@@ -11,9 +11,21 @@
             font-family: 'Inter', sans-serif;
         }
         .hero-bg {
-            background: linear-gradient(to bottom, rgba(1,48,63,0.5), rgba(1,48,63,0.5)), url('');
-            background-size: cover;
-            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
         }
         .service-img {
             height: 150px;
@@ -35,7 +47,6 @@
         .fade-in {
             opacity: 1;
         }
-        /* Common nav link styles */
         .nav-item {
             color: #02577a;
             font-weight: 500;
@@ -44,7 +55,6 @@
         .nav-item:hover {
             color: #02a9f7;
         }
-        /* Hamburger menu */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -71,7 +81,6 @@
         .hamburger.active span:nth-child(3) {
             transform: rotate(-45deg) translate(5px, -5px);
         }
-        /* Mobile styles */
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
@@ -110,18 +119,15 @@
     <!-- Header -->
     <header class="bg-white shadow sticky top-0 z-30">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- Logo -->
             <div class="flex items-center space-x-3">
                 <img src="./HexaLogo.png" alt="Hexa Innovation Logo" class="logo-img">
                 <span class="text-2xl font-bold text-[#02a9f7]">Hexa Innovation</span>
             </div>
-            <!-- Hamburger -->
             <div class="hamburger md:hidden" id="hamburger">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-            <!-- Navigation Links -->
             <div class="nav-links hidden md:flex flex-row items-center justify-end space-x-8" id="navLinks">
                 <a href="#home" class="nav-item">Home</a>
                 <a href="#services" class="nav-item">Services</a>
@@ -132,9 +138,13 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Video -->
     <section id="home" class="hero-bg text-white py-20">
-        <div class="container mx-auto px-6 text-center">
+        <video autoplay muted loop playsinline>
+            <source src="./HexaVideo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-content container mx-auto px-6 text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Transforming Construction with Innovation</h1>
             <p class="text-lg md:text-xl mb-6">Hexa Innovation delivers cutting-edge technology solutions for the construction and architecture industries.</p>
             <a href="#contact" class="inline-block bg-[#02a9f7] text-white px-6 py-3 rounded-lg hover:bg-[#89d6fb] transition-colors">Get in Touch</a>
@@ -244,47 +254,44 @@
             currentService = (currentService % totalServices) + 1;
         }
         rotateServices();
-        setInterval(rotateServices, 1000); // Rotate every 1 second
+        setInterval(rotateServices, 1000);
 
         // Toggle Mobile Menu
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
 
         function toggleMenu(event) {
-            event.preventDefault(); // Prevent default behavior
-            event.stopPropagation(); // Prevent bubbling
+            event.preventDefault();
+            event.stopPropagation();
             const isActive = hamburger.classList.toggle('active');
             navLinks.classList.toggle('active', isActive);
-            document.body.style.overflow = isActive ? 'hidden' : ''; // Prevent scrolling when menu is open
+            document.body.style.overflow = isActive ? 'hidden' : '';
         }
 
         hamburger.addEventListener('click', toggleMenu);
 
-        // Close menu when a link is clicked
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent bubbling
+                event.stopPropagation();
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
-                document.body.style.overflow = ''; // Restore scrolling
+                document.body.style.overflow = '';
             });
         });
 
-        // Close menu when clicking outside
         document.addEventListener('click', (event) => {
             if (!hamburger.contains(event.target) && !navLinks.contains(event.target) && navLinks.classList.contains('active')) {
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
-                document.body.style.overflow = ''; // Restore scrolling
+                document.body.style.overflow = '';
             }
         });
 
-        // Handle window resize to ensure menu state is correct
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
-                document.body.style.overflow = ''; // Restore scrolling
+                document.body.style.overflow = '';
             }
         });
     </script>
