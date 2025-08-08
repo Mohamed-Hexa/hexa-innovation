@@ -1,0 +1,188 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexa Innovation - Transforming Construction & Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://source.unsplash.com/random/1600x900/?construction,technology');
+            background-size: cover;
+            background-position: center;
+        }
+        .service-img {
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-blue-600">Hexa Innovation</div>
+            <div class="space-x-6">
+                <a href="#home" class="text-gray-600 hover:text-blue-600">Home</a>
+                <a href="#services" class="text-gray-600 hover:text-blue-600">Services</a>
+                <a href="#updates" class="text-gray-600 hover:text-blue-600">Updates</a>
+                <a href="#about" class="text-gray-600 hover:text-blue-600">About</a>
+                <a href="#contact" class="text-gray-600 hover:text-blue-600">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Transforming Construction with Innovation</h1>
+            <p class="text-lg md:text-xl mb-6">Hexa Innovation delivers cutting-edge technology solutions for the construction and architecture industries.</p>
+            <a href="#contact" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Get in Touch</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <img src="https://source.unsplash.com/random/300x150/?software,development" alt="Software Development" class="service-img w-full mb-4">
+                    <h3 class="text-xl font-semibold mb-4">Software Development</h3>
+                    <p>Custom software solutions tailored to streamline construction and architecture workflows.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <img src="https://source.unsplash.com/random/300x150/?digital,twin" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
+                    <h3 class="text-xl font-semibold mb-4">Digital Twin & BIM Automation</h3>
+                    <p>Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <img src="https://source.unsplash.com/random/300x150/?virtual,reality" alt="VR & AR Solutions" class="service-img w-full mb-4">
+                    <h3 class="text-xl font-semibold mb-4">VR & AR Solutions</h3>
+                    <p>Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <img src="https://source.unsplash.com/random/300x150/?construction,automation" alt="AEC & VDC Automation" class="service-img w-full mb-4">
+                    <h3 class="text-xl font-semibold mb-4">AEC & VDC Automation</h3>
+                    <p>Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <img src="https://source.unsplash.com/random/300x150/?construction,schedule" alt="4D Construction Scheduling" class="service-img w-full mb-4">
+                    <h3 class="text-xl font-semibold mb-4">4D Construction Scheduling</h3>
+                    <p>Integrate time management with project planning to meet deadlines without compromising quality.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <img src="https://source.unsplash.com/random/300x150/?artificial,intelligence" alt="AI & Machine Learning" class="service-img w-full mb-4">
+                    <h3 class="text-xl font-semibold mb-4">AI & Machine Learning</h3>
+                    <p>Leveraging AI and ML to optimize resource management and drive productivity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Updates Section -->
+    <section id="updates" class="bg-gray-50 py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Latest Updates</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold mb-4">Harnessing Energy Modeling with Digital Twins</h3>
+                    <p>Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
+                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-blue-600 hover:underline">Read more on LinkedIn</a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold mb-4">Understanding Digital Twin Technology</h3>
+                    <p>Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
+                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-blue-600 hover:underline">Read more on LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-gray-200 py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">About Hexa Innovation</h2>
+            <p class="text-lg text-center mb-6">Founded in 2024, Hexa Innovation is at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions. With a team of 11-50 dedicated professionals, we specialize in software development, AEC automation, VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
+            <p class="text-lg text-center">Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering. Join us in redefining the future of construction through innovation and technology.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
+            <div class="max-w-lg mx-auto">
+                <p class="text-lg text-center mb-6">Ready to transform your construction projects? Reach out to us!</p>
+                <div class="space-y-4">
+                    <p class="text-center"><strong>Website:</strong> <a href="http://hexainnovation.com" class="text-blue-600 hover:underline">hexainnovation.com</a></p>
+                    <p class="text-center"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/hexainnovation/" class="text-blue-600 hover:underline">Hexa Innovation</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Hexa Innovation. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
