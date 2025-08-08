@@ -11,7 +11,7 @@
             font-family: 'Inter', sans-serif;
         }
         .hero-bg {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('');
+            background: linear-gradient(to bottom, rgba(1,48,63,0.5), rgba(1,48,63,0.5)), url('');
             background-size: cover;
             background-position: center;
         }
@@ -23,10 +23,10 @@
         .logo-img {
             height: 40px;
             width: auto;
-            margin-right: 10px;
+            margin-right: 12px;
         }
         .highlight {
-            border: 2px solid #3b82f6;
+            border: 2px solid #02a9f7;
             transition: opacity 0.5s;
         }
         .fade-out {
@@ -35,22 +35,99 @@
         .fade-in {
             opacity: 1;
         }
+        /* Common nav link styles */
+        .nav-item {
+            color: #02577a;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-item:hover {
+            color: #02a9f7;
+        }
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 40;
+            width: 30px;
+            height: 30px;
+        }
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: #01303f;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 64px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                padding: 1rem;
+                gap: 1rem;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease-in-out;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 30;
+            }
+            .nav-links.active {
+                display: flex;
+                transform: translateY(0);
+            }
+            .nav-links a {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                text-align: center;
+            }
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-[#d4f0fc] text-[#01303f]">
     <!-- Header -->
-    <header class="bg-white shadow">
+    <header class="bg-white shadow sticky top-0 z-30">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
                 <img src="./HexaLogo.png" alt="Hexa Innovation Logo" class="logo-img">
-                <div class="text-2xl font-bold text-blue-600">Hexa Innovation</div>
+                <span class="text-2xl font-bold text-[#02a9f7]">Hexa Innovation</span>
             </div>
-            <div class="space-x-6">
-                <a href="#home" class="text-gray-600 hover:text-blue-600">Home</a>
-                <a href="#services" class="text-gray-600 hover:text-blue-600">Services</a>
-                <a href="#updates" class="text-gray-600 hover:text-blue-600">Updates</a>
-                <a href="#about" class="text-gray-600 hover:text-blue-600">About</a>
-                <a href="#contact" class="text-gray-600 hover:text-blue-600">Contact</a>
+            <!-- Hamburger -->
+            <div class="hamburger md:hidden" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <!-- Navigation Links -->
+            <div class="nav-links hidden md:flex flex-row items-center justify-end space-x-8" id="navLinks">
+                <a href="#home" class="nav-item">Home</a>
+                <a href="#services" class="nav-item">Services</a>
+                <a href="#updates" class="nav-item">Updates</a>
+                <a href="#about" class="nav-item">About</a>
+                <a href="#contact" class="nav-item">Contact</a>
             </div>
         </nav>
     </header>
@@ -60,103 +137,101 @@
         <div class="container mx-auto px-6 text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Transforming Construction with Innovation</h1>
             <p class="text-lg md:text-xl mb-6">Hexa Innovation delivers cutting-edge technology solutions for the construction and architecture industries.</p>
-            <a href="#contact" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Get in Touch</a>
+            <a href="#contact" class="inline-block bg-[#02a9f7] text-white px-6 py-3 rounded-lg hover:bg-[#89d6fb] transition-colors">Get in Touch</a>
         </div>
     </section>
 
     <!-- Services Section -->
     <section id="services" class="py-16">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
+            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Our Services</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="servicesGrid">
                 <div class="bg-white p-6 rounded-lg shadow highlight" data-service="1">
                     <img src="./img1.png" alt="Software Development" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4">Software Development</h3>
-                    <p>Custom software solutions tailored to streamline construction and architecture workflows.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Software Development</h3>
+                    <p class="text-[#01303f]">Custom software solutions tailored to streamline construction and architecture workflows.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow" data-service="2">
                     <img src="./img2.png" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4">Digital Twin & BIM Automation</h3>
-                    <p>Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Digital Twin & BIM Automation</h3>
+                    <p class="text-[#01303f]">Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow" data-service="3">
                     <img src="./img3.png" alt="VR & AR Solutions" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4">VR & AR Solutions</h3>
-                    <p>Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">VR & AR Solutions</h3>
+                    <p class="text-[#01303f]">Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow" data-service="4">
                     <img src="./img4.png" alt="AEC & VDC Automation" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4">AEC & VDC Automation</h3>
-                    <p>Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AEC & VDC Automation</h3>
+                    <p class="text-[#01303f]">Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow" data-service="5">
                     <img src="./img5.png" alt="4D Construction Scheduling" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4">4D Construction Scheduling</h3>
-                    <p>Integrate time management with project planning to meet deadlines without compromising quality.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">4D Construction Scheduling</h3>
+                    <p class="text-[#01303f]">Integrate time management with project planning to meet deadlines without compromising quality.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow" data-service="6">
                     <img src="./img6.png" alt="AI & Machine Learning" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4">AI & Machine Learning</h3>
-                    <p>Leveraging AI and ML to optimize resource management and drive productivity.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AI & Machine Learning</h3>
+                    <p class="text-[#01303f]">Leveraging AI and ML to optimize resource management and drive productivity.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Updates Section -->
-    <section id="updates" class="bg-gray-50 py-16">
+    <section id="updates" class="bg-[#89d6fb] py-16">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12">Latest Updates</h2>
+            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Latest Updates</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-4">Harnessing Energy Modeling with Digital Twins</h3>
-                    <p>Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
-                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-blue-600 hover:underline">Read more on LinkedIn</a>
+                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Harnessing Energy Modeling with Digital Twins</h3>
+                    <p class="text-[#01303f]">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
+                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-4">Understanding Digital Twin Technology</h3>
-                    <p>Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
-                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-blue-600 hover:underline">Read more on LinkedIn</a>
+                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Understanding Digital Twin Technology</h3>
+                    <p class="text-[#01303f]">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
+                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="bg-gray-200 py-16">
+    <section id="about" class="bg-[#d4f0fc] py-16">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12">About Hexa Innovation</h2>
-            <p class="text-lg text-center mb-6">Founded in 2024, Hexa Innovation is at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions. With a team of 11-50 dedicated professionals, we specialize in software development, AEC automation, VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
-            <p class="text-lg text-center">Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering. Join us in redefining the future of construction through innovation and technology.</p>
+            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">About Hexa Innovation</h2>
+            <p class="text-lg text-center mb-6 text-[#01303f]">Founded in 2024, Hexa Innovation is at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions. With a team of 11-50 dedicated professionals, we specialize in software development, AEC automation, VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
+            <p class="text-lg text-center text-[#01303f]">Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering. Join us in redefining the future of construction through innovation and technology.</p>
         </div>
     </section>
 
     <!-- Contact Section -->
     <section id="contact" class="py-16">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
+            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Contact Us</h2>
             <div class="max-w-lg mx-auto">
-                <p class="text-lg text-center mb-6">Ready to transform your construction projects? Reach out to us!</p>
+                <p class="text-lg text-center mb-6 text-[#01303f]">Ready to transform your construction projects? Reach out to us!</p>
                 <div class="space-y-4">
-                    <p class="text-center"><strong>Website:</strong> <a href="http://hexainnovation.com" class="text-blue-600 hover:underline">hexainnovation.com</a></p>
-                    <p class="text-center"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/hexainnovation/" class="text-blue-600 hover:underline">Hexa Innovation</a></p>
+                    <p class="text-center text-[#01303f]"><strong>Website:</strong> <a href="http://hexainnovation.com" class="text-[#02a9f7] hover:underline">hexainnovation.com</a></p>
+                    <p class="text-center text-[#01303f]"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Hexa Innovation</a></p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6">
-        <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2025 Hexa Innovation. All rights reserved.</p>
-        </div>
+    <footer class="bg-[#01303f] text-white py-6 text-center">
+        <p>&copy; 2025 Hexa Innovation. All rights reserved.</p>
     </footer>
 
     <script>
         // Service Highlight Rotation
+        const services = document.querySelectorAll('#servicesGrid > div');
         let currentService = 1;
         const totalServices = 6;
-        const services = document.querySelectorAll('#servicesGrid > div');
 
         function rotateServices() {
             services.forEach(service => {
@@ -170,6 +245,48 @@
         }
         rotateServices();
         setInterval(rotateServices, 1000); // Rotate every 1 second
+
+        // Toggle Mobile Menu
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        function toggleMenu(event) {
+            event.preventDefault(); // Prevent default behavior
+            event.stopPropagation(); // Prevent bubbling
+            const isActive = hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active', isActive);
+            document.body.style.overflow = isActive ? 'hidden' : ''; // Prevent scrolling when menu is open
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent bubbling
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!hamburger.contains(event.target) && !navLinks.contains(event.target) && navLinks.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+        });
+
+        // Handle window resize to ensure menu state is correct
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+        });
     </script>
 </body>
 </html>
