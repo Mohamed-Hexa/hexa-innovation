@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -50,7 +11,7 @@
             font-family: 'Inter', sans-serif;
         }
         .hero-bg {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://source.unsplash.com/random/1600x900/?construction,technology');
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('');
             background-size: cover;
             background-position: center;
         }
@@ -59,13 +20,31 @@
             object-fit: cover;
             border-radius: 8px;
         }
+        .logo-img {
+            height: 40px;
+            width: auto;
+            margin-right: 10px;
+        }
+        .highlight {
+            border: 2px solid #3b82f6;
+            transition: opacity 0.5s;
+        }
+        .fade-out {
+            opacity: 0.3;
+        }
+        .fade-in {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
     <!-- Header -->
     <header class="bg-white shadow">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">Hexa Innovation</div>
+            <div class="flex items-center">
+                <img src="" alt="Hexa Innovation Logo" class="logo-img">
+                <div class="text-2xl font-bold text-blue-600">Hexa Innovation</div>
+            </div>
             <div class="space-x-6">
                 <a href="#home" class="text-gray-600 hover:text-blue-600">Home</a>
                 <a href="#services" class="text-gray-600 hover:text-blue-600">Services</a>
@@ -89,34 +68,34 @@
     <section id="services" class="py-16">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <img src="https://source.unsplash.com/random/300x150/?software,development" alt="Software Development" class="service-img w-full mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="servicesGrid">
+                <div class="bg-white p-6 rounded-lg shadow highlight" data-service="1">
+                    <img src="" alt="Software Development" class="service-img w-full mb-4">
                     <h3 class="text-xl font-semibold mb-4">Software Development</h3>
                     <p>Custom software solutions tailored to streamline construction and architecture workflows.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <img src="https://source.unsplash.com/random/300x150/?digital,twin" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
+                <div class="bg-white p-6 rounded-lg shadow" data-service="2">
+                    <img src="" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
                     <h3 class="text-xl font-semibold mb-4">Digital Twin & BIM Automation</h3>
                     <p>Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <img src="https://source.unsplash.com/random/300x150/?virtual,reality" alt="VR & AR Solutions" class="service-img w-full mb-4">
+                <div class="bg-white p-6 rounded-lg shadow" data-service="3">
+                    <img src="" alt="VR & AR Solutions" class="service-img w-full mb-4">
                     <h3 class="text-xl font-semibold mb-4">VR & AR Solutions</h3>
                     <p>Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <img src="https://source.unsplash.com/random/300x150/?construction,automation" alt="AEC & VDC Automation" class="service-img w-full mb-4">
+                <div class="bg-white p-6 rounded-lg shadow" data-service="4">
+                    <img src="" alt="AEC & VDC Automation" class="service-img w-full mb-4">
                     <h3 class="text-xl font-semibold mb-4">AEC & VDC Automation</h3>
                     <p>Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <img src="https://source.unsplash.com/random/300x150/?construction,schedule" alt="4D Construction Scheduling" class="service-img w-full mb-4">
+                <div class="bg-white p-6 rounded-lg shadow" data-service="5">
+                    <img src="" alt="4D Construction Scheduling" class="service-img w-full mb-4">
                     <h3 class="text-xl font-semibold mb-4">4D Construction Scheduling</h3>
                     <p>Integrate time management with project planning to meet deadlines without compromising quality.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <img src="https://source.unsplash.com/random/300x150/?artificial,intelligence" alt="AI & Machine Learning" class="service-img w-full mb-4">
+                <div class="bg-white p-6 rounded-lg shadow" data-service="6">
+                    <img src="" alt="AI & Machine Learning" class="service-img w-full mb-4">
                     <h3 class="text-xl font-semibold mb-4">AI & Machine Learning</h3>
                     <p>Leveraging AI and ML to optimize resource management and drive productivity.</p>
                 </div>
@@ -174,15 +153,23 @@
     </footer>
 
     <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        // Service Highlight Rotation
+        let currentService = 1;
+        const totalServices = 6;
+        const services = document.querySelectorAll('#servicesGrid > div');
+
+        function rotateServices() {
+            services.forEach(service => {
+                service.classList.remove('highlight');
+                service.classList.add('fade-out');
             });
-        });
+            const current = document.querySelector(`[data-service="${currentService}"]`);
+            current.classList.remove('fade-out');
+            current.classList.add('fade-in', 'highlight');
+            currentService = (currentService % totalServices) + 1;
+        }
+        rotateServices();
+        setInterval(rotateServices, 1000); // Rotate every 1 second
     </script>
 </body>
 </html>
