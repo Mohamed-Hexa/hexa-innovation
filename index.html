@@ -805,7 +805,7 @@
 
                 document.querySelectorAll('.nav-links a').forEach(link => {
                     link.addEventListener('click', (event) => {
-                        event.stopPropagation();
+                        // This is now handled in the main navigation click handler above
                     });
                 });
 
