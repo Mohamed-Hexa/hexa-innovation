@@ -11,7 +11,7 @@
         .hero-bg { 
             position: relative; 
             overflow: hidden; 
-            height: 100vh; /* Changed to full viewport height */
+            height: 100vh;
             width: 100%; 
         }
         .hero-bg video { 
@@ -20,7 +20,7 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* Ensures video covers the area without distortion */
+            object-fit: cover;
             z-index: -1; 
         }
         .hero-content { position: relative; z-index: 1; }
@@ -33,13 +33,21 @@
         .highlight { border: 2px solid #02a9f7; transition: opacity 0.5s; }
         .fade-out { opacity: 0.3; }
         .fade-in { opacity: 1; }
-        .nav-item { color: #02577a; font-weight: 500; transition: color 0.3s; }
+        .nav-item { color: #02577a; font-weight: 500; transition: color 0.3s; cursor: pointer; }
         .nav-item:hover { color: #02a9f7; }
+        .nav-item.active { color: #02a9f7; font-weight: 600; }
         .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; cursor: pointer; width: 30px; height: 30px; z-index: 40; }
         .hamburger span { width: 25px; height: 3px; background-color: #01303f; border-radius: 2px; transition: all 0.3s ease; }
         .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
         .hamburger.active span:nth-child(2) { opacity: 0; }
         .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .section { display: none; }
+        .section.active { display: block; }
+        .course-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .course-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); }
+        .price-badge { background: linear-gradient(135deg, #02a9f7, #89d6fb); }
+        .back-btn { transition: all 0.3s ease; }
+        .back-btn:hover { background-color: #89d6fb; transform: translateX(-2px); }
         @media (max-width: 768px) {
             .hamburger { display: flex; }
             .nav-links { display: none; position: fixed; top: 64px; left: 0; width: 100%; background: white; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; padding: 1rem; gap: 1rem; transform: translateY(-100%); transition: transform 0.3s ease-in-out; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 30; }
@@ -61,145 +69,1129 @@
                 <span></span><span></span><span></span>
             </div>
             <div class="nav-links hidden md:flex flex-row items-center justify-end space-x-8" id="navLinks">
-                <a href="#home" class="nav-item">Home</a>
-                <a href="#services" class="nav-item">Services</a>
-                <a href="#updates" class="nav-item">Updates</a>
-                <a href="#about" class="nav-item">About</a>
-                <a href="#contact" class="nav-item">Contact</a>
+                <span class="nav-item active" data-section="home">Home</span>
+                <span class="nav-item" data-section="services">Services</span>
+                <span class="nav-item" data-section="courses">Courses</span>
+                <span class="nav-item" data-section="addins">Addins</span>
+                <span class="nav-item" data-section="updates">Updates</span>
+                <span class="nav-item" data-section="about">About</span>
+                <span class="nav-item" data-section="contact">Contact</span>
             </div>
         </nav>
     </header>
 
-    <!-- Video Hero Section -->
-    <section id="home" class="hero-bg">
-        <video id="heroVideo" autoplay muted loop playsinline preload="auto">
-            <source src="./HexaVideo.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </section>
+    <!-- Home Section -->
+    <div id="home" class="section active">
+        <!-- Video Hero Section -->
+        <section class="hero-bg">
+            <video id="heroVideo" autoplay muted loop playsinline preload="auto">
+                <source src="./HexaVideo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </section>
 
-    <!-- Hero Content Section -->
-    <section class="hero-content text-white py-20 bg-[#01303f]">
-        <div class="container mx-auto px-6 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fadeIn">Transforming Construction with Innovation</h1>
-            <p class="text-lg md:text-xl mb-6 animate-fadeIn delay-200">Hexa Innovation delivers cutting-edge technology solutions for the construction and architecture industries.</p>
-            <a href="#contact" class="inline-block bg-[#02a9f7] text-white px-6 py-3 rounded-lg hover:bg-[#89d6fb] transition-colors animate-fadeIn delay-400">Get in Touch</a>
-        </div>
-    </section>
+        <!-- Hero Content Section -->
+        <section class="hero-content text-white py-20 bg-[#01303f]">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fadeIn">Transforming Construction with Innovation</h1>
+                <p class="text-lg md:text-xl mb-6 animate-fadeIn delay-200">Hexa Innovation delivers cutting-edge technology solutions for the construction and architecture industries.</p>
+                <button class="nav-item inline-block bg-[#02a9f7] text-white px-6 py-3 rounded-lg hover:bg-[#89d6fb] transition-colors animate-fadeIn delay-400" data-section="contact">Get in Touch</button>
+            </div>
+        </section>
+    </div>
 
     <!-- Services Section -->
-    <section id="services" class="py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Our Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="servicesGrid">
-                <div class="bg-white p-6 rounded-lg shadow highlight" data-service="1">
-                    <img src="./img1.png" alt="Software Development" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Software Development</h3>
-                    <p class="text-[#01303f]">Custom software solutions tailored to streamline construction and architecture workflows.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="2">
-                    <img src="./img2.png" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Digital Twin & BIM Automation</h3>
-                    <p class="text-[#01303f]">Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="3">
-                    <img src="./img3.png" alt="VR & AR Solutions" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">VR & AR Solutions</h3>
-                    <p class="text-[#01303f]">Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="4">
-                    <img src="./img4.png" alt="AEC & VDC Automation" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AEC & VDC Automation</h3>
-                    <p class="text-[#01303f]">Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="5">
-                    <img src="./img5.png" alt="4D Construction Scheduling" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">4D Construction Scheduling</h3>
-                    <p class="text-[#01303f]">Integrate time management with project planning to meet deadlines without compromising quality.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="6">
-                    <img src="./img6.png" alt="AI & Machine Learning" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AI & Machine Learning</h3>
-                    <p class="text-[#01303f]">Leveraging AI and ML to optimize resource management and drive productivity.</p>
+    <div id="services" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Our Services</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="servicesGrid">
+                    <div class="bg-white p-6 rounded-lg shadow highlight" data-service="1">
+                        <img src="./img1.png" alt="Software Development" class="service-img w-full mb-4">
+                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Software Development</h3>
+                        <p class="text-[#01303f]">Custom software solutions tailored to streamline construction and architecture workflows.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow" data-service="2">
+                        <img src="./img2.png" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
+                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Digital Twin & BIM Automation</h3>
+                        <p class="text-[#01303f]">Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow" data-service="3">
+                        <img src="./img3.png" alt="VR & AR Solutions" class="service-img w-full mb-4">
+                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">VR & AR Solutions</h3>
+                        <p class="text-[#01303f]">Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow" data-service="4">
+                        <img src="./img4.png" alt="AEC & VDC Automation" class="service-img w-full mb-4">
+                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AEC & VDC Automation</h3>
+                        <p class="text-[#01303f]">Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow" data-service="5">
+                        <img src="./img5.png" alt="4D Construction Scheduling" class="service-img w-full mb-4">
+                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">4D Construction Scheduling</h3>
+                        <p class="text-[#01303f]">Integrate time management with project planning to meet deadlines without compromising quality.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow" data-service="6">
+                        <img src="./img6.png" alt="AI & Machine Learning" class="service-img w-full mb-4">
+                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AI & Machine Learning</h3>
+                        <p class="text-[#01303f]">Leveraging AI and ML to optimize resource management and drive productivity.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+
+    <!-- Courses Section -->
+    <div id="courses" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Professional Courses</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Course 1: Dynamo Visual Programming -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#02a9f7] to-[#89d6fb] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">Dynamo Visual Programming</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
+                                <span class="text-[#02577a] font-semibold">12 weeks</span>
+                            </div>
+                            <p class="text-[#01303f] mb-4">Master visual programming with Dynamo for powerful BIM automation and parametric design workflows.</p>
+                            <button onclick="showCourseDetail('dynamo')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+
+                    <!-- Course 2: Revit API & C# Development -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#02577a] to-[#02a9f7] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">Revit API & C# Development</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
+                                <span class="text-[#02577a] font-semibold">14 weeks</span>
+                            </div>
+                            <p class="text-[#01303f] mb-4">Develop custom Revit applications using C# programming and the powerful Revit API framework.</p>
+                            <button onclick="showCourseDetail('revit-api')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+
+                    <!-- Course 3: 4D Construction Planning -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#89d6fb] to-[#02a9f7] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">4D Construction Planning</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
+                                <span class="text-[#02577a] font-semibold">10 weeks</span>
+                            </div>
+                            <p class="text-[#01303f] mb-4">Learn to integrate time management with 3D models for comprehensive construction scheduling and planning.</p>
+                            <button onclick="showCourseDetail('4d-construction')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+
+                    <!-- Course 4: VR/AR with Unity -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#01303f] to-[#02577a] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">VR/AR with Unity</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
+                                <span class="text-[#02577a] font-semibold">16 weeks</span>
+                            </div>
+                            <p class="text-[#01303f] mb-4">Create immersive VR and AR experiences for architecture visualization using Unity development platform.</p>
+                            <button onclick="showCourseDetail('vr-ar-unity')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+
+                    <!-- Course 5: Unreal Engine Blueprints -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#02a9f7] to-[#01303f] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">Unreal Engine Blueprints</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
+                                <span class="text-[#02577a] font-semibold">12 weeks</span>
+                            </div>
+                            <p class="text-[#01303f] mb-4">Master visual scripting in Unreal Engine to create stunning architectural visualizations and interactive experiences.</p>
+                            <button onclick="showCourseDetail('unreal-blueprints')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Addins Section -->
+    <div id="addins" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Professional Addins</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Addin 1: Pipe Sizer -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#02a9f7] to-[#89d6fb] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">Pipe Sizer</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-[#01303f] mb-4 font-semibold">NFPA & ASHRAE Compliant</p>
+                            <p class="text-[#01303f] mb-4">Automated pipe sizing calculations following NFPA and ASHRAE standards for accurate MEP design and code compliance.</p>
+                            <button onclick="showAddinDetail('pipe-sizer')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+
+                    <!-- Addin 2: MEP Count Master -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#02577a] to-[#02a9f7] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">MEP Count Master</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-[#01303f] mb-4 font-semibold">BOQ Generation Tool</p>
+                            <p class="text-[#01303f] mb-4">Automated Bill of Quantities generation for MEP elements with precise counting and material takeoffs.</p>
+                            <button onclick="showAddinDetail('mep-count-master')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+
+                    <!-- Addin 3: Clash Manager -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#89d6fb] to-[#02a9f7] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">Clash Manager</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-[#01303f] mb-4 font-semibold">Advanced Clash Detection</p>
+                            <p class="text-[#01303f] mb-4">Intelligent clash detection and resolution tools to identify and resolve conflicts in MEP systems efficiently.</p>
+                            <button onclick="showAddinDetail('clash-manager')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+
+                    <!-- Addin 4: Smart Hanger -->
+                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
+                        <div class="h-48 bg-gradient-to-r from-[#01303f] to-[#02577a] flex items-center justify-center">
+                            <h3 class="text-2xl font-bold text-white text-center">Smart Hanger</h3>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-[#01303f] mb-4 font-semibold">MEP Support Systems</p>
+                            <p class="text-[#01303f] mb-4">Automated placement and sizing of MEP element supports and false ceiling support systems with engineering calculations.</p>
+                            <button onclick="showAddinDetail('smart-hanger')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Updates Section -->
-    <section id="updates" class="bg-[#89d6fb] py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Latest Updates</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Harnessing Energy Modeling with Digital Twins</h3>
-                    <p class="text-[#01303f]">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
-                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Understanding Digital Twin Technology</h3>
-                    <p class="text-[#01303f]">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
-                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
+    <div id="updates" class="section">
+        <section class="bg-[#89d6fb] py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Latest Updates</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Harnessing Energy Modeling with Digital Twins</h3>
+                        <p class="text-[#01303f]">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
+                        <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Understanding Digital Twin Technology</h3>
+                        <p class="text-[#01303f]">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
+                        <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!-- About Section -->
-    <section id="about" class="bg-[#d4f0fc] py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">About Hexa Innovation</h2>
-            <p class="text-lg text-center mb-6 text-[#01303f]">Founded in 2024, Hexa Innovation is at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions. With a team of 11-50 dedicated professionals, we specialize in software development, AEC automation, VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
-            <p class="text-lg text-center text-[#01303f]">Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering. Join us in redefining the future of construction through innovation and technology.</p>
-        </div>
-    </section>
+    <div id="about" class="section">
+        <section class="bg-[#d4f0fc] py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">About Hexa Innovation</h2>
+                <p class="text-lg text-center mb-6 text-[#01303f]">Founded in 2024, Hexa Innovation is at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions. With a team of 11-50 dedicated professionals, we specialize in software development, AEC automation, VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
+                <p class="text-lg text-center text-[#01303f]">Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering. Join us in redefining the future of construction through innovation and technology.</p>
+            </div>
+        </section>
+    </div>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Contact Us</h2>
-            <div class="max-w-lg mx-auto">
-                <p class="text-lg text-center mb-6 text-[#01303f]">Ready to transform your construction projects? Reach out to us!</p>
-                <div class="space-y-4">
-                    <p class="text-center text-[#01303f]"><strong>Website:</strong> <a href="http://hexainnovation.com" class="text-[#02a9f7] hover:underline">hexainnovation.com</a></p>
-                    <p class="text-center text-[#01303f]"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Hexa Innovation</a></p>
+    <div id="contact" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Contact Us</h2>
+                <div class="max-w-lg mx-auto">
+                    <p class="text-lg text-center mb-6 text-[#01303f]">Ready to transform your construction projects? Reach out to us!</p>
+                    <div class="space-y-4">
+                        <p class="text-center text-[#01303f]"><strong>Website:</strong> <a href="http://hexainnovation.com" class="text-[#02a9f7] hover:underline">hexainnovation.com</a></p>
+                        <p class="text-center text-[#01303f]"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Hexa Innovation</a></p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+
+    <!-- Course Detail Pages -->
+    
+    <!-- Dynamo Course Detail -->
+    <div id="course-dynamo" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Courses</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Dynamo Visual Programming</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
+                            <p class="text-[#01303f] mb-6">Master the power of visual programming with Dynamo, Autodesk's computational design tool. This comprehensive course will teach you to create powerful scripts and automations that transform your BIM workflows and parametric design capabilities.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>Understand Dynamo's visual programming interface and node-based workflow</li>
+                                <li>Create parametric models and automated design solutions</li>
+                                <li>Integrate Dynamo with Revit for BIM automation</li>
+                                <li>Develop custom nodes and packages for reusable solutions</li>
+                                <li>Implement data-driven design processes</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-3: Dynamo Fundamentals</h4>
+                                    <p class="text-[#01303f]">Interface navigation, nodes, wires, and basic geometry creation</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 4-6: Data Management</h4>
+                                    <p class="text-[#01303f]">Lists, data structures, and mathematical operations</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 7-9: Revit Integration</h4>
+                                    <p class="text-[#01303f]">Element creation, parameter manipulation, and model automation</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 10-12: Advanced Applications</h4>
+                                    <p class="text-[#01303f]">Custom nodes, package development, and complex workflows</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Duration:</span>
+                                    <span class="font-semibold text-[#02577a]">12 weeks</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Price:</span>
+                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Format:</span>
+                                    <span class="font-semibold text-[#02577a]">Online</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Level:</span>
+                                    <span class="font-semibold text-[#02577a]">Beginner to Advanced</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• Basic Revit knowledge</li>
+                                <li>• Understanding of BIM concepts</li>
+                                <li>• Computer literacy</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Revit API Course Detail -->
+    <div id="course-revit-api" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Courses</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Revit API & C# Development</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
+                            <p class="text-[#01303f] mb-6">Dive deep into Revit API development using C#. Learn to create powerful custom applications, automate repetitive tasks, and extend Revit's functionality to meet specific project requirements.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>Master C# programming fundamentals for Revit development</li>
+                                <li>Understand Revit API architecture and object model</li>
+                                <li>Create custom commands and external applications</li>
+                                <li>Implement user interfaces using WPF and Windows Forms</li>
+                                <li>Deploy and distribute Revit addins professionally</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-4: C# Fundamentals</h4>
+                                    <p class="text-[#01303f]">C# syntax, object-oriented programming, and .NET framework basics</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 5-8: Revit API Basics</h4>
+                                    <p class="text-[#01303f]">API structure, element manipulation, and basic automation</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 9-11: Advanced Development</h4>
+                                    <p class="text-[#01303f]">Custom UI development, external applications, and complex workflows</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 12-14: Professional Deployment</h4>
+                                    <p class="text-[#01303f]">Package creation, installer development, and distribution strategies</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Duration:</span>
+                                    <span class="font-semibold text-[#02577a]">14 weeks</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Price:</span>
+                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Format:</span>
+                                    <span class="font-semibold text-[#02577a]">Online</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Level:</span>
+                                    <span class="font-semibold text-[#02577a]">Intermediate</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• Proficient in Revit</li>
+                                <li>• Basic programming concepts</li>
+                                <li>• Windows development environment</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 4D Construction Course Detail -->
+    <div id="course-4d-construction" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Courses</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">4D Construction Planning</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
+                            <p class="text-[#01303f] mb-6">Learn to integrate time management with 3D models to create comprehensive 4D construction planning solutions. This course covers advanced scheduling techniques and visualization methods for project success.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>Understand 4D BIM concepts and methodology</li>
+                                <li>Create time-linked 3D models for construction sequencing</li>
+                                <li>Develop construction schedules integrated with BIM models</li>
+                                <li>Implement clash detection and resolution in time sequences</li>
+                                <li>Generate construction animations and progress reports</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-3: 4D BIM Fundamentals</h4>
+                                    <p class="text-[#01303f]">Introduction to 4D concepts, software tools, and project setup</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 4-6: Schedule Integration</h4>
+                                    <p class="text-[#01303f]">Linking construction schedules with BIM elements and sequencing</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 7-8: Animation & Visualization</h4>
+                                    <p class="text-[#01303f]">Creating construction animations and progress visualization</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 9-10: Advanced Applications</h4>
+                                    <p class="text-[#01303f]">Resource optimization, cost integration, and project delivery</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Duration:</span>
+                                    <span class="font-semibold text-[#02577a]">10 weeks</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Price:</span>
+                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Format:</span>
+                                    <span class="font-semibold text-[#02577a]">Online</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Level:</span>
+                                    <span class="font-semibold text-[#02577a]">Intermediate</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• Advanced BIM knowledge</li>
+                                <li>• Project management basics</li>
+                                <li>• Construction sequencing understanding</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- VR/AR Unity Course Detail -->
+    <div id="course-vr-ar-unity" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Courses</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">VR/AR with Unity</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
+                            <p class="text-[#01303f] mb-6">Create immersive Virtual Reality and Augmented Reality experiences for architectural visualization using Unity. This comprehensive course covers everything from basic Unity development to advanced VR/AR implementation.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>Master Unity development environment and workflows</li>
+                                <li>Implement VR experiences for architectural walkthroughs</li>
+                                <li>Develop AR applications for on-site visualization</li>
+                                <li>Optimize performance for immersive experiences</li>
+                                <li>Deploy applications to various VR/AR platforms</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-4: Unity Fundamentals</h4>
+                                    <p class="text-[#01303f]">Unity interface, game objects, components, and basic scripting</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 5-8: 3D Environment Creation</h4>
+                                    <p class="text-[#01303f]">Scene development, lighting, materials, and architectural import workflows</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 9-12: VR Development</h4>
+                                    <p class="text-[#01303f]">VR SDK integration, interaction systems, and immersive experiences</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 13-16: AR Implementation</h4>
+                                    <p class="text-[#01303f]">AR foundation, marker tracking, and mobile deployment</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Duration:</span>
+                                    <span class="font-semibold text-[#02577a]">16 weeks</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Price:</span>
+                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Format:</span>
+                                    <span class="font-semibold text-[#02577a]">Online</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Level:</span>
+                                    <span class="font-semibold text-[#02577a]">Beginner to Advanced</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• Basic 3D modeling knowledge</li>
+                                <li>• Computer graphics understanding</li>
+                                <li>• Gaming or interactive media interest</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Unreal Engine Course Detail -->
+    <div id="course-unreal-blueprints" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Courses</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Unreal Engine Blueprints</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
+                            <p class="text-[#01303f] mb-6">Master visual scripting in Unreal Engine to create stunning architectural visualizations and interactive experiences. Learn Blueprint programming for real-time rendering and immersive presentation solutions.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>Master Unreal Engine interface and Blueprint visual scripting</li>
+                                <li>Create photorealistic architectural renderings</li>
+                                <li>Develop interactive walkthroughs and presentations</li>
+                                <li>Implement real-time lighting and material systems</li>
+                                <li>Build interactive VR-ready architectural experiences</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-3: Unreal Engine Basics</h4>
+                                    <p class="text-[#01303f]">Engine interface, project setup, and basic scene creation</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 4-6: Blueprint Programming</h4>
+                                    <p class="text-[#01303f]">Visual scripting fundamentals and logic implementation</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 7-9: Architectural Visualization</h4>
+                                    <p class="text-[#01303f]">Lighting systems, material creation, and photorealistic rendering</p>
+                                </div>
+                                <div class="border-l-4 border-[#02a9f7] pl-4">
+                                    <h4 class="font-semibold text-[#01303f]">Weeks 10-12: Interactive Experiences</h4>
+                                    <p class="text-[#01303f]">User interaction, animation systems, and deployment strategies</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Duration:</span>
+                                    <span class="font-semibold text-[#02577a]">12 weeks</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Price:</span>
+                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Format:</span>
+                                    <span class="font-semibold text-[#02577a]">Online</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Level:</span>
+                                    <span class="font-semibold text-[#02577a]">Beginner to Intermediate</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• 3D modeling experience</li>
+                                <li>• Basic game engine concepts</li>
+                                <li>• High-performance computer setup</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Addin Detail Pages -->
+    
+    <!-- Pipe Sizer Addin Detail -->
+    <div id="addin-pipe-sizer" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('addins')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Addins</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Pipe Sizer (NFPA - ASHRAE)</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Overview</h2>
+                            <p class="text-[#01303f] mb-6">Professional pipe sizing tool that automatically calculates optimal pipe diameters based on NFPA and ASHRAE standards. Ensures code compliance and optimal system performance for fire protection and HVAC systems.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Key Features</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>NFPA 13 compliant fire protection system sizing</li>
+                                <li>ASHRAE standard HVAC piping calculations</li>
+                                <li>Automatic flow rate and pressure loss calculations</li>
+                                <li>Material property database integration</li>
+                                <li>Code compliance verification and reporting</li>
+                                <li>Integration with Revit MEP workflows</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Technical Capabilities</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">Fire Protection</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Sprinkler system calculations</li>
+                                        <li>• Standpipe system design</li>
+                                        <li>• Water supply analysis</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">HVAC Systems</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Hydronic piping calculations</li>
+                                        <li>• Chilled water systems</li>
+                                        <li>• Hot water distribution</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Addin Information</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Type:</span>
+                                    <span class="font-semibold text-[#02577a]">Revit Addin</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Category:</span>
+                                    <span class="font-semibold text-[#02577a]">MEP Design</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Standards:</span>
+                                    <span class="font-semibold text-[#02577a]">NFPA & ASHRAE</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Requirements</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• Autodesk Revit 2020+</li>
+                                <li>• MEP modeling experience</li>
+                                <li>• Code compliance knowledge</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Request Demo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- MEP Count Master Addin Detail -->
+    <div id="addin-mep-count-master" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('addins')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Addins</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">MEP Count Master "BOQ"</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Overview</h2>
+                            <p class="text-[#01303f] mb-6">Comprehensive Bill of Quantities generation tool specifically designed for MEP systems. Automatically counts and quantifies all MEP elements with precise material takeoffs and cost estimation capabilities.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Key Features</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>Automated MEP element counting and classification</li>
+                                <li>Material quantity calculations with waste factors</li>
+                                <li>Labor hour estimation based on industry standards</li>
+                                <li>Customizable reporting templates and formats</li>
+                                <li>Integration with cost databases and pricing</li>
+                                <li>Multi-discipline coordination and consolidation</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Supported Elements</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">Electrical</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Panels & Switchgear</li>
+                                        <li>• Conduits & Cable Trays</li>
+                                        <li>• Fixtures & Devices</li>
+                                        <li>• Cables & Wiring</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">Plumbing</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Pipes & Fittings</li>
+                                        <li>• Fixtures & Equipment</li>
+                                        <li>• Valves & Controls</li>
+                                        <li>• Supports & Hangers</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">HVAC</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Ducts & Fittings</li>
+                                        <li>• Equipment & Units</li>
+                                        <li>• Dampers & Controls</li>
+                                        <li>• Insulation & Accessories</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Addin Information</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Type:</span>
+                                    <span class="font-semibold text-[#02577a]">Revit Addin</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Category:</span>
+                                    <span class="font-semibold text-[#02577a]">Quantity Takeoff</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Export:</span>
+                                    <span class="font-semibold text-[#02577a]">Excel, CSV, PDF</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Requirements</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• Autodesk Revit 2020+</li>
+                                <li>• MEP modeling workflows</li>
+                                <li>• Cost estimation knowledge</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Request Demo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Clash Manager Addin Detail -->
+    <div id="addin-clash-manager" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('addins')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Addins</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Clash Manager</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Overview</h2>
+                            <p class="text-[#01303f] mb-6">Advanced clash detection and resolution tool that identifies conflicts between MEP systems and provides intelligent solutions. Streamlines coordination workflows and reduces costly on-site conflicts.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Key Features</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>Intelligent clash detection with customizable rules</li>
+                                <li>Automated conflict resolution suggestions</li>
+                                <li>Multi-discipline coordination workflows</li>
+                                <li>Real-time clash monitoring during design</li>
+                                <li>Detailed clash reports with 3D visualization</li>
+                                <li>Integration with project coordination platforms</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Clash Detection Capabilities</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">Hard Clashes</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Physical interference detection</li>
+                                        <li>• Overlap analysis</li>
+                                        <li>• Collision identification</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">Soft Clashes</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Clearance zone violations</li>
+                                        <li>• Access space requirements</li>
+                                        <li>• Maintenance clearances</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Addin Information</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Type:</span>
+                                    <span class="font-semibold text-[#02577a]">Revit Addin</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Category:</span>
+                                    <span class="font-semibold text-[#02577a]">Coordination</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Analysis:</span>
+                                    <span class="font-semibold text-[#02577a]">Real-time</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Requirements</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• Autodesk Revit 2021+</li>
+                                <li>• Multi-discipline BIM models</li>
+                                <li>• Coordination experience</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Request Demo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Smart Hanger Addin Detail -->
+    <div id="addin-smart-hanger" class="section">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <button onclick="showSection('addins')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
+                    <span>←</span> <span>Back to Addins</span>
+                </button>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Smart Hanger</h1>
+                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Overview</h2>
+                            <p class="text-[#01303f] mb-6">Intelligent support system generator for MEP elements and false ceiling supports. Automatically calculates loads, selects appropriate support types, and places hangers according to engineering standards and building codes.</p>
+                            
+                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Key Features</h3>
+                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
+                                <li>Automatic support placement based on load calculations</li>
+                                <li>Engineering-grade support sizing and selection</li>
+                                <li>Code-compliant spacing and attachment methods</li>
+                                <li>False ceiling support system generation</li>
+                                <li>Load path analysis and structural coordination</li>
+                                <li>Material specifications and installation details</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg p-8 shadow-lg">
+                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Support Systems</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">MEP Supports</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Pipe hangers and supports</li>
+                                        <li>• Duct support systems</li>
+                                        <li>• Cable tray supports</li>
+                                        <li>• Equipment mounting</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-[#01303f] mb-2">Ceiling Systems</h4>
+                                    <ul class="text-[#01303f] space-y-1 text-sm">
+                                        <li>• Grid system supports</li>
+                                        <li>• Main runner hangers</li>
+                                        <li>• Cross tee connections</li>
+                                        <li>• Perimeter attachments</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Addin Information</h3>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Type:</span>
+                                    <span class="font-semibold text-[#02577a]">Revit Addin</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Category:</span>
+                                    <span class="font-semibold text-[#02577a]">Support Systems</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[#01303f]">Analysis:</span>
+                                    <span class="font-semibold text-[#02577a]">Load Calculations</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Requirements</h4>
+                            <ul class="text-[#01303f] mb-6 space-y-1">
+                                <li>• Autodesk Revit 2021+</li>
+                                <li>• MEP modeling experience</li>
+                                <li>• Structural coordination knowledge</li>
+                            </ul>
+
+                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Request Demo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-[#01303f] text-white py-6 text-center">
         <p>&copy; 2025 Hexa Innovation. All rights reserved.</p>
     </footer>
 
-    <!-- JS -->
+    <!-- JavaScript -->
     <script>
-        // Autoplay fallback
-        document.addEventListener("DOMContentLoaded", () => {
-            const video = document.getElementById("heroVideo");
-            video.play().catch(() => { video.muted = true; video.play(); });
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update navigation active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            
+            // Close mobile menu if open
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showCourseDetail(courseId) {
+            showSection(`course-${courseId}`);
+        }
+
+        function showAddinDetail(addinId) {
+            showSection(`addin-${addinId}`);
+        }
+
+        // Navigation click handlers
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const sectionId = e.target.getAttribute('data-section');
+                if (sectionId) {
+                    showSection(sectionId);
+                }
+            });
         });
 
-        // Service Highlight Rotation
+        // Auto-play video fallback
+        document.addEventListener("DOMContentLoaded", () => {
+            const video = document.getElementById("heroVideo");
+            if (video) {
+                video.play().catch(() => { 
+                    video.muted = true; 
+                    video.play(); 
+                });
+            }
+        });
+
+        // Service highlight rotation (only when services section is active)
         const services = document.querySelectorAll('#servicesGrid > div');
         let currentService = 1;
         const totalServices = 6;
 
         function rotateServices() {
+            const servicesSection = document.getElementById('services');
+            if (!servicesSection.classList.contains('active')) return;
+            
             services.forEach(service => {
                 service.classList.remove('highlight');
                 service.classList.add('fade-out');
             });
             const current = document.querySelector(`[data-service="${currentService}"]`);
-            current.classList.remove('fade-out');
-            current.classList.add('fade-in', 'highlight');
+            if (current) {
+                current.classList.remove('fade-out');
+                current.classList.add('fade-in', 'highlight');
+            }
             currentService = (currentService % totalServices) + 1;
         }
+
+        // Start rotation and set interval
         rotateServices();
         setInterval(rotateServices, 3000);
 
-        // Toggle Mobile Menu
+        // Mobile menu functionality
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
 
@@ -213,7 +1205,8 @@
 
         hamburger.addEventListener('click', toggleMenu);
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
+        // Close menu when clicking nav items
+        document.querySelectorAll('.nav-links .nav-item').forEach(link => {
             link.addEventListener('click', (event) => {
                 event.stopPropagation();
                 hamburger.classList.remove('active');
@@ -222,6 +1215,7 @@
             });
         });
 
+        // Close menu when clicking outside
         document.addEventListener('click', (event) => {
             if (!hamburger.contains(event.target) && !navLinks.contains(event.target) && navLinks.classList.contains('active')) {
                 hamburger.classList.remove('active');
@@ -230,6 +1224,7 @@
             }
         });
 
+        // Close menu on window resize
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
                 hamburger.classList.remove('active');
