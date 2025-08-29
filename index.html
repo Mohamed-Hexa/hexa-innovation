@@ -11,7 +11,7 @@
         .hero-bg { 
             position: relative; 
             overflow: hidden; 
-            height: 100vh; /* Changed to full viewport height */
+            height: 100vh;
             width: 100%; 
         }
         .hero-bg video { 
@@ -20,7 +20,7 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* Ensures video covers the area without distortion */
+            object-fit: cover;
             z-index: -1; 
         }
         .hero-content { position: relative; z-index: 1; }
@@ -33,13 +33,30 @@
         .highlight { border: 2px solid #02a9f7; transition: opacity 0.5s; }
         .fade-out { opacity: 0.3; }
         .fade-in { opacity: 1; }
-        .nav-item { color: #02577a; font-weight: 500; transition: color 0.3s; }
+        .nav-item { color: #02577a; font-weight: 500; transition: color 0.3s; cursor: pointer; }
         .nav-item:hover { color: #02a9f7; }
+        .nav-item.active { color: #02a9f7; font-weight: 600; }
         .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; cursor: pointer; width: 30px; height: 30px; z-index: 40; }
         .hamburger span { width: 25px; height: 3px; background-color: #01303f; border-radius: 2px; transition: all 0.3s ease; }
         .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
         .hamburger.active span:nth-child(2) { opacity: 0; }
         .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        
+        /* SPA Page Transitions */
+        .page { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
+        .page.active { display: block; opacity: 1; }
+        
+        /* Course and Addon Cards */
+        .feature-card { 
+            background: linear-gradient(135deg, #02a9f7 0%, #89d6fb 100%); 
+            color: white; 
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+        .feature-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 25px rgba(2, 169, 247, 0.3); 
+        }
+        
         @media (max-width: 768px) {
             .hamburger { display: flex; }
             .nav-links { display: none; position: fixed; top: 64px; left: 0; width: 100%; background: white; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; padding: 1rem; gap: 1rem; transform: translateY(-100%); transition: transform 0.3s ease-in-out; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 30; }
@@ -61,181 +78,754 @@
                 <span></span><span></span><span></span>
             </div>
             <div class="nav-links hidden md:flex flex-row items-center justify-end space-x-8" id="navLinks">
-                <a href="#home" class="nav-item">Home</a>
-                <a href="#services" class="nav-item">Services</a>
-                <a href="#updates" class="nav-item">Updates</a>
-                <a href="#about" class="nav-item">About</a>
-                <a href="#contact" class="nav-item">Contact</a>
+                <a data-page="home" class="nav-item active">Home</a>
+                <a data-page="services" class="nav-item">Services</a>
+                <a data-page="courses" class="nav-item">Courses</a>
+                <a data-page="addins" class="nav-item">Addins</a>
+                <a data-page="updates" class="nav-item">Updates</a>
+                <a data-page="about" class="nav-item">About</a>
+                <a data-page="contact" class="nav-item">Contact</a>
             </div>
         </nav>
     </header>
 
-    <!-- Video Hero Section -->
-    <section id="home" class="hero-bg">
-        <video id="heroVideo" autoplay muted loop playsinline preload="auto">
-            <source src="./HexaVideo.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </section>
+    <!-- SPA Content Container -->
+    <div id="app-content">
 
-    <!-- Hero Content Section -->
-    <section class="hero-content text-white py-20 bg-[#01303f]">
-        <div class="container mx-auto px-6 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fadeIn">Transforming Construction with Innovation</h1>
-            <p class="text-lg md:text-xl mb-6 animate-fadeIn delay-200">Hexa Innovation delivers cutting-edge technology solutions for the construction and architecture industries.</p>
-            <a href="#contact" class="inline-block bg-[#02a9f7] text-white px-6 py-3 rounded-lg hover:bg-[#89d6fb] transition-colors animate-fadeIn delay-400">Get in Touch</a>
-        </div>
-    </section>
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <!-- Video Hero Section -->
+            <section class="hero-bg">
+                <video id="heroVideo" autoplay muted loop playsinline preload="auto">
+                    <source src="./HexaVideo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </section>
 
-    <!-- Services Section -->
-    <section id="services" class="py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Our Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="servicesGrid">
-                <div class="bg-white p-6 rounded-lg shadow highlight" data-service="1">
-                    <img src="./img1.png" alt="Software Development" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Software Development</h3>
-                    <p class="text-[#01303f]">Custom software solutions tailored to streamline construction and architecture workflows.</p>
+            <!-- Hero Content Section -->
+            <section class="hero-content text-white py-20 bg-[#01303f]">
+                <div class="container mx-auto px-6 text-center">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fadeIn">Transforming Construction with Innovation</h1>
+                    <p class="text-lg md:text-xl mb-6 animate-fadeIn delay-200">Hexa Innovation delivers cutting-edge technology solutions for the construction and architecture industries.</p>
+                    <button data-page="contact" class="inline-block bg-[#02a9f7] text-white px-6 py-3 rounded-lg hover:bg-[#89d6fb] transition-colors animate-fadeIn delay-400 cursor-pointer">Get in Touch</button>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="2">
-                    <img src="./img2.png" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Digital Twin & BIM Automation</h3>
-                    <p class="text-[#01303f]">Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="3">
-                    <img src="./img3.png" alt="VR & AR Solutions" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">VR & AR Solutions</h3>
-                    <p class="text-[#01303f]">Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="4">
-                    <img src="./img4.png" alt="AEC & VDC Automation" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AEC & VDC Automation</h3>
-                    <p class="text-[#01303f]">Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="5">
-                    <img src="./img5.png" alt="4D Construction Scheduling" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">4D Construction Scheduling</h3>
-                    <p class="text-[#01303f]">Integrate time management with project planning to meet deadlines without compromising quality.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow" data-service="6">
-                    <img src="./img6.png" alt="AI & Machine Learning" class="service-img w-full mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AI & Machine Learning</h3>
-                    <p class="text-[#01303f]">Leveraging AI and ML to optimize resource management and drive productivity.</p>
-                </div>
-            </div>
+            </section>
         </div>
-    </section>
 
-    <!-- Updates Section -->
-    <section id="updates" class="bg-[#89d6fb] py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Latest Updates</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Harnessing Energy Modeling with Digital Twins</h3>
-                    <p class="text-[#01303f]">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
-                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
+        <!-- Services Page -->
+        <div id="services-page" class="page">
+            <section class="py-16">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Our Services</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="servicesGrid">
+                        <div class="bg-white p-6 rounded-lg shadow highlight" data-service="1">
+                            <img src="./img1.png" alt="Software Development" class="service-img w-full mb-4">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Software Development</h3>
+                            <p class="text-[#01303f]">Custom software solutions tailored to streamline construction and architecture workflows.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow" data-service="2">
+                            <img src="./img2.png" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Digital Twin & BIM Automation</h3>
+                            <p class="text-[#01303f]">Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow" data-service="3">
+                            <img src="./img3.png" alt="VR & AR Solutions" class="service-img w-full mb-4">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">VR & AR Solutions</h3>
+                            <p class="text-[#01303f]">Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow" data-service="4">
+                            <img src="./img4.png" alt="AEC & VDC Automation" class="service-img w-full mb-4">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AEC & VDC Automation</h3>
+                            <p class="text-[#01303f]">Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow" data-service="5">
+                            <img src="./img5.png" alt="4D Construction Scheduling" class="service-img w-full mb-4">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">4D Construction Scheduling</h3>
+                            <p class="text-[#01303f]">Integrate time management with project planning to meet deadlines without compromising quality.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow" data-service="6">
+                            <img src="./img6.png" alt="AI & Machine Learning" class="service-img w-full mb-4">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AI & Machine Learning</h3>
+                            <p class="text-[#01303f]">Leveraging AI and ML to optimize resource management and drive productivity.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Understanding Digital Twin Technology</h3>
-                    <p class="text-[#01303f]">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
-                    <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
-                </div>
-            </div>
+            </section>
         </div>
-    </section>
 
-    <!-- About Section -->
-    <section id="about" class="bg-[#d4f0fc] py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">About Hexa Innovation</h2>
-            <p class="text-lg text-center mb-6 text-[#01303f]">Founded in 2024, Hexa Innovation is at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions. With a team of 11-50 dedicated professionals, we specialize in software development, AEC automation, VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
-            <p class="text-lg text-center text-[#01303f]">Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering. Join us in redefining the future of construction through innovation and technology.</p>
-        </div>
-    </section>
+        <!-- Courses Page -->
+        <div id="courses-page" class="page">
+            <section class="py-16">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Professional Courses</h2>
+                    <p class="text-lg text-center mb-12 text-[#01303f] max-w-3xl mx-auto">Enhance your skills with our comprehensive training programs designed for construction and architecture professionals.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- BIM Automation Course -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#02a9f7] to-[#89d6fb] flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <h3 class="text-2xl font-bold mb-2">BIM</h3>
+                                    <p class="text-lg">Automation</p>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">BIM Automation Mastery</h3>
+                                <p class="text-[#01303f] mb-4">Learn to automate Building Information Modeling workflows, streamline project delivery, and enhance collaboration across teams.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Dynamo Visual Programming</li>
+                                    <li>• Revit API Development</li>
+                                    <li>• Automated Documentation</li>
+                                    <li>• Quality Control Systems</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">12 weeks</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Learn More</button>
+                                </div>
+                            </div>
+                        </div>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-16">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Contact Us</h2>
-            <div class="max-w-lg mx-auto">
-                <p class="text-lg text-center mb-6 text-[#01303f]">Ready to transform your construction projects? Reach out to us!</p>
-                <div class="space-y-4">
-                    <p class="text-center text-[#01303f]"><strong>Website:</strong> <a href="http://hexainnovation.com" class="text-[#02a9f7] hover:underline">hexainnovation.com</a></p>
-                    <p class="text-center text-[#01303f]"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Hexa Innovation</a></p>
+                        <!-- Digital Twin Course -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#02577a] to-[#02a9f7] flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <h3 class="text-2xl font-bold mb-2">Digital</h3>
+                                    <p class="text-lg">Twin</p>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Digital Twin Development</h3>
+                                <p class="text-[#01303f] mb-4">Master the creation and management of digital twins for real-time monitoring and predictive maintenance.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• IoT Integration</li>
+                                    <li>• Real-time Data Analytics</li>
+                                    <li>• Predictive Modeling</li>
+                                    <li>• Performance Optimization</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">10 weeks</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Learn More</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- VR/AR Course -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#89d6fb] to-[#d4f0fc] flex items-center justify-center">
+                                <div class="text-[#01303f] text-center">
+                                    <h3 class="text-2xl font-bold mb-2">VR/AR</h3>
+                                    <p class="text-lg">Solutions</p>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">VR/AR for AEC</h3>
+                                <p class="text-[#01303f] mb-4">Develop immersive experiences for architectural visualization and construction planning using cutting-edge VR/AR technology.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Unity Development</li>
+                                    <li>• Immersive Visualization</li>
+                                    <li>• Client Presentation Tools</li>
+                                    <li>• Mixed Reality Applications</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">14 weeks</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Learn More</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI/ML Course -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#01303f] to-[#02577a] flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <h3 class="text-2xl font-bold mb-2">AI/ML</h3>
+                                    <p class="text-lg">Construction</p>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">AI for Construction</h3>
+                                <p class="text-[#01303f] mb-4">Apply artificial intelligence and machine learning techniques to optimize construction processes and resource management.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Predictive Analytics</li>
+                                    <li>• Resource Optimization</li>
+                                    <li>• Quality Assessment</li>
+                                    <li>• Risk Management</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">16 weeks</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Learn More</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4D Scheduling Course -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#02a9f7] to-[#d4f0fc] flex items-center justify-center">
+                                <div class="text-[#01303f] text-center">
+                                    <h3 class="text-2xl font-bold mb-2">4D</h3>
+                                    <p class="text-lg">Scheduling</p>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">4D Construction Planning</h3>
+                                <p class="text-[#01303f] mb-4">Master time-based project visualization and scheduling to deliver projects on time and within budget.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Time-based Visualization</li>
+                                    <li>• Schedule Integration</li>
+                                    <li>• Resource Planning</li>
+                                    <li>• Progress Monitoring</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">8 weeks</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Learn More</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Professional Certificate -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 feature-card flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <h3 class="text-2xl font-bold mb-2">Professional</h3>
+                                    <p class="text-lg">Certificate</p>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Construction Technology Certificate</h3>
+                                <p class="text-[#01303f] mb-4">Comprehensive program covering all aspects of modern construction technology and digital transformation.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Complete Technology Stack</li>
+                                    <li>• Industry Recognition</li>
+                                    <li>• Career Advancement</li>
+                                    <li>• Lifetime Support</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">24 weeks</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Learn More</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
-    </section>
+
+        <!-- Addins Page -->
+        <div id="addins-page" class="page">
+            <section class="py-16">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Software Addins & Tools</h2>
+                    <p class="text-lg text-center mb-12 text-[#01303f] max-w-3xl mx-auto">Boost your productivity with our specialized addins and tools designed for Revit, AutoCAD, and other industry-standard software.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Revit Automation Addin -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#02a9f7] to-[#89d6fb] flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <div class="text-4xl mb-2">🏗️</div>
+                                    <h3 class="text-xl font-bold">Revit Pro</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Revit Automation Suite</h3>
+                                <p class="text-[#01303f] mb-4">Comprehensive Revit addin that automates repetitive tasks, generates reports, and streamlines model management.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Automated Sheet Creation</li>
+                                    <li>• Family Management Tools</li>
+                                    <li>• Quality Control Checks</li>
+                                    <li>• Custom Report Generation</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">$299/year</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Download</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CAD Integration Tool -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#02577a] to-[#02a9f7] flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <div class="text-4xl mb-2">📐</div>
+                                    <h3 class="text-xl font-bold">CAD Sync</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">CAD Integration Platform</h3>
+                                <p class="text-[#01303f] mb-4">Seamlessly integrate AutoCAD with other construction software for enhanced workflow efficiency and data consistency.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Multi-platform Sync</li>
+                                    <li>• Version Control</li>
+                                    <li>• Collaborative Editing</li>
+                                    <li>• Cloud Integration</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">$199/year</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Download</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Energy Analysis Tool -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#89d6fb] to-[#d4f0fc] flex items-center justify-center">
+                                <div class="text-[#01303f] text-center">
+                                    <div class="text-4xl mb-2">⚡</div>
+                                    <h3 class="text-xl font-bold">Energy Pro</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Energy Analysis Suite</h3>
+                                <p class="text-[#01303f] mb-4">Advanced energy modeling and analysis tools integrated directly into your design software for sustainable building solutions.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Real-time Energy Modeling</li>
+                                    <li>• Sustainability Reporting</li>
+                                    <li>• Code Compliance Check</li>
+                                    <li>• Cost-Benefit Analysis</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">$399/year</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Download</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Management Addin -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 bg-gradient-to-br from-[#01303f] to-[#02577a] flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <div class="text-4xl mb-2">📊</div>
+                                    <h3 class="text-xl font-bold">Project Hub</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Project Management Hub</h3>
+                                <p class="text-[#01303f] mb-4">Centralized project management solution that connects design software with scheduling, budgeting, and team collaboration tools.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Task Automation</li>
+                                    <li>• Budget Tracking</li>
+                                    <li>• Team Collaboration</li>
+                                    <li>• Progress Dashboards</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">$249/year</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Download</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quality Control Tool -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                            <div class="h-48 feature-card flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <div class="text-4xl mb-2">✅</div>
+                                    <h3 class="text-xl font-bold">QC Master</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Quality Control Master</h3>
+                                <p class="text-[#01303f] mb-4">Comprehensive quality control and compliance checking tool for construction drawings and models.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Automated Compliance Checks</li>
+                                    <li>• Error Detection</li>
+                                    <li>• Standard Validation</li>
+                                    <li>• Custom Rule Engine</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[#02a9f7] font-semibold">$349/year</span>
+                                    <button class="bg-[#02a9f7] text-white px-4 py-2 rounded hover:bg-[#02577a] transition-colors">Download</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Coming Soon -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow opacity-75">
+                            <div class="h-48 bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+                                <div class="text-white text-center">
+                                    <div class="text-4xl mb-2">🚀</div>
+                                    <h3 class="text-xl font-bold">Coming Soon</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Advanced Analytics Suite</h3>
+                                <p class="text-[#01303f] mb-4">Next-generation analytics platform for comprehensive project insights and performance optimization.</p>
+                                <ul class="text-sm text-[#01303f] mb-4 space-y-1">
+                                    <li>• Advanced Reporting</li>
+                                    <li>• Predictive Analytics</li>
+                                    <li>• Performance Metrics</li>
+                                    <li>• Integration APIs</li>
+                                </ul>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500 font-semibold">Q2 2025</span>
+                                    <button disabled class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed">Coming Soon</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Updates Page -->
+        <div id="updates-page" class="page">
+            <section class="py-16">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Latest Updates</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Harnessing Energy Modeling with Digital Twins</h3>
+                            <p class="text-[#01303f] mb-4">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
+                            <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Understanding Digital Twin Technology</h3>
+                            <p class="text-[#01303f] mb-4">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
+                            <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AI-Powered Construction Planning</h3>
+                            <p class="text-[#01303f] mb-4">Our latest AI algorithms are now capable of optimizing construction schedules with 95% accuracy, reducing project delays and cost overruns significantly.</p>
+                            <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">VR Training Modules Launch</h3>
+                            <p class="text-[#01303f] mb-4">We're excited to announce the launch of our immersive VR training modules for construction safety and equipment operation, now available for enterprise clients.</p>
+                            <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- About Page -->
+        <div id="about-page" class="page">
+            <section class="py-16">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">About Hexa Innovation</h2>
+                    <div class="max-w-4xl mx-auto">
+                        <p class="text-lg text-center mb-8 text-[#01303f]">Founded in 2024, Hexa Innovation is at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions. With a team of 11-50 dedicated professionals, we specialize in software development, AEC automation, VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Our Mission</h3>
+                                <p class="text-[#01303f]">To revolutionize the construction and architecture industries by providing innovative technology solutions that enhance efficiency, reduce costs, and improve project outcomes for our clients worldwide.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Our Vision</h3>
+                                <p class="text-[#01303f]">To become the leading provider of construction technology solutions, driving digital transformation and sustainable practices across the global AEC industry.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-lg shadow mb-8">
+                            <h3 class="text-2xl font-semibold mb-6 text-[#02577a] text-center">Why Choose Hexa Innovation?</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🎯</div>
+                                    <h4 class="font-semibold text-[#02577a] mb-2">Expertise</h4>
+                                    <p class="text-sm text-[#01303f]">Deep industry knowledge and technical expertise</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🔄</div>
+                                    <h4 class="font-semibold text-[#02577a] mb-2">Innovation</h4>
+                                    <p class="text-sm text-[#01303f]">Cutting-edge solutions using latest technologies</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">🤝</div>
+                                    <h4 class="font-semibold text-[#02577a] mb-2">Partnership</h4>
+                                    <p class="text-sm text-[#01303f]">Long-term partnerships with our clients</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl mb-3">📈</div>
+                                    <h4 class="font-semibold text-[#02577a] mb-2">Results</h4>
+                                    <p class="text-sm text-[#01303f]">Proven track record of successful implementations</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-lg text-center text-[#01303f]">Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering. Join us in redefining the future of construction through innovation and technology.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact-page" class="page">
+            <section class="py-16">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Contact Us</h2>
+                    <div class="max-w-4xl mx-auto">
+                        <p class="text-lg text-center mb-8 text-[#01303f]">Ready to transform your construction projects? We'd love to hear from you!</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Contact Form -->
+                            <div class="bg-white p-8 rounded-lg shadow">
+                                <h3 class="text-xl font-semibold mb-6 text-[#02577a]">Get in Touch</h3>
+                                <form class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-[#01303f] mb-1">Name</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#02a9f7] focus:border-transparent">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-[#01303f] mb-1">Email</label>
+                                        <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#02a9f7] focus:border-transparent">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-[#01303f] mb-1">Company</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#02a9f7] focus:border-transparent">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-[#01303f] mb-1">Message</label>
+                                        <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#02a9f7] focus:border-transparent"></textarea>
+                                    </div>
+                                    <button type="submit" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-md hover:bg-[#02577a] transition-colors">Send Message</button>
+                                </form>
+                            </div>
+
+                            <!-- Contact Information -->
+                            <div class="space-y-6">
+                                <div class="bg-white p-6 rounded-lg shadow">
+                                    <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Contact Information</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="text-[#02a9f7] text-xl">🌐</div>
+                                            <div>
+                                                <p class="font-medium text-[#01303f]">Website</p>
+                                                <a href="http://hexainnovation.com" target="_blank" class="text-[#02a9f7] hover:underline">hexainnovation.com</a>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="text-[#02a9f7] text-xl">💼</div>
+                                            <div>
+                                                <p class="font-medium text-[#01303f]">LinkedIn</p>
+                                                <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="text-[#02a9f7] hover:underline">Hexa Innovation</a>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="text-[#02a9f7] text-xl">📧</div>
+                                            <div>
+                                                <p class="font-medium text-[#01303f]">Email</p>
+                                                <a href="mailto:info@hexainnovation.com" class="text-[#02a9f7] hover:underline">info@hexainnovation.com</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-[#02a9f7] p-6 rounded-lg text-white">
+                                    <h3 class="text-xl font-semibold mb-4">Ready to Innovate?</h3>
+                                    <p class="mb-4">Let's discuss how we can help transform your construction and architecture projects with our innovative technology solutions.</p>
+                                    <button data-page="services" class="bg-white text-[#02a9f7] px-4 py-2 rounded hover:bg-gray-100 transition-colors cursor-pointer">Explore Our Services</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </div>
 
     <!-- Footer -->
     <footer class="bg-[#01303f] text-white py-6 text-center">
         <p>&copy; 2025 Hexa Innovation. All rights reserved.</p>
     </footer>
 
-    <!-- JS -->
+    <!-- SPA JavaScript -->
     <script>
-        // Autoplay fallback
-        document.addEventListener("DOMContentLoaded", () => {
-            const video = document.getElementById("heroVideo");
-            video.play().catch(() => { video.muted = true; video.play(); });
-        });
+        // SPA Router
+        class SPARouter {
+            constructor() {
+                this.currentPage = 'home';
+                this.pages = ['home', 'services', 'courses', 'addins', 'updates', 'about', 'contact'];
+                this.init();
+            }
 
-        // Service Highlight Rotation
-        const services = document.querySelectorAll('#servicesGrid > div');
-        let currentService = 1;
-        const totalServices = 6;
+            init() {
+                // Initialize navigation event listeners
+                this.setupNavigation();
+                
+                // Handle initial page load
+                this.loadInitialPage();
+                
+                // Initialize other features
+                this.initVideoAutoplay();
+                this.initServiceRotation();
+                this.initMobileMenu();
+            }
 
-        function rotateServices() {
-            services.forEach(service => {
-                service.classList.remove('highlight');
-                service.classList.add('fade-out');
-            });
-            const current = document.querySelector(`[data-service="${currentService}"]`);
-            current.classList.remove('fade-out');
-            current.classList.add('fade-in', 'highlight');
-            currentService = (currentService % totalServices) + 1;
-        }
-        rotateServices();
-        setInterval(rotateServices, 3000);
+            setupNavigation() {
+                // Handle navigation clicks
+                document.addEventListener('click', (e) => {
+                    const navItem = e.target.closest('[data-page]');
+                    if (navItem) {
+                        e.preventDefault();
+                        const page = navItem.getAttribute('data-page');
+                        this.navigateTo(page);
+                    }
+                });
 
-        // Toggle Mobile Menu
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
+                // Handle browser back/forward
+                window.addEventListener('popstate', (e) => {
+                    const page = e.state?.page || 'home';
+                    this.navigateTo(page, false);
+                });
+            }
 
-        function toggleMenu(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            const isActive = hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active', isActive);
-            document.body.style.overflow = isActive ? 'hidden' : '';
-        }
+            loadInitialPage() {
+                const hash = window.location.hash.slice(1);
+                if (hash && this.pages.includes(hash)) {
+                    this.navigateTo(hash, false);
+                } else {
+                    this.navigateTo('home', false);
+                }
+            }
 
-        hamburger.addEventListener('click', toggleMenu);
+            navigateTo(page, updateHistory = true) {
+                if (!this.pages.includes(page)) return;
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', (event) => {
-                event.stopPropagation();
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-        });
+                // Hide current page
+                const currentPageElement = document.getElementById(`${this.currentPage}-page`);
+                if (currentPageElement) {
+                    currentPageElement.classList.remove('active');
+                }
 
-        document.addEventListener('click', (event) => {
-            if (!hamburger.contains(event.target) && !navLinks.contains(event.target) && navLinks.classList.contains('active')) {
+                // Show new page
+                const newPageElement = document.getElementById(`${page}-page`);
+                if (newPageElement) {
+                    setTimeout(() => {
+                        newPageElement.classList.add('active');
+                    }, 150);
+                }
+
+                // Update navigation active state
+                this.updateActiveNavItem(page);
+
+                // Update browser history
+                if (updateHistory) {
+                    const url = page === 'home' ? '/' : `/#${page}`;
+                    window.history.pushState({ page }, '', url);
+                }
+
+                this.currentPage = page;
+
+                // Close mobile menu if open
+                this.closeMobileMenu();
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            updateActiveNavItem(page) {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-page') === page) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+
+            closeMobileMenu() {
+                const hamburger = document.getElementById('hamburger');
+                const navLinks = document.getElementById('navLinks');
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
                 document.body.style.overflow = '';
             }
-        });
 
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
+            // Video autoplay functionality
+            initVideoAutoplay() {
+                document.addEventListener("DOMContentLoaded", () => {
+                    const video = document.getElementById("heroVideo");
+                    if (video) {
+                        video.play().catch(() => { 
+                            video.muted = true; 
+                            video.play(); 
+                        });
+                    }
+                });
             }
+
+            // Service highlight rotation (only for services page)
+            initServiceRotation() {
+                let currentService = 1;
+                const totalServices = 6;
+                let rotationInterval;
+
+                const startRotation = () => {
+                    if (rotationInterval) clearInterval(rotationInterval);
+                    
+                    const rotateServices = () => {
+                        if (this.currentPage !== 'services') return;
+                        
+                        const services = document.querySelectorAll('#servicesGrid > div');
+                        services.forEach(service => {
+                            service.classList.remove('highlight');
+                            service.classList.add('fade-out');
+                        });
+                        
+                        const current = document.querySelector(`[data-service="${currentService}"]`);
+                        if (current) {
+                            current.classList.remove('fade-out');
+                            current.classList.add('fade-in', 'highlight');
+                        }
+                        
+                        currentService = (currentService % totalServices) + 1;
+                    };
+                    
+                    rotateServices();
+                    rotationInterval = setInterval(rotateServices, 3000);
+                };
+
+                // Start rotation when on services page
+                document.addEventListener('click', (e) => {
+                    const navItem = e.target.closest('[data-page]');
+                    if (navItem && navItem.getAttribute('data-page') === 'services') {
+                        setTimeout(startRotation, 300);
+                    }
+                });
+
+                // Start rotation if initially on services page
+                if (this.currentPage === 'services') {
+                    startRotation();
+                }
+            }
+
+            // Mobile menu functionality
+            initMobileMenu() {
+                const hamburger = document.getElementById('hamburger');
+                const navLinks = document.getElementById('navLinks');
+
+                const toggleMenu = (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const isActive = hamburger.classList.toggle('active');
+                    navLinks.classList.toggle('active', isActive);
+                    document.body.style.overflow = isActive ? 'hidden' : '';
+                };
+
+                hamburger.addEventListener('click', toggleMenu);
+
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                    });
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!hamburger.contains(event.target) && !navLinks.contains(event.target) && navLinks.classList.contains('active')) {
+                        this.closeMobileMenu();
+                    }
+                });
+
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                        this.closeMobileMenu();
+                    }
+                });
+            }
+        }
+
+        // Initialize SPA when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new SPARouter();
         });
     </script>
 </body>
