@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clash Detection Report - Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding: 0;
+            color: #2d3748;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            background: #ffffff;
+            padding: 20px 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-bottom: 1px solid #e2e8f0;
+            border-left: 4px solid #2c3e50;
+        }
+
+        .nav-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2em;
+        }
+
+        .logo-text h1 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .logo-text p {
+            color: #5a6c7d;
+            font-size: 0.85em;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            padding: 40px;
+        }
+
+        /* Upload Section - Centered Card */
+        .upload-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            padding: 40px 20px;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #2c3e50;
+            padding: 60px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .upload-header {
+            margin-bottom: 40px;
+        }
+
+        .upload-header h2 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .upload-header p {
+            color: #5a6c7d;
+            font-size: 1.05em;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .upload-area {
+            border: 2px dashed #34495e;
+            border-radius: 6px;
+            padding: 50px 30px;
+            cursor: default;
+            transition: all 0.3s ease;
+            background: #ecf0f1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover:not(.loading) {
+            background: #d5dbdb;
+            border-color: #2c3e50;
+        }
+
+        .upload-area.dragover {
+            background: #bdc3c7;
+            border-color: #2c3e50;
+            cursor: pointer;
+        }
+
+        .upload-area.loading {
+            background: #f0fff4;
+            cursor: wait;
+        }
+
+        .upload-icon {
+            font-size: 5em;
+            color: #34495e;
+            margin-bottom: 20px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .upload-text {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .upload-subtext {
+            color: #7f8c8d;
+            font-size: 1em;
+            margin-bottom: 25px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .btn-primary {
+            background: #2c3e50;
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(44, 62, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .btn-primary span {
+            font-size: 1.2em;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #34495e;
+            box-shadow: 0 4px 8px rgba(44, 62, 80, 0.4);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading-message {
+            color: #27ae60;
+            font-size: 1.1em;
+            margin-top: 25px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #c6f6d5;
+            border-top-color: #27ae60;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .file-types {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .file-types-title {
+            color: #5a6c7d;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-types-list {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .file-type-badge {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            display: none;
+        }
+
+        .dashboard-content.active {
+            display: block;
+        }
+
+        .filter-bar {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #2c3e50;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-bar label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-bar select, .filter-bar input {
+            padding: 12px 16px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 0.95em;
+            outline: none;
+            transition: all 0.2s;
+            background: white;
+            min-width: 180px;
+            color: #2c3e50;
+        }
+
+        .filter-bar select:focus, .filter-bar input:focus {
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        .btn-reset {
+            background: #95a5a6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: auto;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover {
+            background: #7f8c8d;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+            border-left: 4px solid #34495e;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .stat-label {
+            color: #5a6c7d;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .stat-number {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #2c3e50;
+            line-height: 1;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #2c3e50;
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .chart-title small {
+            color: #7f8c8d;
+            font-size: 0.7em;
+            font-weight: 400;
+        }
+
+        .table-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #2c3e50;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.8em;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .severity-high {
+            color: #c0392b;
+            font-weight: 700;
+        }
+
+        .severity-medium {
+            color: #d68910;
+            font-weight: 700;
+        }
+
+        .severity-low {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-new { background: #e74c3c; color: white; }
+        .badge-active { background: #f39c12; color: white; }
+        .badge-reviewed { background: #3498db; color: white; }
+        .badge-approved { background: #27ae60; color: white; }
+        .badge-resolved { background: #95a5a6; color: white; }
+
+        canvas {
+            max-height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .upload-card {
+                padding: 40px 30px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-bar select, .filter-bar input {
+                min-width: 100%;
+            }
+
+            .btn-reset {
+                margin-left: 0;
+            }
+
+            .logo-text h1 {
+                font-size: 1.2em;
+            }
+
+            .top-nav {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <div class="nav-content">
+            <div class="logo-section">
+                <div class="logo-icon">🏗️</div>
+                <div class="logo-text">
+                    <h1>Clash Detection Dashboard</h1>
+                    <p>Powered by Navisworks XML Reports</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Upload Section -->
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-card">
+                    <div class="upload-header">
+                        <h2>Import Clash Report</h2>
+                        <p>Upload your Navisworks XML clash detection report to generate comprehensive analytics and visualizations</p>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon" id="uploadIcon">📁</div>
+                        <div class="upload-text" id="uploadText">Drag & Drop your file here</div>
+                        <div class="upload-subtext" id="uploadSubtext">or click the button below to browse</div>
+                        <input type="file" id="fileInput" accept=".xml">
+                        <button class="btn-primary" type="button" onclick="document.getElementById('fileInput').click()">
+                            <span>📂</span> Choose File
+                        </button>
+                        <div id="loadingMessage" class="loading-message" style="display: none;">
+                            <div class="spinner"></div>
+                            Processing your clash report...
+                        </div>
+                    </div>
+
+                    <div class="file-types">
+                        <div class="file-types-title">Supported Formats</div>
+                        <div class="file-types-list">
+                            <span class="file-type-badge">XML Files</span>
+                            <span class="file-type-badge">Navisworks Reports</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content" id="dashboardContent">
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label>Test</label>
+                        <select id="testFilter" onchange="applyFilters()">
+                            <option value="all">All Tests</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select id="statusFilter" onchange="applyFilters()">
+                            <option value="all">All Status</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Severity</label>
+                        <select id="severityFilter" onchange="applyFilters()">
+                            <option value="all">All Severity</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Search</label>
+                        <input type="text" id="searchInput" placeholder="Search clashes..." onkeyup="applyFilters()">
+                    </div>
+                    
+                    <button class="btn-reset" onclick="resetDashboard()">New Upload</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Clashes</div>
+                        <div class="stat-number" id="totalClashes">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">New Clashes</div>
+                        <div class="stat-number" id="newClashes">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Active Tests</div>
+                        <div class="stat-number" id="activeTests">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Avg Distance</div>
+                        <div class="stat-number" id="avgDistance">0m</div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <div class="chart-title">Clashes by Test <small>(Click to filter)</small></div>
+                        <canvas id="clashByTestChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Severity Distribution <small>(Click to filter)</small></div>
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Status Distribution <small>(Click to filter)</small></div>
+                    <canvas id="statusChart"></canvas>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let charts = {
+            clashByTest: null,
+            severity: null,
+            status: null
+        };
+
+        let parsedData = {
+            tests: [],
+            allClashes: []
+        };
+
+        let currentFilters = {
+            test: 'all',
+            status: 'all',
+            severity: 'all',
+            search: ''
+        };
+
+        let isProcessing = false;
+
+        const uploadIcon = document.getElementById('uploadIcon');
+        const uploadText = document.getElementById('uploadText');
+        const uploadSubtext = document.getElementById('uploadSubtext');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            if (!isProcessing) uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.xml') && !isProcessing) {
+                handleFile(file);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && !isProcessing) {
+                handleFile(file);
+            }
+            e.target.value = '';
+        });
+
+        function handleFile(file) {
+            if (isProcessing) return;
+            isProcessing = true;
+            
+            uploadArea.classList.add('loading');
+            loadingMessage.style.display = 'flex';
+            uploadIcon.style.display = 'none';
+            uploadText.style.display = 'none';
+            uploadSubtext.style.display = 'none';
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const xmlText = e.target.result;
+                    parseXML(xmlText);
+                } catch (error) {
+                    console.error('Error parsing XML:', error);
+                    alert('Error reading file: ' + error.message);
+                    resetUploadUI();
+                }
+            };
+            reader.onerror = () => {
+                alert('Error reading file.');
+                resetUploadUI();
+            };
+            reader.readAsText(file);
+        }
+
+        function resetUploadUI() {
+            isProcessing = false;
+            uploadArea.classList.remove('loading');
+            loadingMessage.style.display = 'none';
+            uploadIcon.style.display = 'block';
+            uploadText.style.display = 'block';
+            uploadSubtext.style.display = 'block';
+            fileInput.value = '';
+        }
+
+        function parseXML(xmlText) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+            
+            let clashtests;
+            if (xmlDoc.getElementsByTagName('root')[0]) {
+                clashtests = xmlDoc.getElementsByTagName('clashtest');
+            } else {
+                clashtests = xmlDoc.querySelectorAll('exchange batchtest clashtests clashtest');
+            }
+            
+            parsedData.tests = [];
+            parsedData.allClashes = [];
+            
+            let totalNew = 0;
+            let totalDistances = [];
+
+            for (let test of clashtests) {
+                const testName = test.getAttribute('name');
+                const clashResults = test.getElementsByTagName('clashresult');
+                const total = clashResults.length;
+                
+                if (total === 0) continue;
+
+                let testStatusCounts = { new: 0, active: 0, reviewed: 0, approved: 0, resolved: 0 };
+                for (let clash of clashResults) {
+                    let status = clash.getAttribute('status');
+                    if (status) {
+                        status = status.toLowerCase();
+                        testStatusCounts[status] = (testStatusCounts[status] || 0) + 1;
+                    }
+                }
+
+                const newCount = testStatusCounts.new;
+                totalNew += newCount;
+
+                const testData = {
+                    name: testName,
+                    total: total,
+                    new: newCount,
+                    active: testStatusCounts.active,
+                    clashes: []
+                };
+
+                for (let clash of clashResults) {
+                    let status = clash.getAttribute('status') || 'New';
+                    const distance = parseFloat(clash.getAttribute('distance')) || 0;
+                    totalDistances.push(distance);
+
+                    const clashPoint = clash.getElementsByTagName('pos3f')[0];
+                    const x = clashPoint ? clashPoint.getAttribute('x') : '0';
+                    const y = clashPoint ? clashPoint.getAttribute('y') : '0';
+                    const z = clashPoint ? clashPoint.getAttribute('z') : '0';
+
+                    const clashId = clash.getAttribute('name') || clash.getAttribute('href') || 'N/A';
+
+                    const clashData = {
+                        id: clashId,
+                        status: status,
+                        distance: distance,
+                        position: `${x}, ${y}, ${z}`,
+                        testName: testName
+                    };
+
+                    testData.clashes.push(clashData);
+                    parsedData.allClashes.push(clashData);
+                }
+
+                parsedData.tests.push(testData);
+            }
+
+            const totalClashes = parsedData.allClashes.length;
+            const avgDistance = totalDistances.length > 0 ?
+                (totalDistances.reduce((a, b) => a + b, 0) / totalDistances.length).toFixed(3) : 0;
+
+            updateDashboard(totalClashes, totalNew, parsedData.tests.length, avgDistance);
+        }
+
+        function updateDashboard(total, newCount, activeTests, avgDist) {
+            document.getElementById('totalClashes').textContent = total;
+            document.getElementById('newClashes').textContent = newCount;
+            document.getElementById('activeTests').textContent = activeTests;
+            document.getElementById('avgDistance').textContent = avgDist + 'm';
+
+            populateTestFilter();
+            populateStatusFilter();
+            populateSeverityFilter();
+
+            createCharts();
+
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('dashboardContent').classList.add('active');
+            resetUploadUI();
+        }
+
+        function populateTestFilter() {
+            const testFilter = document.getElementById('testFilter');
+            testFilter.innerHTML = '<option value="all">All Tests</option>';
+            parsedData.tests.forEach(test => {
+                const option = document.createElement('option');
+                option.value = test.name;
+                option.textContent = test.name;
+                testFilter.appendChild(option);
+            });
+        }
+
+        function populateStatusFilter() {
+            const statusFilter = document.getElementById('statusFilter');
+            statusFilter.innerHTML = '<option value="all">All Status</option>';
+            const statusCounts = {};
+            parsedData.allClashes.forEach(clash => {
+                const upperStatus = clash.status.charAt(0).toUpperCase() + clash.status.slice(1).toLowerCase();
+                statusCounts[upperStatus] = (statusCounts[upperStatus] || 0) + 1;
+            });
+            Object.keys(statusCounts).sort().forEach(status => {
+                const option = document.createElement('option');
+                option.value = status.toLowerCase();
+                option.textContent = `${status} (${statusCounts[status]})`;
+                statusFilter.appendChild(option);
+            });
+        }
+
+        function populateSeverityFilter() {
+            const severityFilter = document.getElementById('severityFilter');
+            severityFilter.innerHTML = '<option value="all">All Severity</option>';
+            let highCount = 0, medCount = 0, lowCount = 0;
+            parsedData.allClashes.forEach(clash => {
+                const sev = getSeverity(clash.distance);
+                if (sev === 'High') highCount++;
+                else if (sev === 'Medium') medCount++;
+                else lowCount++;
+            });
+            ['High', 'Medium', 'Low'].forEach(sev => {
+                const count = sev === 'High' ? highCount : sev === 'Medium' ? medCount : lowCount;
+                const option = document.createElement('option');
+                option.value = sev.toLowerCase();
+                option.textContent = `${sev} (${count})`;
+                severityFilter.appendChild(option);
+            });
+        }
+
+        function getSeverity(distance) {
+            const d = Math.abs(distance);
+            if (d > 0.5) return 'High';
+            if (d > 0.2) return 'Medium';
+            return 'Low';
+        }
+
+        function getSeverityClass(severity) {
+            if (severity === 'High') return 'severity-high';
+            if (severity === 'Medium') return 'severity-medium';
+            return 'severity-low';
+        }
+
+        function getStatusBadge(status) {
+            const lowerStatus = status.toLowerCase();
+            const badges = {
+                'new': 'badge-new',
+                'active': 'badge-active',
+                'reviewed': 'badge-reviewed',
+                'approved': 'badge-approved',
+                'resolved': 'badge-resolved'
+            };
+            return badges[lowerStatus] || 'badge-new';
+        }
+
+        function populateTable() {
+            // Table removed - no longer needed
+        }
+
+        function applyFilters() {
+            currentFilters.test = document.getElementById('testFilter').value;
+            currentFilters.status = document.getElementById('statusFilter').value;
+            currentFilters.severity = document.getElementById('severityFilter').value;
+            currentFilters.search = document.getElementById('searchInput').value.toLowerCase();
+
+            // Filter logic for future use if needed
+            let visibleCount = parsedData.allClashes.length;
+
+            // Apply test filter
+            if (currentFilters.test !== 'all') {
+                visibleCount = parsedData.allClashes.filter(c => c.testName === currentFilters.test).length;
+            }
+
+            // Apply status filter
+            if (currentFilters.status !== 'all') {
+                visibleCount = parsedData.allClashes.filter(c => 
+                    c.status.toLowerCase() === currentFilters.status &&
+                    (currentFilters.test === 'all' || c.testName === currentFilters.test)
+                ).length;
+            }
+
+            // Apply severity filter
+            if (currentFilters.severity !== 'all') {
+                visibleCount = parsedData.allClashes.filter(c => {
+                    const sev = getSeverity(c.distance).toLowerCase();
+                    return sev === currentFilters.severity &&
+                        (currentFilters.test === 'all' || c.testName === currentFilters.test) &&
+                        (currentFilters.status === 'all' || c.status.toLowerCase() === currentFilters.status);
+                }).length;
+            }
+
+            // Apply search filter
+            if (currentFilters.search) {
+                visibleCount = parsedData.allClashes.filter(c => {
+                    const searchText = `${c.testName} ${c.id} ${c.status} ${c.position}`.toLowerCase();
+                    return searchText.includes(currentFilters.search);
+                }).length;
+            }
+
+            document.getElementById('totalClashes').textContent = visibleCount;
+        }
+
+        function createCharts() {
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+
+            const ctx1 = document.getElementById('clashByTestChart').getContext('2d');
+            charts.clashByTest = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: parsedData.tests.map(t => t.name),
+                    datasets: [{
+                        label: 'Number of Clashes',
+                        data: parsedData.tests.map(t => t.total),
+                        backgroundColor: '#34495e',
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(44, 62, 80, 0.95)',
+                            padding: 12,
+                            cornerRadius: 4,
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed.y} clashes`;
+                                }
+                            }
+                        }
+                    },
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            grid: {
+                                color: '#ecf0f1',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#5a6c7d',
+                                font: {
+                                    size: 11,
+                                    weight: '600'
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#2c3e50',
+                                font: {
+                                    size: 11,
+                                    weight: '600'
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const testName = parsedData.tests[index].name;
+                            document.getElementById('testFilter').value = testName;
+                            applyFilters();
+                        }
+                    }
+                }
+            });
+
+            let highCount = 0, medCount = 0, lowCount = 0;
+            parsedData.allClashes.forEach(clash => {
+                const sev = getSeverity(clash.distance);
+                if (sev === 'High') highCount++;
+                else if (sev === 'Medium') medCount++;
+                else lowCount++;
+            });
+
+            const ctx2 = document.getElementById('severityChart').getContext('2d');
+            charts.severity = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Severity', 'Medium Severity', 'Low Severity'],
+                    datasets: [{
+                        data: [highCount, medCount, lowCount],
+                        backgroundColor: ['#c0392b', '#d68910', '#27ae60'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        intersect: true
+                    },
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                },
+                                color: '#2c3e50'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(44, 62, 80, 0.95)',
+                            padding: 12,
+                            cornerRadius: 4,
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed} clashes`;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const severities = ['high', 'medium', 'low'];
+                            document.getElementById('severityFilter').value = severities[index];
+                            applyFilters();
+                        }
+                    }
+                }
+            });
+
+            const statusCounts = {};
+            const statusLabels = [];
+            const statusColors = ['#e74c3c', '#f39c12', '#3498db', '#27ae60', '#95a5a6'];
+            parsedData.allClashes.forEach(clash => {
+                const upperStatus = clash.status.charAt(0).toUpperCase() + clash.status.slice(1).toLowerCase();
+                statusCounts[upperStatus] = (statusCounts[upperStatus] || 0) + 1;
+            });
+
+            Object.keys(statusCounts).sort().forEach(status => {
+                statusLabels.push(status);
+            });
+
+            const ctx3 = document.getElementById('statusChart').getContext('2d');
+            charts.status = new Chart(ctx3, {
+                type: 'pie',
+                data: {
+                    labels: statusLabels,
+                    datasets: [{
+                        data: Object.values(statusCounts),
+                        backgroundColor: statusColors.slice(0, statusLabels.length),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        intersect: true
+                    },
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                },
+                                color: '#2c3e50'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(44, 62, 80, 0.95)',
+                            padding: 12,
+                            cornerRadius: 4,
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed} clashes`;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const status = statusLabels[index].toLowerCase();
+                            document.getElementById('statusFilter').value = status;
+                            applyFilters();
+                        }
+                    }
+                }
+            });
+        }
+
+        function resetDashboard() {
+            document.getElementById('uploadSection').style.display = 'flex';
+            document.getElementById('dashboardContent').classList.remove('active');
+            parsedData = { tests: [], allClashes: [] };
+            currentFilters = { test: 'all', status: 'all', severity: 'all', search: '' };
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+            resetUploadUI();
+        }
+    </script>
+</body>
+</html>
