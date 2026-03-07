@@ -522,15 +522,15 @@ function resetUploadUI() {
 /* ── XML PARSING ── */
 function parseXML(xmlText) {
   const xmlDoc = new DOMParser().parseFromString(xmlText, 'text/xml');
-  let clashtests = xmlDoc.querySelectorAll('exchange batchtest clashtests clashtest');
-  if (!clashtests.length) clashtests = xmlDoc.getElementsByTagName('clashtest');
+  // Support both <root> and <exchange> wrappers
+  let clashtests = xmlDoc.getElementsByTagName('clashtest');
 
   parsedData.tests = [];
   parsedData.allClashes = [];
   let totalNew = 0, distances = [];
 
   for (let test of clashtests) {
-    const testName = test.getAttribute('name');
+    const testName = test.getAttribute('name') || 'Unnamed Test';
     const results = test.getElementsByTagName('clashresult');
     if (!results.length) continue;
 
@@ -547,28 +547,33 @@ function parseXML(xmlText) {
       const status = r.getAttribute('status') || 'New';
       const distance = parseFloat(r.getAttribute('distance')) || 0;
       distances.push(distance);
-      const pos = r.getElementsByTagName('pos3f')[0];
+
+      // Position is inside <clashpoint><pos3f> 
+      const clashpoint = r.getElementsByTagName('clashpoint')[0];
+      const pos = clashpoint ? clashpoint.getElementsByTagName('pos3f')[0] : r.getElementsByTagName('pos3f')[0];
       const x = pos ? parseFloat(pos.getAttribute('x')).toFixed(3) : '0';
       const y = pos ? parseFloat(pos.getAttribute('y')).toFixed(3) : '0';
       const z = pos ? parseFloat(pos.getAttribute('z')).toFixed(3) : '0';
 
-      // Get proper clash name (not image href)
-      const rawName = r.getAttribute('name') || '';
-      const clashName = rawName && !rawName.match(/\.jpg|\.png|\.jpeg/i) ? rawName : (r.getAttribute('href') || rawName || 'N/A');
+      // Clash ID: use href stripped of extension (e.g. cd010001.jpg -> cd010001)
+      const href = r.getAttribute('href') || '';
+      const clashId = href ? href.replace(/\.[^.]+$/, '') : (r.getAttribute('name') || 'N/A');
 
-      // Extract both element IDs from clashobjects
-      const clashObjects = r.getElementsByTagName('clashobject');
-      let elem1 = 'N/A', elem2 = 'N/A';
-      if (clashObjects.length >= 1) {
-        // Try smarttag > value, then objectattribute name, then fallback to object name attr
-        const obj1 = clashObjects[0];
-        const obj2 = clashObjects.length >= 2 ? clashObjects[1] : null;
-        elem1 = getElemId(obj1);
-        elem2 = obj2 ? getElemId(obj2) : 'N/A';
+      // Extract element info from the two <clashobject> children
+      // Only get DIRECT children clashobjects of this clashresult
+      const allObjs = r.getElementsByTagName('clashobject');
+      // Filter to only direct children (depth = 1 level under clashresult)
+      const directObjs = [];
+      for (let obj of allObjs) {
+        if (obj.parentNode === r) directObjs.push(obj);
       }
 
+      let elem1 = 'N/A', elem2 = 'N/A';
+      if (directObjs.length >= 1) elem1 = extractElemInfo(directObjs[0]);
+      if (directObjs.length >= 2) elem2 = extractElemInfo(directObjs[1]);
+
       const clash = {
-        id: clashName,
+        id: clashId,
         elem1: elem1,
         elem2: elem2,
         status: status,
@@ -797,30 +802,40 @@ function resetDashboard() {
 }
 
 /* ── HELPERS ── */
-function getElemId(obj) {
+function extractElemInfo(obj) {
   if (!obj) return 'N/A';
-  // Try smarttag value (most descriptive)
-  const smarttag = obj.getElementsByTagName('smarttag')[0];
-  if (smarttag) {
-    const val = smarttag.getAttribute('value') || smarttag.textContent;
-    if (val && val.trim()) return val.trim();
-  }
-  // Try objectattribute with name containing 'id' or 'name'
-  const attrs = obj.getElementsByTagName('objectattribute');
-  for (let a of attrs) {
-    const aname = (a.getAttribute('name') || '').toLowerCase();
-    if (aname.includes('id') || aname.includes('name') || aname.includes('guid')) {
-      const val = a.getAttribute('value') || a.textContent;
-      if (val && val.trim()) return val.trim();
+
+  // Smarttag children: <name>Item Name</name> and <value>Default Wall</value>
+  // The XML <n> tag is parsed as <name> by the DOM parser
+  let itemName = '';
+  const smarttags = obj.getElementsByTagName('smarttag');
+  for (let st of smarttags) {
+    const nEl = st.getElementsByTagName('name')[0];
+    const vEl = st.getElementsByTagName('value')[0];
+    if (nEl && vEl && nEl.textContent.trim() === 'Item Name') {
+      itemName = vEl.textContent.trim();
+      break;
     }
   }
-  // First objectattribute value
-  if (attrs.length > 0) {
-    const val = attrs[0].getAttribute('value') || attrs[0].textContent;
-    if (val && val.trim()) return val.trim();
+  // Fallback: just use the first smarttag value if no "Item Name" found
+  if (!itemName && smarttags.length > 0) {
+    const vEl = smarttags[0].getElementsByTagName('value')[0];
+    if (vEl) itemName = vEl.textContent.trim();
   }
-  // Fall back to the object's own name attribute
-  return obj.getAttribute('name') || 'N/A';
+
+  // Get element ID from <objectattribute><value>
+  let elemId = '';
+  const attrEl = obj.getElementsByTagName('objectattribute')[0];
+  if (attrEl) {
+    const valEl = attrEl.getElementsByTagName('value')[0];
+    if (valEl) elemId = valEl.textContent.trim();
+  }
+
+  // Combine: "Item Name [ID]"
+  if (itemName && elemId) return `${itemName} [${elemId}]`;
+  if (itemName) return itemName;
+  if (elemId) return elemId;
+  return 'N/A';
 }
 
 function getSev(d) {
