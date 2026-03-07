@@ -5,1867 +5,530 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hexa Innovation — Transforming Construction & Architecture</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ink: #0a0f14;
-    --ink2: #111820;
-    --surface: #141c25;
-    --panel: #1a2535;
-    --border: rgba(255,255,255,0.07);
-    --cyan: #00c2e0;
-    --cyan2: #0090a8;
-    --amber: #f4a623;
-    --text: #e8edf2;
-    --muted: #7a8fa3;
-    --white: #ffffff;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--ink);
-    color: var(--text);
-    overflow-x: hidden;
-  }
-
-  h1, h2, h3, h4, h5 {
-    font-family: 'Syne', sans-serif;
-    letter-spacing: -0.02em;
-  }
-
-  /* ── NOISE OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
-
-  /* ── HEADER ── */
-  header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 1000;
-    padding: 0 48px;
-    height: 68px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(10,15,20,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-
-  .logo-hex {
-    width: 36px;
-    height: 36px;
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .logo-hex svg { width: 100%; height: 100%; }
-
-  .logo-name {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.1rem;
-    color: var(--white);
-    letter-spacing: 0.02em;
-  }
-  .logo-name span { color: var(--cyan); }
-
-  nav { display: flex; align-items: center; gap: 6px; }
-
-  nav a {
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--muted);
-    text-decoration: none;
-    padding: 6px 14px;
-    border-radius: 6px;
-    transition: color 0.2s, background 0.2s;
-    cursor: pointer;
-  }
-
-  nav a:hover, nav a.active { color: var(--white); background: rgba(255,255,255,0.06); }
-
-  .nav-cta {
-    background: var(--cyan) !important;
-    color: var(--ink) !important;
-    font-weight: 600 !important;
-    margin-left: 8px;
-    padding: 7px 18px !important;
-  }
-  .nav-cta:hover { background: #00d8fa !important; }
-
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 4px;
-  }
-  .hamburger span {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--text);
-    border-radius: 2px;
-    transition: all 0.3s;
-  }
-
-  /* ── SECTIONS SYSTEM ── */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* ── HERO ── */
-  #home {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-video-wrap {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  .hero-video-wrap video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.35;
-  }
-
-  .hero-video-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(10,15,20,0.3) 0%, rgba(10,15,20,0.9) 85%, var(--ink) 100%);
-  }
-
-  .hero-content {
-    position: absolute;
-    bottom: 80px;
-    left: 0; right: 0;
-    padding: 0 80px;
-    z-index: 10;
-  }
-
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--cyan);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-
-  .hero-tag::before {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 1px;
-    background: var(--cyan);
-  }
-
-  .hero-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.8rem, 6vw, 5.5rem);
-    font-weight: 800;
-    line-height: 1.02;
-    color: var(--white);
-    max-width: 780px;
-    margin-bottom: 28px;
-  }
-
-  .hero-title em {
-    font-style: normal;
-    color: var(--cyan);
-  }
-
-  .hero-sub {
-    font-size: 1.05rem;
-    color: var(--muted);
-    font-weight: 300;
-    max-width: 480px;
-    line-height: 1.7;
-    margin-bottom: 40px;
-  }
-
-  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--cyan);
-    color: var(--ink);
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    padding: 14px 28px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-    letter-spacing: 0.01em;
-  }
-  .btn-primary:hover { background: #00d8fa; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,194,224,0.3); }
-
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 13px 26px;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
-
-  /* Scroll indicator */
-  .scroll-hint {
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    z-index: 10;
-  }
-  .scroll-hint span { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
-  .scroll-line {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, var(--cyan), transparent);
-    animation: scrollPulse 1.8s ease-in-out infinite;
-  }
-  @keyframes scrollPulse { 0%,100%{ opacity:0.3 } 50%{ opacity:1 } }
-
-  /* ── STATS BAR ── */
-  .stats-bar {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 36px 80px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-  }
-
-  .stat-item {
-    padding: 0 40px;
-    border-right: 1px solid var(--border);
-    text-align: center;
-  }
-  .stat-item:first-child { padding-left: 0; }
-  .stat-item:last-child { border-right: none; padding-right: 0; }
-
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-  .stat-num span { color: var(--cyan); }
-  .stat-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.06em; }
-
-  /* ── SECTION CHROME ── */
-  .section-wrap {
-    padding: 100px 80px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--cyan);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .section-label::before {
-    content: '';
-    width: 20px;
-    height: 1px;
-    background: var(--cyan);
-  }
-
-  .section-title {
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1.1;
-    margin-bottom: 16px;
-  }
-
-  .section-sub {
-    font-size: 1rem;
-    color: var(--muted);
-    max-width: 520px;
-    line-height: 1.7;
-    font-weight: 300;
-    margin-bottom: 60px;
-  }
-
-  /* ── SERVICES ── */
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-  }
-
-  .service-card {
-    background: var(--surface);
-    padding: 40px 36px;
-    position: relative;
-    transition: background 0.3s;
-    overflow: hidden;
-    cursor: default;
-  }
-
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--cyan), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .service-card:hover { background: var(--panel); }
-  .service-card:hover::before { opacity: 1; }
-
-  .service-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: rgba(0,194,224,0.1);
-    border: 1px solid rgba(0,194,224,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 24px;
-    font-size: 1.4rem;
-  }
-
-  .service-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--cyan);
-    letter-spacing: 0.15em;
-    margin-bottom: 12px;
-    opacity: 0.6;
-  }
-
-  .service-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 12px;
-    line-height: 1.3;
-  }
-
-  .service-desc {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-
-  /* ── COURSES ── */
-  .courses-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  .course-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-    cursor: pointer;
-  }
-
-  .course-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    border-color: rgba(0,194,224,0.25);
-  }
-
-  .course-banner {
-    height: 130px;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    padding: 20px;
-    overflow: hidden;
-  }
-
-  .course-banner::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(0,194,224,0.15), rgba(0,0,0,0.6));
-  }
-
-  .course-banner-bg {
-    position: absolute;
-    inset: 0;
-    background: var(--panel);
-  }
-
-  .course-banner-label {
-    position: relative;
-    z-index: 1;
-    font-family: 'Syne', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.2;
-  }
-
-  .course-body { padding: 24px; }
-
-  .course-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-
-  .course-price {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--cyan);
-  }
-
-  .course-duration {
-    font-size: 0.78rem;
-    color: var(--muted);
-    background: rgba(255,255,255,0.05);
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-  }
-
-  .course-desc {
-    font-size: 0.84rem;
-    color: var(--muted);
-    line-height: 1.65;
-    margin-bottom: 20px;
-  }
-
-  .btn-card {
-    width: 100%;
-    background: rgba(0,194,224,0.1);
-    color: var(--cyan);
-    border: 1px solid rgba(0,194,224,0.25);
-    font-family: 'Syne', sans-serif;
-    font-weight: 600;
-    font-size: 0.83rem;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.03em;
-  }
-  .btn-card:hover { background: var(--cyan); color: var(--ink); border-color: var(--cyan); }
-
-  /* ── ADDINS ── */
-  .addins-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .addin-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    transition: transform 0.3s, border-color 0.3s;
-    cursor: pointer;
-  }
-  .addin-card:hover { transform: translateY(-3px); border-color: rgba(0,194,224,0.25); }
-
-  .addin-top {
-    height: 100px;
-    display: flex;
-    align-items: center;
-    padding: 0 28px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .addin-top-gradient {
-    position: absolute;
-    inset: 0;
-  }
-
-  .addin-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: var(--white);
-    position: relative;
-    z-index: 1;
-  }
-
-  .addin-body { padding: 24px 28px; }
-
-  .addin-tag {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--amber);
-    background: rgba(244,166,35,0.1);
-    border: 1px solid rgba(244,166,35,0.2);
-    border-radius: 20px;
-    padding: 3px 10px;
-    letter-spacing: 0.05em;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-  }
-
-  .addin-desc {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 20px;
-  }
-
-  /* ── UPDATES ── */
-  .updates-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-
-  .update-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 36px;
-    transition: border-color 0.3s;
-  }
-  .update-card:hover { border-color: rgba(0,194,224,0.2); }
-
-  .update-date {
-    font-size: 0.72rem;
-    color: var(--cyan);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    font-weight: 600;
-  }
-
-  .update-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 14px;
-    line-height: 1.3;
-  }
-
-  .update-text {
-    font-size: 0.87rem;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 24px;
-  }
-
-  .update-link {
-    font-size: 0.82rem;
-    color: var(--cyan);
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: gap 0.2s;
-  }
-  .update-link:hover { gap: 10px; }
-
-  /* ── ABOUT ── */
-  .about-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-  }
-
-  .about-visual {
-    position: relative;
-    height: 420px;
-  }
-
-  .about-hex-grid {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    padding: 20px;
-    align-content: center;
-  }
-
-  .about-hex {
-    aspect-ratio: 1;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    background: var(--panel);
-    border: none;
-    transition: background 0.3s;
-    animation: hexFlicker var(--dur, 4s) ease-in-out infinite;
-    animation-delay: var(--delay, 0s);
-  }
-
-  @keyframes hexFlicker {
-    0%,100%{ background: var(--panel); }
-    50%{ background: rgba(0,194,224,0.2); }
-  }
-
-  .about-text-content > p {
-    font-size: 0.95rem;
-    color: var(--muted);
-    line-height: 1.8;
-    margin-bottom: 20px;
-    font-weight: 300;
-  }
-
-  .about-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 32px;
-  }
-
-  .about-tag {
-    font-size: 0.78rem;
-    color: var(--text);
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-weight: 500;
-  }
-
-  /* ── CONTACT ── */
-  .contact-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: start;
-  }
-
-  .contact-info { padding-top: 8px; }
-
-  .contact-link-block {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .contact-link-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 20px 24px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    text-decoration: none;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .contact-link-item:hover { border-color: rgba(0,194,224,0.3); background: var(--panel); }
-
-  .contact-link-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: rgba(0,194,224,0.1);
-    border: 1px solid rgba(0,194,224,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-  }
-
-  .contact-link-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 2px; }
-  .contact-link-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
-
-  .contact-form-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 40px;
-  }
-
-  .form-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 28px;
-  }
-
-  .form-row { margin-bottom: 18px; }
-
-  .form-label {
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--muted);
-    margin-bottom: 8px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .form-input, .form-textarea {
-    width: 100%;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .form-input:focus, .form-textarea:focus {
-    border-color: var(--cyan);
-    box-shadow: 0 0 0 3px rgba(0,194,224,0.1);
-  }
-
-  .form-textarea { resize: vertical; min-height: 110px; }
-
-  /* ── DETAIL PAGES ── */
-  .detail-wrap {
-    padding: 100px 80px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--muted);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 18px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 48px;
-    text-decoration: none;
-  }
-  .back-btn:hover { color: var(--cyan); border-color: rgba(0,194,224,0.3); }
-
-  .detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: 40px;
-    align-items: start;
-  }
-
-  .detail-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--white);
-    margin-bottom: 32px;
-    line-height: 1.1;
-  }
-
-  .detail-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 36px;
-    margin-bottom: 20px;
-  }
-
-  .detail-block-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .detail-block p {
-    font-size: 0.9rem;
-    color: var(--muted);
-    line-height: 1.8;
-  }
-
-  .detail-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .detail-list li {
-    font-size: 0.88rem;
-    color: var(--muted);
-    padding-left: 18px;
-    position: relative;
-    line-height: 1.5;
-  }
-
-  .detail-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8px;
-    width: 6px;
-    height: 6px;
-    background: var(--cyan);
-    border-radius: 50%;
-  }
-
-  .module-list { display: flex; flex-direction: column; gap: 14px; }
-
-  .module-item {
-    border-left: 2px solid var(--cyan);
-    padding: 14px 20px;
-    background: rgba(0,194,224,0.04);
-    border-radius: 0 8px 8px 0;
-  }
-
-  .module-item h4 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--white);
-    margin-bottom: 4px;
-  }
-
-  .module-item p {
-    font-size: 0.82rem;
-    color: var(--muted);
-  }
-
-  .sidebar-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 28px;
-    position: sticky;
-    top: 88px;
-  }
-
-  .sidebar-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 20px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sidebar-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 0.85rem;
-  }
-
-  .sidebar-row:last-of-type { border-bottom: none; }
-  .sidebar-row-label { color: var(--muted); }
-  .sidebar-row-value { color: var(--white); font-weight: 600; }
-  .sidebar-row-value.highlight { color: var(--cyan); font-size: 1.4rem; font-family: 'Syne', sans-serif; font-weight: 800; }
-
-  .prereq-list {
-    list-style: none;
-    margin: 20px 0 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .prereq-list li {
-    font-size: 0.83rem;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .prereq-list li::before {
-    content: '✓';
-    color: var(--cyan);
-    font-weight: 700;
-    font-size: 0.75rem;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--ink2);
-    border-top: 1px solid var(--border);
-    padding: 40px 80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .footer-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .footer-text {
-    font-size: 0.82rem;
-    color: var(--muted);
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 24px;
-  }
-
-  .footer-links a {
-    font-size: 0.82rem;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: var(--cyan); }
-
-  /* ── MOBILE ── */
-  @media (max-width: 900px) {
-    header { padding: 0 24px; }
-    nav a:not(.nav-cta) { display: none; }
-    .hamburger { display: flex; }
-
-    .mobile-nav {
-      position: fixed;
-      top: 68px;
-      left: 0; right: 0;
-      background: var(--ink2);
-      border-bottom: 1px solid var(--border);
-      padding: 16px;
-      display: none;
-      flex-direction: column;
-      gap: 4px;
-      z-index: 999;
-    }
-    .mobile-nav.open { display: flex; }
-    .mobile-nav a {
-      display: block;
-      padding: 12px 16px;
-      color: var(--muted);
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .mobile-nav a:hover, .mobile-nav a.active { background: rgba(255,255,255,0.05); color: var(--white); }
-
-    .section-wrap { padding: 60px 24px; }
-    .hero-content { padding: 0 24px; bottom: 60px; }
-    .hero-title { font-size: 2.4rem; }
-    .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 24px; gap: 16px; }
-    .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 16px; }
-    .stat-item:nth-child(2n) { border-right: none; }
-    .services-grid { grid-template-columns: 1fr; }
-    .courses-grid { grid-template-columns: 1fr; }
-    .addins-grid { grid-template-columns: 1fr; }
-    .updates-grid { grid-template-columns: 1fr; }
-    .about-layout { grid-template-columns: 1fr; gap: 40px; }
-    .about-visual { display: none; }
-    .contact-layout { grid-template-columns: 1fr; }
-    .detail-grid { grid-template-columns: 1fr; }
-    .detail-wrap { padding: 80px 24px; }
-    footer { flex-direction: column; gap: 20px; padding: 32px 24px; text-align: center; }
-    .footer-links { flex-wrap: wrap; justify-content: center; }
-  }
-
-  /* ── ANIMATIONS ── */
-  .fade-up {
-    opacity: 0;
-    transform: translateY(24px);
-    animation: fadeUp 0.6s ease forwards;
-  }
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .fade-up-1 { animation-delay: 0.1s; }
-  .fade-up-2 { animation-delay: 0.2s; }
-  .fade-up-3 { animation-delay: 0.3s; }
-  .fade-up-4 { animation-delay: 0.4s; }
+:root {
+  --navy:   #0b1f3a;
+  --navy2:  #132d52;
+  --cyan:   #0099c6;
+  --cyan-l: #e6f6fb;
+  --cyan-m: #b3e4f2;
+  --white:  #ffffff;
+  --off:    #f7f9fc;
+  --border: #e2e8f0;
+  --text:   #1a2a3a;
+  --muted:  #607080;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);height:70px;display:flex;align-items:center;padding:0 56px;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--navy);letter-spacing:0.01em;}
+.logo-text span{color:var(--cyan);}
+nav{display:flex;align-items:center;gap:2px;}
+nav a{font-size:0.83rem;font-weight:600;color:var(--muted);text-decoration:none;padding:7px 13px;border-radius:7px;cursor:pointer;transition:color .2s,background .2s;letter-spacing:.02em;}
+nav a:hover{color:var(--navy);background:var(--off);}
+nav a.active{color:var(--navy);}
+.nav-cta{background:var(--navy)!important;color:var(--white)!important;margin-left:8px;padding:8px 20px!important;border-radius:8px;}
+.nav-cta:hover{background:var(--navy2)!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+.hamburger span{display:block;width:24px;height:2px;background:var(--navy);border-radius:2px;transition:all .3s;}
+.mob-menu{display:none;position:fixed;top:70px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);padding:12px 20px 20px;flex-direction:column;gap:4px;z-index:998;}
+.mob-menu.open{display:flex;}
+.mob-menu a{font-size:.9rem;font-weight:600;color:var(--muted);padding:11px 14px;border-radius:8px;cursor:pointer;text-decoration:none;transition:background .2s,color .2s;}
+.mob-menu a:hover{background:var(--off);color:var(--navy);}
+
+/* PAGES */
+.page{display:none;} .page.active{display:block;}
+
+/* BUTTONS */
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--cyan);color:var(--white);font-family:'Manrope',sans-serif;font-weight:700;font-size:.88rem;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;text-decoration:none;transition:all .2s;letter-spacing:.02em;}
+.btn-p:hover{background:#0088b3;box-shadow:0 6px 20px rgba(0,153,198,.35);transform:translateY(-1px);}
+.btn-n{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:var(--white);font-family:'Manrope',sans-serif;font-weight:700;font-size:.88rem;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;text-decoration:none;transition:all .2s;}
+.btn-n:hover{background:var(--navy2);transform:translateY(-1px);}
+.btn-o{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy);font-family:'Manrope',sans-serif;font-weight:600;font-size:.88rem;padding:12px 26px;border-radius:9px;border:1.5px solid var(--navy);cursor:pointer;text-decoration:none;transition:all .2s;}
+.btn-o:hover{background:var(--navy);color:var(--white);}
+.btn-g{display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--cyan);font-weight:700;font-size:.84rem;padding:10px 0;border:none;cursor:pointer;transition:gap .2s;text-decoration:none;letter-spacing:.02em;}
+.btn-g:hover{gap:10px;}
+.btn-card{width:100%;background:var(--off);border:1.5px solid var(--border);color:var(--navy);font-family:'Manrope',sans-serif;font-weight:700;font-size:.82rem;padding:10px;border-radius:9px;cursor:pointer;transition:all .2s;letter-spacing:.02em;}
+.btn-card:hover{background:var(--navy);color:var(--white);border-color:var(--navy);}
+
+/* SECTION LABELS */
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;color:var(--cyan);letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px;}
+.eyebrow::before{content:'';width:22px;height:2px;background:var(--cyan);}
+.sec-h{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,3.2vw,2.7rem);font-weight:700;color:var(--navy);line-height:1.18;margin-bottom:14px;}
+.sec-p{font-size:.97rem;color:var(--muted);font-weight:400;line-height:1.75;max-width:500px;margin-bottom:52px;}
+
+/* HERO */
+.hero-wrap{position:relative;min-height:calc(100vh - 70px);overflow:hidden;display:flex;align-items:center;background:var(--white);}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.1;z-index:0;}
+.hero-dots{position:absolute;top:0;right:0;width:45%;height:100%;background-image:radial-gradient(circle,rgba(0,153,198,.18) 1.5px,transparent 1.5px);background-size:28px 28px;z-index:0;-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.7),transparent);mask-image:linear-gradient(to left,rgba(0,0,0,.7),transparent);}
+.hero-glow{position:absolute;top:-100px;right:-100px;width:700px;height:700px;background:radial-gradient(ellipse at center,rgba(0,153,198,.08) 0%,transparent 70%);z-index:0;}
+.hero-inner{position:relative;z-index:1;padding:80px 56px;max-width:1300px;width:100%;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--cyan-l);color:var(--cyan);border:1px solid var(--cyan-m);font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:24px;}
+.hero-h{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:800;color:var(--navy);line-height:1.1;margin-bottom:22px;}
+.hero-h em{font-style:italic;color:var(--cyan);}
+.hero-sub{font-size:1rem;color:var(--muted);line-height:1.78;font-weight:400;max-width:440px;margin-bottom:38px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-proof{display:flex;align-items:center;gap:24px;margin-top:44px;padding-top:36px;border-top:1px solid var(--border);}
+.proof-n{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--navy);line-height:1;}
+.proof-n span{color:var(--cyan);}
+.proof-l{font-size:.73rem;color:var(--muted);font-weight:500;margin-top:3px;letter-spacing:.04em;}
+.proof-div{width:1px;height:48px;background:var(--border);}
+.hero-right{position:relative;}
+.hero-img-stack{position:relative;width:100%;aspect-ratio:4/3.2;}
+.hero-main-img{width:88%;height:100%;object-fit:cover;border-radius:16px;box-shadow:0 30px 80px rgba(11,31,58,.15);display:block;margin-left:auto;}
+.hero-over{position:absolute;bottom:-24px;left:0;width:52%;border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgba(11,31,58,.18);border:4px solid var(--white);}
+.hero-over img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover;}
+.hero-float{position:absolute;top:22px;left:0;background:var(--white);border-radius:12px;padding:14px 18px;box-shadow:0 8px 30px rgba(11,31,58,.12);display:flex;align-items:center;gap:10px;min-width:180px;}
+.float-ic{width:36px;height:36px;background:var(--cyan-l);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.float-top{font-size:.72rem;color:var(--muted);font-weight:500;}
+.float-bot{font-size:.88rem;color:var(--navy);font-weight:700;}
+
+/* STRIP */
+.strip{background:var(--navy);padding:24px 56px;display:flex;align-items:center;}
+.strip-items{display:flex;align-items:center;gap:36px;flex-wrap:wrap;}
+.strip-item{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:10px;white-space:nowrap;}
+.strip-item::before{content:'';width:6px;height:6px;background:var(--cyan);border-radius:50%;flex-shrink:0;}
+
+/* SERVICES */
+.svc-wrap{padding:100px 56px;max-width:1300px;margin:0 auto;}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.svc-card{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:var(--white);transition:transform .3s,box-shadow .3s;cursor:default;}
+.svc-card:hover{transform:translateY(-5px);box-shadow:0 20px 60px rgba(11,31,58,.1);}
+.svc-img{width:100%;height:190px;object-fit:cover;display:block;}
+.svc-body{padding:24px 26px 28px;}
+.svc-num{font-size:.68rem;font-weight:700;color:var(--cyan);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;}
+.svc-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.3;}
+.svc-desc{font-size:.84rem;color:var(--muted);line-height:1.7;}
+
+/* COURSES */
+.crs-section{background:var(--off);padding:100px 0;}
+.crs-inner{max-width:1300px;margin:0 auto;padding:0 56px;}
+.crs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.crs-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s;cursor:pointer;}
+.crs-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(11,31,58,.1);border-color:var(--cyan-m);}
+.crs-banner{height:120px;display:flex;align-items:flex-end;padding:18px 22px;position:relative;overflow:hidden;}
+.crs-banner-bg{position:absolute;inset:0;}
+.crs-title{font-family:'Playfair Display',serif;font-size:1.08rem;font-weight:700;color:var(--white);position:relative;z-index:1;line-height:1.2;text-shadow:0 1px 8px rgba(0,0,0,.3);}
+.crs-body{padding:22px 22px 24px;}
+.crs-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.crs-price{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--cyan);}
+.crs-wk{font-size:.75rem;font-weight:600;color:var(--muted);background:var(--off);border:1px solid var(--border);padding:4px 10px;border-radius:20px;letter-spacing:.04em;}
+.crs-desc{font-size:.83rem;color:var(--muted);line-height:1.68;margin-bottom:18px;}
+
+/* ADDINS */
+.adn-wrap{padding:100px 56px;max-width:1300px;margin:0 auto;}
+.adn-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+.adn-card{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--white);transition:transform .3s,box-shadow .3s,border-color .3s;cursor:pointer;}
+.adn-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(11,31,58,.1);border-color:var(--cyan-m);}
+.adn-head{background:var(--navy);padding:26px 28px;display:flex;align-items:center;justify-content:space-between;}
+.adn-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--white);}
+.adn-badge{font-size:.68rem;font-weight:700;color:var(--cyan);background:rgba(0,153,198,.15);border:1px solid rgba(0,153,198,.3);border-radius:20px;padding:4px 12px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.adn-body{padding:22px 28px 26px;}
+.adn-tag{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;}
+.adn-desc{font-size:.86rem;color:var(--muted);line-height:1.72;margin-bottom:20px;}
+
+/* UPDATES */
+.upd-section{background:var(--navy);padding:100px 56px;}
+.upd-inner{max-width:1300px;margin:0 auto;}
+.upd-inner .sec-h{color:var(--white);}
+.upd-inner .eyebrow{color:var(--cyan-m);}
+.upd-inner .eyebrow::before{background:var(--cyan-m);}
+.upd-inner .sec-p{color:rgba(255,255,255,.5);}
+.upd-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+.upd-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:36px;transition:background .3s,border-color .3s;}
+.upd-card:hover{background:rgba(255,255,255,.08);border-color:rgba(0,153,198,.4);}
+.upd-date{font-size:.7rem;font-weight:700;color:var(--cyan);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;}
+.upd-title{font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:700;color:var(--white);line-height:1.35;margin-bottom:14px;}
+.upd-text{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.75;margin-bottom:22px;}
+.upd-link{font-size:.82rem;font-weight:700;color:var(--cyan);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:gap .2s;}
+.upd-link:hover{gap:10px;}
+
+/* ABOUT */
+.abt-wrap{padding:100px 56px;max-width:1300px;margin:0 auto;}
+.abt-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.abt-img-wrap{position:relative;}
+.abt-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block;box-shadow:0 24px 70px rgba(11,31,58,.13);}
+.abt-accent{position:absolute;bottom:-20px;right:-20px;width:170px;background:var(--navy);border-radius:14px;padding:20px;text-align:center;box-shadow:0 12px 40px rgba(11,31,58,.2);}
+.abt-acc-n{font-family:'Playfair Display',serif;font-size:2rem;font-weight:800;color:var(--cyan);line-height:1;}
+.abt-acc-l{font-size:.72rem;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;}
+.abt-text p{font-size:.95rem;color:var(--muted);line-height:1.82;margin-bottom:18px;font-weight:400;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-size:.78rem;font-weight:600;color:var(--navy);background:var(--cyan-l);border:1px solid var(--cyan-m);padding:6px 14px;border-radius:20px;letter-spacing:.03em;}
+
+/* CONTACT */
+.cnt-section{background:var(--off);padding:100px 56px;}
+.cnt-inner{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:70px;align-items:start;}
+.cnt-links{margin-top:36px;display:flex;flex-direction:column;gap:14px;}
+.clink{display:flex;align-items:center;gap:16px;padding:18px 22px;background:var(--white);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:border-color .2s,box-shadow .2s;}
+.clink:hover{border-color:var(--cyan-m);box-shadow:0 6px 24px rgba(11,31,58,.08);}
+.clink-ic{width:40px;height:40px;background:var(--cyan-l);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;border:1px solid var(--cyan-m);}
+.clink-l{font-size:.73rem;color:var(--muted);font-weight:500;margin-bottom:2px;}
+.clink-v{font-size:.9rem;font-weight:700;color:var(--navy);}
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:44px;box-shadow:0 8px 40px rgba(11,31,58,.06);}
+.form-h{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:28px;}
+.form-r{margin-bottom:18px;}
+.form-r2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+.form-l{display:block;font-size:.74rem;font-weight:700;color:var(--text);letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px;}
+.form-i,.form-ta{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:11px 15px;font-family:'Manrope',sans-serif;font-size:.88rem;color:var(--text);background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s;}
+.form-i:focus,.form-ta:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,153,198,.12);}
+.form-ta{resize:vertical;min-height:112px;}
+
+/* DETAIL PAGES */
+.det-page{padding-top:70px;}
+.det-hero{background:var(--navy);padding:60px 56px 52px;}
+.det-hero-in{max-width:1200px;margin:0 auto;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:rgba(255,255,255,.5);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 16px;cursor:pointer;text-decoration:none;transition:all .2s;margin-bottom:28px;}
+.back-btn:hover{color:var(--white);background:rgba(255,255,255,.12);}
+.det-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:800;color:var(--white);line-height:1.15;margin-bottom:10px;}
+.det-sub{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.7;max-width:560px;}
+.det-body{max-width:1200px;margin:0 auto;padding:52px 56px 80px;display:grid;grid-template-columns:1fr 340px;gap:44px;align-items:start;}
+.det-block{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:34px;margin-bottom:20px;}
+.det-block-h{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.det-block p{font-size:.9rem;color:var(--muted);line-height:1.8;}
+.det-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.det-list li{font-size:.88rem;color:var(--muted);padding-left:20px;position:relative;line-height:1.55;}
+.det-list li::before{content:'';position:absolute;left:0;top:7px;width:7px;height:7px;background:var(--cyan);border-radius:50%;}
+.mod-list{display:flex;flex-direction:column;gap:12px;}
+.mod-item{border-left:3px solid var(--cyan);padding:14px 18px;background:var(--off);border-radius:0 10px 10px 0;}
+.mod-item h4{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.mod-item p{font-size:.82rem;color:var(--muted);}
+.sb-box{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px;position:sticky;top:86px;box-shadow:0 8px 32px rgba(11,31,58,.07);}
+.sb-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.sb-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.04);font-size:.85rem;}
+.sb-row:last-of-type{border-bottom:none;}
+.sb-l{color:var(--muted);}
+.sb-v{color:var(--navy);font-weight:700;}
+.sb-v.big{color:var(--cyan);font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;}
+.sb-pre{margin:18px 0 24px;display:flex;flex-direction:column;gap:8px;}
+.sb-pre-i{font-size:.82rem;color:var(--muted);display:flex;align-items:flex-start;gap:8px;}
+.sb-pre-i::before{content:'✓';color:var(--cyan);font-weight:700;flex-shrink:0;}
+
+/* FOOTER */
+footer{background:var(--navy);padding:40px 56px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+.foot-brand{display:flex;align-items:center;gap:10px;}
+.foot-copy{font-size:.8rem;color:rgba(255,255,255,.4);}
+.foot-links{display:flex;gap:22px;flex-wrap:wrap;}
+.foot-links a{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.4);text-decoration:none;cursor:pointer;transition:color .2s;}
+.foot-links a:hover{color:var(--cyan);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+.fu{opacity:0;animation:fadeUp .65s ease forwards;}
+.fu1{animation-delay:.08s;}.fu2{animation-delay:.18s;}.fu3{animation-delay:.28s;}.fu4{animation-delay:.38s;}.fu5{animation-delay:.48s;}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  header{padding:0 24px;}
+  nav a:not(.nav-cta){display:none;}
+  .hamburger{display:flex;}
+  .hero-inner{grid-template-columns:1fr;gap:40px;padding:50px 24px;}
+  .hero-right{display:none;}
+  .hero-h{font-size:2.4rem;}
+  .strip{padding:20px 24px;}.strip-items{gap:20px;}
+  .svc-wrap,.adn-wrap,.abt-wrap{padding:70px 24px;}
+  .crs-inner{padding:0 24px;}.crs-section{padding:70px 0;}
+  .upd-section{padding:70px 24px;}
+  .cnt-section{padding:70px 24px;}
+  .svc-grid,.crs-grid,.upd-grid{grid-template-columns:1fr;}
+  .adn-grid{grid-template-columns:1fr;}
+  .abt-grid{grid-template-columns:1fr;gap:40px;}
+  .abt-img-wrap{display:none;}
+  .cnt-inner{grid-template-columns:1fr;gap:40px;}
+  .det-body{grid-template-columns:1fr;padding:40px 24px 60px;}
+  .det-hero{padding:48px 24px 40px;}
+  .form-r2{grid-template-columns:1fr;}
+  footer{padding:32px 24px;}.foot-links{display:none;}
+}
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <header>
-  <a class="logo" href="#" onclick="showPage('home')">
-    <div class="logo-hex">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="rgba(0,194,224,0.15)" stroke="#00c2e0" stroke-width="1.5"/>
-        <polygon points="20,8 30,14 30,26 20,32 10,26 10,14" fill="rgba(0,194,224,0.08)" stroke="#00c2e0" stroke-width="1" opacity="0.6"/>
-        <circle cx="20" cy="20" r="3" fill="#00c2e0"/>
-      </svg>
-    </div>
-    <span class="logo-name">HEXA <span>INNOVATION</span></span>
+  <a class="logo" onclick="showPage('home')">
+    <svg width="36" height="36" viewBox="0 0 38 38" fill="none">
+      <polygon points="19,2 34,10.5 34,27.5 19,36 4,27.5 4,10.5" fill="#e6f6fb" stroke="#0099c6" stroke-width="1.8"/>
+      <polygon points="19,9 27,14 27,24 19,29 11,24 11,14" fill="none" stroke="#0099c6" stroke-width="1.2" opacity="0.5"/>
+      <circle cx="19" cy="19" r="3.5" fill="#0099c6"/>
+    </svg>
+    <div class="logo-text">HEXA <span>INNOVATION</span></div>
   </a>
-
-  <nav id="desktopNav">
-    <a onclick="showPage('home')" class="active" data-p="home">Home</a>
+  <nav>
+    <a onclick="showPage('home')" data-p="home" class="active">Home</a>
     <a onclick="showPage('services')" data-p="services">Services</a>
     <a onclick="showPage('courses')" data-p="courses">Courses</a>
     <a onclick="showPage('addins')" data-p="addins">Addins</a>
     <a onclick="showPage('updates')" data-p="updates">Updates</a>
     <a onclick="showPage('about')" data-p="about">About</a>
-    <a onclick="showPage('contact')" data-p="contact" class="nav-cta">Contact</a>
+    <a onclick="showPage('contact')" data-p="contact" class="nav-cta">Contact Us</a>
   </nav>
-
-  <div class="hamburger" id="hamburger" onclick="toggleMobile()">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="hamburger" id="hbg" onclick="toggleMob()"><span></span><span></span><span></span></div>
 </header>
 
-<!-- Mobile Nav -->
-<div class="mobile-nav" id="mobileNav">
-  <a onclick="showPage('home');toggleMobile()" data-p="home">Home</a>
-  <a onclick="showPage('services');toggleMobile()" data-p="services">Services</a>
-  <a onclick="showPage('courses');toggleMobile()" data-p="courses">Courses</a>
-  <a onclick="showPage('addins');toggleMobile()" data-p="addins">Addins</a>
-  <a onclick="showPage('updates');toggleMobile()" data-p="updates">Updates</a>
-  <a onclick="showPage('about');toggleMobile()" data-p="about">About</a>
-  <a onclick="showPage('contact');toggleMobile()" data-p="contact">Contact</a>
+<div class="mob-menu" id="mobMenu">
+  <a onclick="showPage('home');toggleMob()" data-p="home">Home</a>
+  <a onclick="showPage('services');toggleMob()" data-p="services">Services</a>
+  <a onclick="showPage('courses');toggleMob()" data-p="courses">Courses</a>
+  <a onclick="showPage('addins');toggleMob()" data-p="addins">Addins</a>
+  <a onclick="showPage('updates');toggleMob()" data-p="updates">Updates</a>
+  <a onclick="showPage('about');toggleMob()" data-p="about">About</a>
+  <a onclick="showPage('contact');toggleMob()" data-p="contact">Contact</a>
 </div>
 
-<!-- ══════════════ HOME ══════════════ -->
+<!-- ════ HOME ════ -->
 <div id="home" class="page active">
-  <div class="hero-video-wrap">
-    <video autoplay muted loop playsinline>
-      <source src="./HexaVideo.mp4" type="video/mp4">
-    </video>
-    <div class="hero-video-overlay"></div>
-    <div class="hero-content">
-      <div class="hero-tag fade-up fade-up-1">Construction Technology</div>
-      <h1 class="hero-title fade-up fade-up-2">Building the<br><em>Future</em> of<br>Construction</h1>
-      <p class="hero-sub fade-up fade-up-3">Cutting-edge BIM, VR/AR, AI and automation solutions transforming how the world designs and builds.</p>
-      <div class="hero-btns fade-up fade-up-4">
-        <button class="btn-primary" onclick="showPage('services')">Explore Services →</button>
-        <button class="btn-secondary" onclick="showPage('contact')">Get in Touch</button>
+  <div style="padding-top:70px;">
+    <div class="hero-wrap">
+      <video class="hero-video" autoplay muted loop playsinline><source src="./HexaVideo.mp4" type="video/mp4"></video>
+      <div class="hero-glow"></div>
+      <div class="hero-dots"></div>
+      <div class="hero-inner">
+        <div>
+          <div class="hero-badge fu fu1">🏗️ &nbsp;Construction Technology</div>
+          <h1 class="hero-h fu fu2">Building the <em>Future</em><br>of Construction<br>&amp; Architecture</h1>
+          <p class="hero-sub fu fu3">Hexa Innovation delivers BIM automation, VR/AR, AI, and Digital Twin solutions that transform how the world designs, plans, and builds.</p>
+          <div class="hero-btns fu fu4">
+            <button class="btn-p" onclick="showPage('services')">Explore Services →</button>
+            <button class="btn-o" onclick="showPage('contact')">Get in Touch</button>
+          </div>
+          <div class="hero-proof fu fu5">
+            <div><div class="proof-n">6<span>+</span></div><div class="proof-l">Core Services</div></div>
+            <div class="proof-div"></div>
+            <div><div class="proof-n">5<span>+</span></div><div class="proof-l">Courses</div></div>
+            <div class="proof-div"></div>
+            <div><div class="proof-n">4<span>+</span></div><div class="proof-l">Revit Addins</div></div>
+            <div class="proof-div"></div>
+            <div><div class="proof-n">2024</div><div class="proof-l">Founded</div></div>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-img-stack">
+            <div class="hero-float">
+              <div class="float-ic">🏗️</div>
+              <div><div class="float-top">Specializing in</div><div class="float-bot">BIM Automation</div></div>
+            </div>
+            <img src="./img1.png" alt="Innovation" class="hero-main-img">
+            <div class="hero-over"><img src="./img2.png" alt="Digital Twin"></div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="scroll-hint">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
-  </div>
-
-  <div class="stats-bar">
-    <div class="stat-item">
-      <div class="stat-num">6<span>+</span></div>
-      <div class="stat-label">Core Services</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">5<span>+</span></div>
-      <div class="stat-label">Professional Courses</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">4<span>+</span></div>
-      <div class="stat-label">Revit Addins</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">2024</div>
-      <div class="stat-label">Founded</div>
+    <div class="strip">
+      <div class="strip-items">
+        <div class="strip-item">Software Development</div>
+        <div class="strip-item">BIM Automation</div>
+        <div class="strip-item">Digital Twins</div>
+        <div class="strip-item">VR &amp; AR Solutions</div>
+        <div class="strip-item">4D Scheduling</div>
+        <div class="strip-item">AI &amp; Machine Learning</div>
+        <div class="strip-item">AEC &amp; VDC Automation</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ SERVICES ══════════════ -->
+<!-- ════ SERVICES ════ -->
 <div id="services" class="page">
-  <div class="section-wrap">
-    <div class="section-label">What We Do</div>
-    <h2 class="section-title">Our Services</h2>
-    <p class="section-sub">End-to-end technology solutions for the AEC industry — from automation to immersive visualization.</p>
-
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon">⚙️</div>
-        <div class="service-num">01</div>
-        <div class="service-title">Software Development</div>
-        <p class="service-desc">Custom software solutions tailored to streamline construction and architecture workflows.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🏗️</div>
-        <div class="service-num">02</div>
-        <div class="service-title">Digital Twin & BIM Automation</div>
-        <p class="service-desc">Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🥽</div>
-        <div class="service-num">03</div>
-        <div class="service-title">VR & AR Solutions</div>
-        <p class="service-desc">Immersive Virtual and Augmented Reality for enhanced project visualization and client engagement.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🔄</div>
-        <div class="service-num">04</div>
-        <div class="service-title">AEC & VDC Automation</div>
-        <p class="service-desc">Automation for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">📅</div>
-        <div class="service-num">05</div>
-        <div class="service-title">4D Construction Scheduling</div>
-        <p class="service-desc">Integrate time management with project planning to meet deadlines without compromising quality.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🤖</div>
-        <div class="service-num">06</div>
-        <div class="service-title">AI & Machine Learning</div>
-        <p class="service-desc">Leveraging AI and ML to optimize resource management and drive productivity across projects.</p>
+  <div style="padding-top:70px;">
+    <div class="svc-wrap">
+      <div class="eyebrow">What We Do</div>
+      <h2 class="sec-h">Our Services</h2>
+      <p class="sec-p">End-to-end technology solutions for the AEC industry — from automation and AI to immersive visualization.</p>
+      <div class="svc-grid">
+        <div class="svc-card"><img src="./img1.png" alt="Software Dev" class="svc-img"><div class="svc-body"><div class="svc-num">01 — Service</div><div class="svc-title">Software Development</div><p class="svc-desc">Custom software solutions tailored to streamline construction and architecture workflows end-to-end.</p></div></div>
+        <div class="svc-card"><img src="./img2.png" alt="Digital Twin" class="svc-img"><div class="svc-body"><div class="svc-num">02 — Service</div><div class="svc-title">Digital Twin &amp; BIM Automation</div><p class="svc-desc">Advanced Digital Twin and BIM automation to enhance project visualization and operational efficiency.</p></div></div>
+        <div class="svc-card"><img src="./img3.png" alt="VR AR" class="svc-img"><div class="svc-body"><div class="svc-num">03 — Service</div><div class="svc-title">VR &amp; AR Solutions</div><p class="svc-desc">Immersive Virtual and Augmented Reality for enhanced project visualization and client engagement.</p></div></div>
+        <div class="svc-card"><img src="./img4.png" alt="AEC VDC" class="svc-img"><div class="svc-body"><div class="svc-num">04 — Service</div><div class="svc-title">AEC &amp; VDC Automation</div><p class="svc-desc">Automation for Architecture, Engineering, Construction, and Virtual Design &amp; Construction processes.</p></div></div>
+        <div class="svc-card"><img src="./img5.png" alt="4D" class="svc-img"><div class="svc-body"><div class="svc-num">05 — Service</div><div class="svc-title">4D Construction Scheduling</div><p class="svc-desc">Integrate time management with project planning to meet deadlines without compromising quality.</p></div></div>
+        <div class="svc-card"><img src="./img6.png" alt="AI ML" class="svc-img"><div class="svc-body"><div class="svc-num">06 — Service</div><div class="svc-title">AI &amp; Machine Learning</div><p class="svc-desc">Leveraging AI and ML to optimize resource management and drive productivity across every project phase.</p></div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ COURSES ══════════════ -->
+<!-- ════ COURSES ════ -->
 <div id="courses" class="page">
-  <div class="section-wrap">
-    <div class="section-label">Education</div>
-    <h2 class="section-title">Professional Courses</h2>
-    <p class="section-sub">Master the tools shaping modern construction technology — taught by industry practitioners.</p>
-
-    <div class="courses-grid">
-      <div class="course-card" onclick="showDetail('course-dynamo')">
-        <div class="course-banner">
-          <div class="course-banner-bg" style="background: linear-gradient(135deg, #0a2a3a, #01303f);"></div>
-          <div class="course-banner-label">Dynamo Visual<br>Programming</div>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="course-price">$100</span>
-            <span class="course-duration">12 weeks</span>
+  <div style="padding-top:70px;">
+    <div class="crs-section">
+      <div class="crs-inner">
+        <div class="eyebrow">Education</div>
+        <h2 class="sec-h">Professional Courses</h2>
+        <p class="sec-p">Master the tools shaping modern construction technology — taught by industry practitioners.</p>
+        <div class="crs-grid">
+          <div class="crs-card" onclick="showPage('d-dynamo')">
+            <div class="crs-banner"><div class="crs-banner-bg" style="background:linear-gradient(135deg,#0b2a42,#0d4a6e);"></div><div class="crs-title">Dynamo Visual<br>Programming</div></div>
+            <div class="crs-body"><div class="crs-meta"><span class="crs-price">$100</span><span class="crs-wk">12 weeks</span></div><p class="crs-desc">Master visual programming with Dynamo for powerful BIM automation and parametric design.</p><button class="btn-card">View Details →</button></div>
           </div>
-          <p class="course-desc">Master visual programming with Dynamo for powerful BIM automation and parametric design workflows.</p>
-          <button class="btn-card">View Course Details →</button>
-        </div>
-      </div>
-
-      <div class="course-card" onclick="showDetail('course-revit-api')">
-        <div class="course-banner">
-          <div class="course-banner-bg" style="background: linear-gradient(135deg, #0f1f2e, #02577a);"></div>
-          <div class="course-banner-label">Revit API &<br>C# Development</div>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="course-price">$100</span>
-            <span class="course-duration">14 weeks</span>
+          <div class="crs-card" onclick="showPage('d-revit')">
+            <div class="crs-banner"><div class="crs-banner-bg" style="background:linear-gradient(135deg,#0b1f38,#135680);"></div><div class="crs-title">Revit API &amp;<br>C# Development</div></div>
+            <div class="crs-body"><div class="crs-meta"><span class="crs-price">$100</span><span class="crs-wk">14 weeks</span></div><p class="crs-desc">Develop custom Revit applications using C# and the powerful Revit API framework.</p><button class="btn-card">View Details →</button></div>
           </div>
-          <p class="course-desc">Develop custom Revit applications using C# programming and the powerful Revit API framework.</p>
-          <button class="btn-card">View Course Details →</button>
-        </div>
-      </div>
-
-      <div class="course-card" onclick="showDetail('course-4d')">
-        <div class="course-banner">
-          <div class="course-banner-bg" style="background: linear-gradient(135deg, #0d2030, #023848);"></div>
-          <div class="course-banner-label">4D Construction<br>Planning</div>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="course-price">$100</span>
-            <span class="course-duration">10 weeks</span>
+          <div class="crs-card" onclick="showPage('d-4d')">
+            <div class="crs-banner"><div class="crs-banner-bg" style="background:linear-gradient(135deg,#082436,#0c5070);"></div><div class="crs-title">4D Construction<br>Planning</div></div>
+            <div class="crs-body"><div class="crs-meta"><span class="crs-price">$100</span><span class="crs-wk">10 weeks</span></div><p class="crs-desc">Integrate time management with 3D models for comprehensive construction scheduling.</p><button class="btn-card">View Details →</button></div>
           </div>
-          <p class="course-desc">Learn to integrate time management with 3D models for comprehensive construction scheduling.</p>
-          <button class="btn-card">View Course Details →</button>
-        </div>
-      </div>
-
-      <div class="course-card" onclick="showDetail('course-vrar')">
-        <div class="course-banner">
-          <div class="course-banner-bg" style="background: linear-gradient(135deg, #080e15, #0f2030);"></div>
-          <div class="course-banner-label">VR/AR with Unity</div>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="course-price">$100</span>
-            <span class="course-duration">16 weeks</span>
+          <div class="crs-card" onclick="showPage('d-unity')">
+            <div class="crs-banner"><div class="crs-banner-bg" style="background:linear-gradient(135deg,#060e1a,#0b2540);"></div><div class="crs-title">VR/AR with Unity</div></div>
+            <div class="crs-body"><div class="crs-meta"><span class="crs-price">$100</span><span class="crs-wk">16 weeks</span></div><p class="crs-desc">Create immersive VR and AR experiences for architecture visualization using Unity.</p><button class="btn-card">View Details →</button></div>
           </div>
-          <p class="course-desc">Create immersive VR and AR experiences for architecture visualization using Unity platform.</p>
-          <button class="btn-card">View Course Details →</button>
-        </div>
-      </div>
-
-      <div class="course-card" onclick="showDetail('course-unreal')">
-        <div class="course-banner">
-          <div class="course-banner-bg" style="background: linear-gradient(135deg, #0a1520, #01303f);"></div>
-          <div class="course-banner-label">Unreal Engine<br>Blueprints</div>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="course-price">$100</span>
-            <span class="course-duration">12 weeks</span>
+          <div class="crs-card" onclick="showPage('d-unreal')">
+            <div class="crs-banner"><div class="crs-banner-bg" style="background:linear-gradient(135deg,#091828,#0f3558);"></div><div class="crs-title">Unreal Engine<br>Blueprints</div></div>
+            <div class="crs-body"><div class="crs-meta"><span class="crs-price">$100</span><span class="crs-wk">12 weeks</span></div><p class="crs-desc">Master visual scripting in Unreal Engine for stunning architectural visualizations.</p><button class="btn-card">View Details →</button></div>
           </div>
-          <p class="course-desc">Master visual scripting in Unreal Engine for stunning architectural visualizations and interactive experiences.</p>
-          <button class="btn-card">View Course Details →</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ ADDINS ══════════════ -->
+<!-- ════ ADDINS ════ -->
 <div id="addins" class="page">
-  <div class="section-wrap">
-    <div class="section-label">Tools</div>
-    <h2 class="section-title">Professional Addins</h2>
-    <p class="section-sub">Purpose-built Revit addins that supercharge your MEP workflows and design processes.</p>
-
-    <div class="addins-grid">
-      <div class="addin-card" onclick="showDetail('addin-pipe')">
-        <div class="addin-top">
-          <div class="addin-top-gradient" style="background: linear-gradient(120deg, #012a38, #014d6a);"></div>
-          <span class="addin-name">Pipe Sizer</span>
-        </div>
-        <div class="addin-body">
-          <span class="addin-tag">NFPA & ASHRAE</span>
-          <p class="addin-desc">Automated pipe sizing calculations following NFPA and ASHRAE standards for accurate MEP design and code compliance.</p>
-          <button class="btn-card">See More →</button>
-        </div>
-      </div>
-
-      <div class="addin-card" onclick="showDetail('addin-mep')">
-        <div class="addin-top">
-          <div class="addin-top-gradient" style="background: linear-gradient(120deg, #011d28, #023448);"></div>
-          <span class="addin-name">MEP Count Master</span>
-        </div>
-        <div class="addin-body">
-          <span class="addin-tag">BOQ Generation</span>
-          <p class="addin-desc">Automated Bill of Quantities generation for MEP elements with precise counting and material takeoffs.</p>
-          <button class="btn-card">See More →</button>
-        </div>
-      </div>
-
-      <div class="addin-card" onclick="showDetail('addin-clash')">
-        <div class="addin-top">
-          <div class="addin-top-gradient" style="background: linear-gradient(120deg, #01202e, #013040);"></div>
-          <span class="addin-name">Clash Manager</span>
-        </div>
-        <div class="addin-body">
-          <span class="addin-tag">Clash Detection</span>
-          <p class="addin-desc">Intelligent clash detection and resolution tools to identify and resolve conflicts in MEP systems efficiently.</p>
-          <button class="btn-card">See More →</button>
-        </div>
-      </div>
-
-      <div class="addin-card" onclick="showDetail('addin-hanger')">
-        <div class="addin-top">
-          <div class="addin-top-gradient" style="background: linear-gradient(120deg, #010f18, #01293a);"></div>
-          <span class="addin-name">Smart Hanger</span>
-        </div>
-        <div class="addin-body">
-          <span class="addin-tag">MEP Support Systems</span>
-          <p class="addin-desc">Automated placement and sizing of MEP element supports and false ceiling support systems with engineering calculations.</p>
-          <button class="btn-card">See More →</button>
-        </div>
+  <div style="padding-top:70px;">
+    <div class="adn-wrap">
+      <div class="eyebrow">Tools</div>
+      <h2 class="sec-h">Professional Addins</h2>
+      <p class="sec-p">Purpose-built Revit addins that supercharge your MEP workflows and design processes.</p>
+      <div class="adn-grid">
+        <div class="adn-card" onclick="showPage('d-pipe')"><div class="adn-head"><span class="adn-name">Pipe Sizer</span><span class="adn-badge">NFPA &amp; ASHRAE</span></div><div class="adn-body"><div class="adn-tag">MEP Design · Revit Addin</div><p class="adn-desc">Automated pipe sizing calculations following NFPA and ASHRAE standards for accurate MEP design and code compliance.</p><a class="btn-g">See Full Details →</a></div></div>
+        <div class="adn-card" onclick="showPage('d-mep')"><div class="adn-head"><span class="adn-name">MEP Count Master</span><span class="adn-badge">BOQ Generation</span></div><div class="adn-body"><div class="adn-tag">Quantity Takeoff · Revit Addin</div><p class="adn-desc">Automated Bill of Quantities generation for MEP elements with precise counting and material takeoffs.</p><a class="btn-g">See Full Details →</a></div></div>
+        <div class="adn-card" onclick="showPage('d-clash')"><div class="adn-head"><span class="adn-name">Clash Manager</span><span class="adn-badge">Real-time Detection</span></div><div class="adn-body"><div class="adn-tag">Coordination · Revit Addin</div><p class="adn-desc">Intelligent clash detection and resolution tools to identify and resolve MEP system conflicts efficiently.</p><a class="btn-g">See Full Details →</a></div></div>
+        <div class="adn-card" onclick="showPage('d-hanger')"><div class="adn-head"><span class="adn-name">Smart Hanger</span><span class="adn-badge">Load Calculations</span></div><div class="adn-body"><div class="adn-tag">Support Systems · Revit Addin</div><p class="adn-desc">Automated placement and sizing of MEP supports and false ceiling systems with engineering calculations.</p><a class="btn-g">See Full Details →</a></div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ UPDATES ══════════════ -->
+<!-- ════ UPDATES ════ -->
 <div id="updates" class="page">
-  <div class="section-wrap">
-    <div class="section-label">Insights</div>
-    <h2 class="section-title">Latest Updates</h2>
-    <p class="section-sub">Thoughts and insights from our team on the future of construction technology.</p>
-
-    <div class="updates-grid">
-      <div class="update-card">
-        <div class="update-date">Digital Twins · 2024</div>
-        <h3 class="update-title">Harnessing Energy Modeling with Digital Twins</h3>
-        <p class="update-text">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
-        <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="update-link">Read on LinkedIn →</a>
-      </div>
-
-      <div class="update-card">
-        <div class="update-date">Technology · 2024</div>
-        <h3 class="update-title">Understanding Digital Twin Technology</h3>
-        <p class="update-text">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
-        <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="update-link">Read on LinkedIn →</a>
+  <div style="padding-top:70px;">
+    <div class="upd-section">
+      <div class="upd-inner">
+        <div class="eyebrow">Insights</div>
+        <h2 class="sec-h">Latest Updates</h2>
+        <p class="sec-p">Thoughts and insights from our team on the future of construction technology.</p>
+        <div class="upd-grid">
+          <div class="upd-card"><div class="upd-date">Digital Twins · 2024</div><h3 class="upd-title">Harnessing Energy Modeling with Digital Twins</h3><p class="upd-text">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management.</p><a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="upd-link">Read on LinkedIn →</a></div>
+          <div class="upd-card"><div class="upd-date">Technology · 2024</div><h3 class="upd-title">Understanding Digital Twin Technology</h3><p class="upd-text">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p><a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="upd-link">Read on LinkedIn →</a></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ ABOUT ══════════════ -->
+<!-- ════ ABOUT ════ -->
 <div id="about" class="page">
-  <div class="section-wrap">
-    <div class="about-layout">
-      <div class="about-text-content">
-        <div class="section-label">About Us</div>
-        <h2 class="section-title">Building Tomorrow's Construction Industry</h2>
-
-        <p>Founded in 2024, Hexa Innovation stands at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions.</p>
-        <p>With a team of 11–50 dedicated professionals, we specialize in software development, AEC & VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
-        <p>Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering.</p>
-
-        <div class="about-tags">
-          <span class="about-tag">Software Development</span>
-          <span class="about-tag">BIM Automation</span>
-          <span class="about-tag">VR & AR</span>
-          <span class="about-tag">Digital Twins</span>
-          <span class="about-tag">AI & ML</span>
-          <span class="about-tag">4D Scheduling</span>
-          <span class="about-tag">AEC Automation</span>
-          <span class="about-tag">VDC Solutions</span>
+  <div style="padding-top:70px;">
+    <div class="abt-wrap">
+      <div class="abt-grid">
+        <div class="abt-img-wrap">
+          <img src="./img4.png" alt="About" class="abt-img">
+          <div class="abt-accent"><div class="abt-acc-n">2024</div><div class="abt-acc-l">Founded</div></div>
         </div>
-      </div>
-
-      <div class="about-visual">
-        <div class="about-hex-grid" id="hexGrid"></div>
+        <div class="abt-text">
+          <div class="eyebrow">About Us</div>
+          <h2 class="sec-h" style="margin-bottom:22px;">Building Tomorrow's Construction Industry</h2>
+          <p>Founded in 2024, Hexa Innovation stands at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions.</p>
+          <p>With a team of 11–50 dedicated professionals, we specialize in software development, AEC &amp; VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
+          <p>Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering.</p>
+          <div class="chips">
+            <span class="chip">Software Development</span><span class="chip">BIM Automation</span><span class="chip">VR &amp; AR</span><span class="chip">Digital Twins</span><span class="chip">AI &amp; ML</span><span class="chip">4D Scheduling</span><span class="chip">AEC Automation</span><span class="chip">VDC Solutions</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ CONTACT ══════════════ -->
+<!-- ════ CONTACT ════ -->
 <div id="contact" class="page">
-  <div class="section-wrap">
-    <div class="section-label">Get in Touch</div>
-    <h2 class="section-title">Contact Us</h2>
-    <p class="section-sub">Ready to transform your construction projects? Let's talk.</p>
-
-    <div class="contact-layout">
-      <div class="contact-info">
-        <p style="font-size:1rem; color:var(--muted); line-height:1.8;">We'd love to hear about your project and explore how Hexa Innovation can help bring it to life with the latest technology.</p>
-
-        <div class="contact-link-block">
-          <a href="http://hexainnovation.com" target="_blank" class="contact-link-item">
-            <div class="contact-link-icon">🌐</div>
-            <div>
-              <div class="contact-link-label">Website</div>
-              <div class="contact-link-value">hexainnovation.com</div>
-            </div>
-          </a>
-          <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="contact-link-item">
-            <div class="contact-link-icon">💼</div>
-            <div>
-              <div class="contact-link-label">LinkedIn</div>
-              <div class="contact-link-value">Hexa Innovation</div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <div class="contact-form-panel">
-        <div class="form-title">Send a Message</div>
-        <div class="form-row">
-          <label class="form-label">Your Name</label>
-          <input type="text" class="form-input" placeholder="John Doe">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Email Address</label>
-          <input type="email" class="form-input" placeholder="john@company.com">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Subject</label>
-          <input type="text" class="form-input" placeholder="Project enquiry">
-        </div>
-        <div class="form-row">
-          <label class="form-label">Message</label>
-          <textarea class="form-textarea" placeholder="Tell us about your project..."></textarea>
-        </div>
-        <button class="btn-primary" style="width:100%; justify-content:center;">Send Message →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════ DETAIL: COURSES ══════════════ -->
-
-<!-- Dynamo -->
-<div id="course-dynamo" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">Dynamo Visual Programming</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Course Overview</div>
-          <p>Master the power of visual programming with Dynamo, Autodesk's computational design tool. Create powerful scripts and automations that transform your BIM workflows and parametric design capabilities.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Learning Objectives</div>
-          <ul class="detail-list">
-            <li>Understand Dynamo's visual programming interface and node-based workflow</li>
-            <li>Create parametric models and automated design solutions</li>
-            <li>Integrate Dynamo with Revit for BIM automation</li>
-            <li>Develop custom nodes and packages for reusable solutions</li>
-            <li>Implement data-driven design processes</li>
-          </ul>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Module Breakdown</div>
-          <div class="module-list">
-            <div class="module-item"><h4>Weeks 1–3: Dynamo Fundamentals</h4><p>Interface navigation, nodes, wires, and basic geometry creation</p></div>
-            <div class="module-item"><h4>Weeks 4–6: Data Management</h4><p>Lists, data structures, and mathematical operations</p></div>
-            <div class="module-item"><h4>Weeks 7–9: Revit Integration</h4><p>Element creation, parameter manipulation, and model automation</p></div>
-            <div class="module-item"><h4>Weeks 10–12: Advanced Applications</h4><p>Custom nodes, package development, and complex workflows</p></div>
+  <div style="padding-top:70px;">
+    <div class="cnt-section">
+      <div class="cnt-inner">
+        <div>
+          <div class="eyebrow">Get in Touch</div>
+          <h2 class="sec-h">Ready to Transform Your Projects?</h2>
+          <p style="font-size:.96rem;color:var(--muted);line-height:1.78;">We'd love to hear about your project and explore how Hexa Innovation can bring it to life with the latest construction technology.</p>
+          <div class="cnt-links">
+            <a href="http://hexainnovation.com" target="_blank" class="clink"><div class="clink-ic">🌐</div><div><div class="clink-l">Website</div><div class="clink-v">hexainnovation.com</div></div></a>
+            <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="clink"><div class="clink-ic">💼</div><div><div class="clink-l">LinkedIn</div><div class="clink-v">Hexa Innovation</div></div></a>
           </div>
         </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Course Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">12 weeks</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Beginner–Advanced</span></div>
-          <ul class="prereq-list">
-            <li>Basic Revit knowledge</li>
-            <li>Understanding of BIM concepts</li>
-            <li>Computer literacy</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Revit API -->
-<div id="course-revit-api" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">Revit API & C# Development</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Course Overview</div>
-          <p>Dive deep into Revit API development using C#. Create powerful custom applications, automate repetitive tasks, and extend Revit's functionality to meet specific project requirements.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Learning Objectives</div>
-          <ul class="detail-list">
-            <li>Master C# programming fundamentals for Revit development</li>
-            <li>Understand Revit API architecture and object model</li>
-            <li>Create custom commands and external applications</li>
-            <li>Implement user interfaces using WPF and Windows Forms</li>
-            <li>Deploy and distribute Revit addins professionally</li>
-          </ul>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Module Breakdown</div>
-          <div class="module-list">
-            <div class="module-item"><h4>Weeks 1–4: C# Fundamentals</h4><p>C# syntax, object-oriented programming, and .NET framework basics</p></div>
-            <div class="module-item"><h4>Weeks 5–8: Revit API Basics</h4><p>API structure, element manipulation, and basic automation</p></div>
-            <div class="module-item"><h4>Weeks 9–11: Advanced Development</h4><p>Custom UI development, external applications, and complex workflows</p></div>
-            <div class="module-item"><h4>Weeks 12–14: Professional Deployment</h4><p>Package creation, installer development, and distribution strategies</p></div>
+        <div class="form-card">
+          <div class="form-h">Send Us a Message</div>
+          <div class="form-r2">
+            <div><label class="form-l">First Name</label><input type="text" class="form-i" placeholder="John"></div>
+            <div><label class="form-l">Last Name</label><input type="text" class="form-i" placeholder="Doe"></div>
           </div>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Course Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">14 weeks</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Intermediate</span></div>
-          <ul class="prereq-list">
-            <li>Proficient in Revit</li>
-            <li>Basic programming concepts</li>
-            <li>Windows development environment</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
+          <div class="form-r"><label class="form-l">Email Address</label><input type="email" class="form-i" placeholder="john@company.com"></div>
+          <div class="form-r"><label class="form-l">Subject</label><input type="text" class="form-i" placeholder="Project enquiry, Course info…"></div>
+          <div class="form-r"><label class="form-l">Message</label><textarea class="form-ta" placeholder="Tell us about your project…"></textarea></div>
+          <button class="btn-n" style="width:100%;justify-content:center;padding:14px;">Send Message →</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 4D -->
-<div id="course-4d" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">4D Construction Planning</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Course Overview</div>
-          <p>Learn to integrate time management with 3D models to create comprehensive 4D construction planning solutions. Covers advanced scheduling techniques and visualization methods for project success.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Learning Objectives</div>
-          <ul class="detail-list">
-            <li>Understand 4D BIM concepts and methodology</li>
-            <li>Create time-linked 3D models for construction sequencing</li>
-            <li>Develop construction schedules integrated with BIM models</li>
-            <li>Implement clash detection and resolution in time sequences</li>
-            <li>Generate construction animations and progress reports</li>
-          </ul>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Module Breakdown</div>
-          <div class="module-list">
-            <div class="module-item"><h4>Weeks 1–3: 4D BIM Fundamentals</h4><p>Introduction to 4D concepts, software tools, and project setup</p></div>
-            <div class="module-item"><h4>Weeks 4–6: Schedule Integration</h4><p>Linking construction schedules with BIM elements and sequencing</p></div>
-            <div class="module-item"><h4>Weeks 7–8: Animation & Visualization</h4><p>Creating construction animations and progress visualization</p></div>
-            <div class="module-item"><h4>Weeks 9–10: Advanced Applications</h4><p>Resource optimization, cost integration, and project delivery</p></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Course Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">10 weeks</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Intermediate</span></div>
-          <ul class="prereq-list">
-            <li>Advanced BIM knowledge</li>
-            <li>Project management basics</li>
-            <li>Construction sequencing understanding</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- ════ DETAIL: COURSES ════ -->
+
+<div id="d-dynamo" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('courses')">← Back to Courses</a><div class="det-title">Dynamo Visual Programming</div><div class="det-sub">Master visual programming with Dynamo for powerful BIM automation and parametric design workflows.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Course Overview</div><p>Master the power of visual programming with Dynamo, Autodesk's computational design tool. Create powerful scripts and automations that transform your BIM workflows and parametric design capabilities.</p></div><div class="det-block"><div class="det-block-h">Learning Objectives</div><ul class="det-list"><li>Understand Dynamo's visual programming interface and node-based workflow</li><li>Create parametric models and automated design solutions</li><li>Integrate Dynamo with Revit for BIM automation</li><li>Develop custom nodes and packages for reusable solutions</li><li>Implement data-driven design processes</li></ul></div><div class="det-block"><div class="det-block-h">Module Breakdown</div><div class="mod-list"><div class="mod-item"><h4>Weeks 1–3: Dynamo Fundamentals</h4><p>Interface navigation, nodes, wires, and basic geometry creation</p></div><div class="mod-item"><h4>Weeks 4–6: Data Management</h4><p>Lists, data structures, and mathematical operations</p></div><div class="mod-item"><h4>Weeks 7–9: Revit Integration</h4><p>Element creation, parameter manipulation, and model automation</p></div><div class="mod-item"><h4>Weeks 10–12: Advanced Applications</h4><p>Custom nodes, package development, and complex workflows</p></div></div></div></div><div><div class="sb-box"><div class="sb-title">Course Details</div><div class="sb-row"><span class="sb-l">Duration</span><span class="sb-v">12 weeks</span></div><div class="sb-row"><span class="sb-l">Price</span><span class="sb-v big">$100</span></div><div class="sb-row"><span class="sb-l">Format</span><span class="sb-v">Online</span></div><div class="sb-row"><span class="sb-l">Level</span><span class="sb-v">Beginner–Advanced</span></div><div class="sb-pre"><div class="sb-pre-i">Basic Revit knowledge</div><div class="sb-pre-i">Understanding of BIM concepts</div><div class="sb-pre-i">Computer literacy</div></div><button class="btn-p" style="width:100%;justify-content:center;">Enroll Now →</button></div></div></div>
 </div>
 
-<!-- VR/AR -->
-<div id="course-vrar" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">VR/AR with Unity</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Course Overview</div>
-          <p>Create immersive VR and AR experiences for architectural visualization using Unity. Covers everything from basic Unity development to advanced VR/AR implementation for the AEC industry.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Learning Objectives</div>
-          <ul class="detail-list">
-            <li>Master Unity development environment and workflows</li>
-            <li>Implement VR experiences for architectural walkthroughs</li>
-            <li>Develop AR applications for on-site visualization</li>
-            <li>Optimize performance for immersive experiences</li>
-            <li>Deploy applications to various VR/AR platforms</li>
-          </ul>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Module Breakdown</div>
-          <div class="module-list">
-            <div class="module-item"><h4>Weeks 1–4: Unity Fundamentals</h4><p>Unity interface, game objects, components, and basic scripting</p></div>
-            <div class="module-item"><h4>Weeks 5–8: 3D Environment Creation</h4><p>Scene development, lighting, materials, and architectural import workflows</p></div>
-            <div class="module-item"><h4>Weeks 9–12: VR Development</h4><p>VR SDK integration, interaction systems, and immersive experiences</p></div>
-            <div class="module-item"><h4>Weeks 13–16: AR Implementation</h4><p>AR foundation, marker tracking, and mobile deployment</p></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Course Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">16 weeks</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Beginner–Advanced</span></div>
-          <ul class="prereq-list">
-            <li>Basic 3D modeling knowledge</li>
-            <li>Computer graphics understanding</li>
-            <li>Interest in interactive media</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="d-revit" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('courses')">← Back to Courses</a><div class="det-title">Revit API &amp; C# Development</div><div class="det-sub">Build powerful custom Revit applications using C# and the Revit API framework.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Course Overview</div><p>Dive deep into Revit API development using C#. Create powerful custom applications, automate repetitive tasks, and extend Revit's functionality to meet specific project requirements.</p></div><div class="det-block"><div class="det-block-h">Learning Objectives</div><ul class="det-list"><li>Master C# programming fundamentals for Revit development</li><li>Understand Revit API architecture and object model</li><li>Create custom commands and external applications</li><li>Implement user interfaces using WPF and Windows Forms</li><li>Deploy and distribute Revit addins professionally</li></ul></div><div class="det-block"><div class="det-block-h">Module Breakdown</div><div class="mod-list"><div class="mod-item"><h4>Weeks 1–4: C# Fundamentals</h4><p>C# syntax, object-oriented programming, and .NET basics</p></div><div class="mod-item"><h4>Weeks 5–8: Revit API Basics</h4><p>API structure, element manipulation, and basic automation</p></div><div class="mod-item"><h4>Weeks 9–11: Advanced Development</h4><p>Custom UI, external applications, and complex workflows</p></div><div class="mod-item"><h4>Weeks 12–14: Professional Deployment</h4><p>Package creation, installer development, and distribution</p></div></div></div></div><div><div class="sb-box"><div class="sb-title">Course Details</div><div class="sb-row"><span class="sb-l">Duration</span><span class="sb-v">14 weeks</span></div><div class="sb-row"><span class="sb-l">Price</span><span class="sb-v big">$100</span></div><div class="sb-row"><span class="sb-l">Format</span><span class="sb-v">Online</span></div><div class="sb-row"><span class="sb-l">Level</span><span class="sb-v">Intermediate</span></div><div class="sb-pre"><div class="sb-pre-i">Proficient in Revit</div><div class="sb-pre-i">Basic programming concepts</div><div class="sb-pre-i">Windows development environment</div></div><button class="btn-p" style="width:100%;justify-content:center;">Enroll Now →</button></div></div></div>
 </div>
 
-<!-- Unreal -->
-<div id="course-unreal" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">Unreal Engine Blueprints</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Course Overview</div>
-          <p>Master visual scripting in Unreal Engine to create stunning architectural visualizations and interactive experiences. Learn Blueprint programming for real-time rendering and immersive presentations.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Learning Objectives</div>
-          <ul class="detail-list">
-            <li>Master Unreal Engine interface and Blueprint visual scripting</li>
-            <li>Create photorealistic architectural renderings</li>
-            <li>Develop interactive walkthroughs and presentations</li>
-            <li>Implement real-time lighting and material systems</li>
-            <li>Build interactive VR-ready architectural experiences</li>
-          </ul>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Module Breakdown</div>
-          <div class="module-list">
-            <div class="module-item"><h4>Weeks 1–3: Unreal Engine Basics</h4><p>Engine interface, project setup, and basic scene creation</p></div>
-            <div class="module-item"><h4>Weeks 4–6: Blueprint Programming</h4><p>Visual scripting fundamentals and logic implementation</p></div>
-            <div class="module-item"><h4>Weeks 7–9: Architectural Visualization</h4><p>Lighting systems, material creation, and photorealistic rendering</p></div>
-            <div class="module-item"><h4>Weeks 10–12: Interactive Experiences</h4><p>User interaction, animation systems, and deployment strategies</p></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Course Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">12 weeks</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Beginner–Intermediate</span></div>
-          <ul class="prereq-list">
-            <li>3D modeling experience</li>
-            <li>Basic game engine concepts</li>
-            <li>High-performance computer</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="d-4d" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('courses')">← Back to Courses</a><div class="det-title">4D Construction Planning</div><div class="det-sub">Integrate time management with 3D models for comprehensive construction scheduling.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Course Overview</div><p>Learn to integrate time management with 3D models to create comprehensive 4D construction planning solutions. Covers advanced scheduling techniques and visualization methods for project success.</p></div><div class="det-block"><div class="det-block-h">Learning Objectives</div><ul class="det-list"><li>Understand 4D BIM concepts and methodology</li><li>Create time-linked 3D models for construction sequencing</li><li>Develop construction schedules integrated with BIM models</li><li>Implement clash detection in time sequences</li><li>Generate construction animations and progress reports</li></ul></div><div class="det-block"><div class="det-block-h">Module Breakdown</div><div class="mod-list"><div class="mod-item"><h4>Weeks 1–3: 4D BIM Fundamentals</h4><p>Introduction to 4D concepts, software tools, and project setup</p></div><div class="mod-item"><h4>Weeks 4–6: Schedule Integration</h4><p>Linking construction schedules with BIM elements</p></div><div class="mod-item"><h4>Weeks 7–8: Animation &amp; Visualization</h4><p>Creating construction animations and progress visualization</p></div><div class="mod-item"><h4>Weeks 9–10: Advanced Applications</h4><p>Resource optimization, cost integration, and project delivery</p></div></div></div></div><div><div class="sb-box"><div class="sb-title">Course Details</div><div class="sb-row"><span class="sb-l">Duration</span><span class="sb-v">10 weeks</span></div><div class="sb-row"><span class="sb-l">Price</span><span class="sb-v big">$100</span></div><div class="sb-row"><span class="sb-l">Format</span><span class="sb-v">Online</span></div><div class="sb-row"><span class="sb-l">Level</span><span class="sb-v">Intermediate</span></div><div class="sb-pre"><div class="sb-pre-i">Advanced BIM knowledge</div><div class="sb-pre-i">Project management basics</div><div class="sb-pre-i">Construction sequencing understanding</div></div><button class="btn-p" style="width:100%;justify-content:center;">Enroll Now →</button></div></div></div>
 </div>
 
-<!-- ══════════════ DETAIL: ADDINS ══════════════ -->
-
-<!-- Pipe Sizer -->
-<div id="addin-pipe" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('addins')">← Back to Addins</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">Pipe Sizer (NFPA–ASHRAE)</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Overview</div>
-          <p>Professional pipe sizing tool that automatically calculates optimal pipe diameters based on NFPA and ASHRAE standards. Ensures code compliance and optimal system performance for fire protection and HVAC systems.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Key Features</div>
-          <ul class="detail-list">
-            <li>NFPA 13 compliant fire protection system sizing</li>
-            <li>ASHRAE standard HVAC piping calculations</li>
-            <li>Automatic flow rate and pressure loss calculations</li>
-            <li>Material property database integration</li>
-            <li>Code compliance verification and reporting</li>
-            <li>Full integration with Revit MEP workflows</li>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Addin Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Type</span><span class="sidebar-row-value">Revit Addin</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Category</span><span class="sidebar-row-value">MEP Design</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Standards</span><span class="sidebar-row-value">NFPA & ASHRAE</span></div>
-          <ul class="prereq-list">
-            <li>Autodesk Revit 2020+</li>
-            <li>MEP modeling experience</li>
-            <li>Code compliance knowledge</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Request Demo →</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="d-unity" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('courses')">← Back to Courses</a><div class="det-title">VR/AR with Unity</div><div class="det-sub">Create immersive VR and AR experiences for architectural visualization using Unity.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Course Overview</div><p>Create immersive Virtual Reality and Augmented Reality experiences for architectural visualization using Unity. Covers everything from basic Unity development to advanced VR/AR implementation for the AEC industry.</p></div><div class="det-block"><div class="det-block-h">Learning Objectives</div><ul class="det-list"><li>Master Unity development environment and workflows</li><li>Implement VR experiences for architectural walkthroughs</li><li>Develop AR applications for on-site visualization</li><li>Optimize performance for immersive experiences</li><li>Deploy applications to various VR/AR platforms</li></ul></div><div class="det-block"><div class="det-block-h">Module Breakdown</div><div class="mod-list"><div class="mod-item"><h4>Weeks 1–4: Unity Fundamentals</h4><p>Unity interface, game objects, components, and basic scripting</p></div><div class="mod-item"><h4>Weeks 5–8: 3D Environment Creation</h4><p>Scene development, lighting, materials, and architectural import</p></div><div class="mod-item"><h4>Weeks 9–12: VR Development</h4><p>VR SDK integration, interaction systems, and immersive experiences</p></div><div class="mod-item"><h4>Weeks 13–16: AR Implementation</h4><p>AR foundation, marker tracking, and mobile deployment</p></div></div></div></div><div><div class="sb-box"><div class="sb-title">Course Details</div><div class="sb-row"><span class="sb-l">Duration</span><span class="sb-v">16 weeks</span></div><div class="sb-row"><span class="sb-l">Price</span><span class="sb-v big">$100</span></div><div class="sb-row"><span class="sb-l">Format</span><span class="sb-v">Online</span></div><div class="sb-row"><span class="sb-l">Level</span><span class="sb-v">Beginner–Advanced</span></div><div class="sb-pre"><div class="sb-pre-i">Basic 3D modeling knowledge</div><div class="sb-pre-i">Computer graphics understanding</div><div class="sb-pre-i">Interest in interactive media</div></div><button class="btn-p" style="width:100%;justify-content:center;">Enroll Now →</button></div></div></div>
 </div>
 
-<!-- MEP Count Master -->
-<div id="addin-mep" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('addins')">← Back to Addins</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">MEP Count Master "BOQ"</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Overview</div>
-          <p>Comprehensive Bill of Quantities generation tool for MEP systems. Automatically counts and quantifies all MEP elements with precise material takeoffs and cost estimation capabilities.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Key Features</div>
-          <ul class="detail-list">
-            <li>Automated MEP element counting and classification</li>
-            <li>Material quantity calculations with waste factors</li>
-            <li>Labor hour estimation based on industry standards</li>
-            <li>Customizable reporting templates and formats</li>
-            <li>Integration with cost databases and pricing</li>
-            <li>Multi-discipline coordination and consolidation</li>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Addin Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Type</span><span class="sidebar-row-value">Revit Addin</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Category</span><span class="sidebar-row-value">Quantity Takeoff</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Export</span><span class="sidebar-row-value">Excel, CSV, PDF</span></div>
-          <ul class="prereq-list">
-            <li>Autodesk Revit 2020+</li>
-            <li>MEP modeling workflows</li>
-            <li>Cost estimation knowledge</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Request Demo →</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="d-unreal" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('courses')">← Back to Courses</a><div class="det-title">Unreal Engine Blueprints</div><div class="det-sub">Master visual scripting in Unreal Engine for stunning architectural visualizations.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Course Overview</div><p>Master visual scripting in Unreal Engine to create stunning architectural visualizations and interactive experiences. Learn Blueprint programming for real-time rendering and immersive presentations.</p></div><div class="det-block"><div class="det-block-h">Learning Objectives</div><ul class="det-list"><li>Master Unreal Engine interface and Blueprint visual scripting</li><li>Create photorealistic architectural renderings</li><li>Develop interactive walkthroughs and presentations</li><li>Implement real-time lighting and material systems</li><li>Build interactive VR-ready architectural experiences</li></ul></div><div class="det-block"><div class="det-block-h">Module Breakdown</div><div class="mod-list"><div class="mod-item"><h4>Weeks 1–3: Unreal Engine Basics</h4><p>Engine interface, project setup, and basic scene creation</p></div><div class="mod-item"><h4>Weeks 4–6: Blueprint Programming</h4><p>Visual scripting fundamentals and logic implementation</p></div><div class="mod-item"><h4>Weeks 7–9: Architectural Visualization</h4><p>Lighting systems, material creation, and photorealistic rendering</p></div><div class="mod-item"><h4>Weeks 10–12: Interactive Experiences</h4><p>User interaction, animation systems, and deployment strategies</p></div></div></div></div><div><div class="sb-box"><div class="sb-title">Course Details</div><div class="sb-row"><span class="sb-l">Duration</span><span class="sb-v">12 weeks</span></div><div class="sb-row"><span class="sb-l">Price</span><span class="sb-v big">$100</span></div><div class="sb-row"><span class="sb-l">Format</span><span class="sb-v">Online</span></div><div class="sb-row"><span class="sb-l">Level</span><span class="sb-v">Beginner–Intermediate</span></div><div class="sb-pre"><div class="sb-pre-i">3D modeling experience</div><div class="sb-pre-i">Basic game engine concepts</div><div class="sb-pre-i">High-performance computer</div></div><button class="btn-p" style="width:100%;justify-content:center;">Enroll Now →</button></div></div></div>
 </div>
 
-<!-- Clash Manager -->
-<div id="addin-clash" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('addins')">← Back to Addins</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">Clash Manager</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Overview</div>
-          <p>Advanced clash detection and resolution tool that identifies conflicts between MEP systems and provides intelligent solutions. Streamlines coordination workflows and reduces costly on-site conflicts.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Key Features</div>
-          <ul class="detail-list">
-            <li>Intelligent clash detection with customizable rules</li>
-            <li>Automated conflict resolution suggestions</li>
-            <li>Multi-discipline coordination workflows</li>
-            <li>Real-time clash monitoring during design</li>
-            <li>Detailed clash reports with 3D visualization</li>
-            <li>Integration with project coordination platforms</li>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Addin Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Type</span><span class="sidebar-row-value">Revit Addin</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Category</span><span class="sidebar-row-value">Coordination</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Analysis</span><span class="sidebar-row-value">Real-time</span></div>
-          <ul class="prereq-list">
-            <li>Autodesk Revit 2021+</li>
-            <li>Multi-discipline BIM models</li>
-            <li>Coordination experience</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Request Demo →</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- ════ DETAIL: ADDINS ════ -->
+
+<div id="d-pipe" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('addins')">← Back to Addins</a><div class="det-title">Pipe Sizer (NFPA–ASHRAE)</div><div class="det-sub">Automated pipe sizing compliant with NFPA and ASHRAE standards for fire protection and HVAC systems.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Overview</div><p>Professional pipe sizing tool that automatically calculates optimal pipe diameters based on NFPA and ASHRAE standards. Ensures code compliance and optimal system performance for fire protection and HVAC systems.</p></div><div class="det-block"><div class="det-block-h">Key Features</div><ul class="det-list"><li>NFPA 13 compliant fire protection system sizing</li><li>ASHRAE standard HVAC piping calculations</li><li>Automatic flow rate and pressure loss calculations</li><li>Material property database integration</li><li>Code compliance verification and reporting</li><li>Full integration with Revit MEP workflows</li></ul></div></div><div><div class="sb-box"><div class="sb-title">Addin Details</div><div class="sb-row"><span class="sb-l">Type</span><span class="sb-v">Revit Addin</span></div><div class="sb-row"><span class="sb-l">Category</span><span class="sb-v">MEP Design</span></div><div class="sb-row"><span class="sb-l">Standards</span><span class="sb-v">NFPA &amp; ASHRAE</span></div><div class="sb-pre"><div class="sb-pre-i">Autodesk Revit 2020+</div><div class="sb-pre-i">MEP modeling experience</div><div class="sb-pre-i">Code compliance knowledge</div></div><button class="btn-p" style="width:100%;justify-content:center;">Request Demo →</button></div></div></div>
 </div>
 
-<!-- Smart Hanger -->
-<div id="addin-hanger" class="page">
-  <div class="detail-wrap">
-    <a class="back-btn" onclick="showPage('addins')">← Back to Addins</a>
-    <div class="detail-grid">
-      <div>
-        <h1 class="detail-title">Smart Hanger</h1>
-        <div class="detail-block">
-          <div class="detail-block-title">Overview</div>
-          <p>Intelligent support system generator for MEP elements and false ceiling supports. Automatically calculates loads, selects appropriate support types, and places hangers according to engineering standards and building codes.</p>
-        </div>
-        <div class="detail-block">
-          <div class="detail-block-title">Key Features</div>
-          <ul class="detail-list">
-            <li>Automatic support placement based on load calculations</li>
-            <li>Engineering-grade support sizing and selection</li>
-            <li>Code-compliant spacing and attachment methods</li>
-            <li>False ceiling support system generation</li>
-            <li>Load path analysis and structural coordination</li>
-            <li>Material specifications and installation details</li>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <div class="sidebar-card">
-          <div class="sidebar-title">Addin Details</div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Type</span><span class="sidebar-row-value">Revit Addin</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Category</span><span class="sidebar-row-value">Support Systems</span></div>
-          <div class="sidebar-row"><span class="sidebar-row-label">Analysis</span><span class="sidebar-row-value">Load Calculations</span></div>
-          <ul class="prereq-list">
-            <li>Autodesk Revit 2021+</li>
-            <li>MEP modeling experience</li>
-            <li>Structural coordination knowledge</li>
-          </ul>
-          <button class="btn-primary" style="width:100%; justify-content:center;">Request Demo →</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="d-mep" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('addins')">← Back to Addins</a><div class="det-title">MEP Count Master "BOQ"</div><div class="det-sub">Comprehensive automated Bill of Quantities generation for all MEP disciplines.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Overview</div><p>Comprehensive Bill of Quantities generation tool for MEP systems. Automatically counts and quantifies all MEP elements with precise material takeoffs and cost estimation capabilities.</p></div><div class="det-block"><div class="det-block-h">Key Features</div><ul class="det-list"><li>Automated MEP element counting and classification</li><li>Material quantity calculations with waste factors</li><li>Labor hour estimation based on industry standards</li><li>Customizable reporting templates and formats</li><li>Integration with cost databases and pricing</li><li>Multi-discipline coordination and consolidation</li></ul></div></div><div><div class="sb-box"><div class="sb-title">Addin Details</div><div class="sb-row"><span class="sb-l">Type</span><span class="sb-v">Revit Addin</span></div><div class="sb-row"><span class="sb-l">Category</span><span class="sb-v">Quantity Takeoff</span></div><div class="sb-row"><span class="sb-l">Export</span><span class="sb-v">Excel, CSV, PDF</span></div><div class="sb-pre"><div class="sb-pre-i">Autodesk Revit 2020+</div><div class="sb-pre-i">MEP modeling workflows</div><div class="sb-pre-i">Cost estimation knowledge</div></div><button class="btn-p" style="width:100%;justify-content:center;">Request Demo →</button></div></div></div>
 </div>
 
-<!-- ══════════════ FOOTER ══════════════ -->
+<div id="d-clash" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('addins')">← Back to Addins</a><div class="det-title">Clash Manager</div><div class="det-sub">Intelligent clash detection and resolution for MEP coordination workflows.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Overview</div><p>Advanced clash detection and resolution tool that identifies conflicts between MEP systems and provides intelligent solutions. Streamlines coordination and reduces costly on-site conflicts.</p></div><div class="det-block"><div class="det-block-h">Key Features</div><ul class="det-list"><li>Intelligent clash detection with customizable rules</li><li>Automated conflict resolution suggestions</li><li>Multi-discipline coordination workflows</li><li>Real-time clash monitoring during design</li><li>Detailed clash reports with 3D visualization</li><li>Integration with project coordination platforms</li></ul></div></div><div><div class="sb-box"><div class="sb-title">Addin Details</div><div class="sb-row"><span class="sb-l">Type</span><span class="sb-v">Revit Addin</span></div><div class="sb-row"><span class="sb-l">Category</span><span class="sb-v">Coordination</span></div><div class="sb-row"><span class="sb-l">Analysis</span><span class="sb-v">Real-time</span></div><div class="sb-pre"><div class="sb-pre-i">Autodesk Revit 2021+</div><div class="sb-pre-i">Multi-discipline BIM models</div><div class="sb-pre-i">Coordination experience</div></div><button class="btn-p" style="width:100%;justify-content:center;">Request Demo →</button></div></div></div>
+</div>
+
+<div id="d-hanger" class="page det-page">
+  <div class="det-hero"><div class="det-hero-in"><a class="back-btn" onclick="showPage('addins')">← Back to Addins</a><div class="det-title">Smart Hanger</div><div class="det-sub">Automated MEP support and false ceiling system generation with engineering calculations.</div></div></div>
+  <div class="det-body"><div><div class="det-block"><div class="det-block-h">Overview</div><p>Intelligent support system generator for MEP elements and false ceiling supports. Automatically calculates loads, selects appropriate support types, and places hangers according to engineering standards and building codes.</p></div><div class="det-block"><div class="det-block-h">Key Features</div><ul class="det-list"><li>Automatic support placement based on load calculations</li><li>Engineering-grade support sizing and selection</li><li>Code-compliant spacing and attachment methods</li><li>False ceiling support system generation</li><li>Load path analysis and structural coordination</li><li>Material specifications and installation details</li></ul></div></div><div><div class="sb-box"><div class="sb-title">Addin Details</div><div class="sb-row"><span class="sb-l">Type</span><span class="sb-v">Revit Addin</span></div><div class="sb-row"><span class="sb-l">Category</span><span class="sb-v">Support Systems</span></div><div class="sb-row"><span class="sb-l">Analysis</span><span class="sb-v">Load Calculations</span></div><div class="sb-pre"><div class="sb-pre-i">Autodesk Revit 2021+</div><div class="sb-pre-i">MEP modeling experience</div><div class="sb-pre-i">Structural coordination knowledge</div></div><button class="btn-p" style="width:100%;justify-content:center;">Request Demo →</button></div></div></div>
+</div>
+
+<!-- ════ FOOTER ════ -->
 <footer>
-  <div class="footer-left">
-    <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
-      <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" stroke="#00c2e0" stroke-width="1.5" fill="rgba(0,194,224,0.1)"/>
-    </svg>
-    <span class="footer-text">© 2025 Hexa Innovation. All rights reserved.</span>
+  <div class="foot-brand">
+    <svg width="26" height="26" viewBox="0 0 38 38" fill="none"><polygon points="19,2 34,10.5 34,27.5 19,36 4,27.5 4,10.5" stroke="#0099c6" stroke-width="1.5" fill="rgba(0,153,198,0.2)"/><circle cx="19" cy="19" r="3" fill="#0099c6"/></svg>
+    <span class="foot-copy">&nbsp;&nbsp;© 2025 Hexa Innovation. All rights reserved.</span>
   </div>
-  <div class="footer-links">
+  <div class="foot-links">
     <a onclick="showPage('services')">Services</a>
     <a onclick="showPage('courses')">Courses</a>
     <a onclick="showPage('addins')">Addins</a>
@@ -1875,47 +538,20 @@
 </footer>
 
 <script>
-  function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const target = document.getElementById(id);
-    if (target) target.classList.add('active');
-
-    // Update nav
-    document.querySelectorAll('[data-p]').forEach(a => {
-      a.classList.toggle('active', a.getAttribute('data-p') === id);
-    });
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function showDetail(id) {
-    showPage(id);
-  }
-
-  function toggleMobile() {
-    const mn = document.getElementById('mobileNav');
-    const hb = document.getElementById('hamburger');
-    const open = mn.classList.toggle('open');
-    hb.querySelectorAll('span')[0].style.transform = open ? 'rotate(45deg) translate(5px,5px)' : '';
-    hb.querySelectorAll('span')[1].style.opacity = open ? '0' : '1';
-    hb.querySelectorAll('span')[2].style.transform = open ? 'rotate(-45deg) translate(5px,-5px)' : '';
-  }
-
-  // Hex grid animation
-  const hexGrid = document.getElementById('hexGrid');
-  if (hexGrid) {
-    for (let i = 0; i < 25; i++) {
-      const h = document.createElement('div');
-      h.className = 'about-hex';
-      h.style.setProperty('--dur', (3 + Math.random() * 4) + 's');
-      h.style.setProperty('--delay', (Math.random() * 4) + 's');
-      hexGrid.appendChild(h);
-    }
-  }
-
-  // Video autoplay
-  const vid = document.querySelector('video');
-  if (vid) vid.play().catch(() => { vid.muted = true; vid.play(); });
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const t=document.getElementById(id);
+  if(t)t.classList.add('active');
+  document.querySelectorAll('[data-p]').forEach(a=>a.classList.toggle('active',a.getAttribute('data-p')===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleMob(){document.getElementById('mobMenu').classList.toggle('open');}
+document.addEventListener('click',e=>{
+  const m=document.getElementById('mobMenu'),h=document.getElementById('hbg');
+  if(!m.contains(e.target)&&!h.contains(e.target))m.classList.remove('open');
+});
+const v=document.querySelector('video');
+if(v)v.play().catch(()=>{v.muted=true;v.play();});
 </script>
 </body>
 </html>
