@@ -1,1237 +1,1921 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hexa Innovation - Transforming Construction & Architecture</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .hero-bg { 
-            position: relative; 
-            overflow: hidden; 
-            height: 100vh;
-            width: 100%; 
-        }
-        .hero-bg video { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover;
-            z-index: -1; 
-        }
-        .hero-content { position: relative; z-index: 1; }
-        .animate-fadeIn { animation: fadeIn 1s ease forwards; opacity: 0; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-400 { animation-delay: 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .service-img { height: 150px; object-fit: cover; border-radius: 8px; }
-        .logo-img { height: 40px; width: auto; margin-right: 12px; }
-        .highlight { border: 2px solid #02a9f7; transition: opacity 0.5s; }
-        .fade-out { opacity: 0.3; }
-        .fade-in { opacity: 1; }
-        .nav-item { color: #02577a; font-weight: 500; transition: color 0.3s; cursor: pointer; }
-        .nav-item:hover { color: #02a9f7; }
-        .nav-item.active { color: #02a9f7; font-weight: 600; }
-        .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; cursor: pointer; width: 30px; height: 30px; z-index: 40; }
-        .hamburger span { width: 25px; height: 3px; background-color: #01303f; border-radius: 2px; transition: all 0.3s ease; }
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-        .section { display: none; }
-        .section.active { display: block; }
-        .course-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .course-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); }
-        .price-badge { background: linear-gradient(135deg, #02a9f7, #89d6fb); }
-        .back-btn { transition: all 0.3s ease; }
-        .back-btn:hover { background-color: #89d6fb; transform: translateX(-2px); }
-        @media (max-width: 768px) {
-            .hamburger { display: flex; }
-            .nav-links { display: none; position: fixed; top: 64px; left: 0; width: 100%; background: white; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; padding: 1rem; gap: 1rem; transform: translateY(-100%); transition: transform 0.3s ease-in-out; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 30; }
-            .nav-links.active { display: flex; transform: translateY(0); }
-            .nav-links a { font-size: 1rem; padding: 0.5rem 1rem; text-align: center; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hexa Innovation — Transforming Construction & Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0f14;
+    --ink2: #111820;
+    --surface: #141c25;
+    --panel: #1a2535;
+    --border: rgba(255,255,255,0.07);
+    --cyan: #00c2e0;
+    --cyan2: #0090a8;
+    --amber: #f4a623;
+    --text: #e8edf2;
+    --muted: #7a8fa3;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Syne', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 48px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,15,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-hex {
+    width: 36px;
+    height: 36px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .logo-hex svg { width: 100%; height: 100%; }
+
+  .logo-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+  .logo-name span { color: var(--cyan); }
+
+  nav { display: flex; align-items: center; gap: 6px; }
+
+  nav a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+    cursor: pointer;
+  }
+
+  nav a:hover, nav a.active { color: var(--white); background: rgba(255,255,255,0.06); }
+
+  .nav-cta {
+    background: var(--cyan) !important;
+    color: var(--ink) !important;
+    font-weight: 600 !important;
+    margin-left: 8px;
+    padding: 7px 18px !important;
+  }
+  .nav-cta:hover { background: #00d8fa !important; }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* ── SECTIONS SYSTEM ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-video-wrap {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .hero-video-wrap video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35;
+  }
+
+  .hero-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,15,20,0.3) 0%, rgba(10,15,20,0.9) 85%, var(--ink) 100%);
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 80px;
+    left: 0; right: 0;
+    padding: 0 80px;
+    z-index: 10;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.02;
+    color: var(--white);
+    max-width: 780px;
+    margin-bottom: 28px;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    color: var(--cyan);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cyan);
+    color: var(--ink);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { background: #00d8fa; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,194,224,0.3); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 13px 26px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    z-index: 10;
+  }
+  .scroll-hint span { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--cyan), transparent);
+    animation: scrollPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{ opacity:0.3 } 50%{ opacity:1 } }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 80px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .stat-item {
+    padding: 0 40px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  .stat-item:first-child { padding-left: 0; }
+  .stat-item:last-child { border-right: none; padding-right: 0; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-num span { color: var(--cyan); }
+  .stat-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.06em; }
+
+  /* ── SECTION CHROME ── */
+  .section-wrap {
+    padding: 100px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-label::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 60px;
+  }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .service-card {
+    background: var(--surface);
+    padding: 40px 36px;
+    position: relative;
+    transition: background 0.3s;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .service-card:hover { background: var(--panel); }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(0,194,224,0.1);
+    border: 1px solid rgba(0,194,224,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    font-size: 1.4rem;
+  }
+
+  .service-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+    opacity: 0.6;
+  }
+
+  .service-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .service-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── COURSES ── */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .course-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    cursor: pointer;
+  }
+
+  .course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    border-color: rgba(0,194,224,0.25);
+  }
+
+  .course-banner {
+    height: 130px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  .course-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,194,224,0.15), rgba(0,0,0,0.6));
+  }
+
+  .course-banner-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--panel);
+  }
+
+  .course-banner-label {
+    position: relative;
+    z-index: 1;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  .course-body { padding: 24px; }
+
+  .course-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .course-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--cyan);
+  }
+
+  .course-duration {
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: rgba(255,255,255,0.05);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .course-desc {
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .btn-card {
+    width: 100%;
+    background: rgba(0,194,224,0.1);
+    color: var(--cyan);
+    border: 1px solid rgba(0,194,224,0.25);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.83rem;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .btn-card:hover { background: var(--cyan); color: var(--ink); border-color: var(--cyan); }
+
+  /* ── ADDINS ── */
+  .addins-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .addin-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+  }
+  .addin-card:hover { transform: translateY(-3px); border-color: rgba(0,194,224,0.25); }
+
+  .addin-top {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .addin-top-gradient {
+    position: absolute;
+    inset: 0;
+  }
+
+  .addin-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--white);
+    position: relative;
+    z-index: 1;
+  }
+
+  .addin-body { padding: 24px 28px; }
+
+  .addin-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--amber);
+    background: rgba(244,166,35,0.1);
+    border: 1px solid rgba(244,166,35,0.2);
+    border-radius: 20px;
+    padding: 3px 10px;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .addin-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  /* ── UPDATES ── */
+  .updates-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .update-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px;
+    transition: border-color 0.3s;
+  }
+  .update-card:hover { border-color: rgba(0,194,224,0.2); }
+
+  .update-date {
+    font-size: 0.72rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .update-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+
+  .update-text {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .update-link {
+    font-size: 0.82rem;
+    color: var(--cyan);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s;
+  }
+  .update-link:hover { gap: 10px; }
+
+  /* ── ABOUT ── */
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 420px;
+  }
+
+  .about-hex-grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    padding: 20px;
+    align-content: center;
+  }
+
+  .about-hex {
+    aspect-ratio: 1;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: var(--panel);
+    border: none;
+    transition: background 0.3s;
+    animation: hexFlicker var(--dur, 4s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @keyframes hexFlicker {
+    0%,100%{ background: var(--panel); }
+    50%{ background: rgba(0,194,224,0.2); }
+  }
+
+  .about-text-content > p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .about-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 32px;
+  }
+
+  .about-tag {
+    font-size: 0.78rem;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-weight: 500;
+  }
+
+  /* ── CONTACT ── */
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .contact-info { padding-top: 8px; }
+
+  .contact-link-block {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contact-link-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .contact-link-item:hover { border-color: rgba(0,194,224,0.3); background: var(--panel); }
+
+  .contact-link-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(0,194,224,0.1);
+    border: 1px solid rgba(0,194,224,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-link-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 2px; }
+  .contact-link-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+
+  .contact-form-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+  }
+
+  .form-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+
+  .form-row { margin-bottom: 18px; }
+
+  .form-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(0,194,224,0.1);
+  }
+
+  .form-textarea { resize: vertical; min-height: 110px; }
+
+  /* ── DETAIL PAGES ── */
+  .detail-wrap {
+    padding: 100px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 48px;
+    text-decoration: none;
+  }
+  .back-btn:hover { color: var(--cyan); border-color: rgba(0,194,224,0.3); }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .detail-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 32px;
+    line-height: 1.1;
+  }
+
+  .detail-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px;
+    margin-bottom: 20px;
+  }
+
+  .detail-block-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-block p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .detail-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .detail-list li {
+    font-size: 0.88rem;
+    color: var(--muted);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .detail-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+  }
+
+  .module-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .module-item {
+    border-left: 2px solid var(--cyan);
+    padding: 14px 20px;
+    background: rgba(0,194,224,0.04);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .module-item h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .module-item p {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    position: sticky;
+    top: 88px;
+  }
+
+  .sidebar-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.85rem;
+  }
+
+  .sidebar-row:last-of-type { border-bottom: none; }
+  .sidebar-row-label { color: var(--muted); }
+  .sidebar-row-value { color: var(--white); font-weight: 600; }
+  .sidebar-row-value.highlight { color: var(--cyan); font-size: 1.4rem; font-family: 'Syne', sans-serif; font-weight: 800; }
+
+  .prereq-list {
+    list-style: none;
+    margin: 20px 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .prereq-list li {
+    font-size: 0.83rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .prereq-list li::before {
+    content: '✓';
+    color: var(--cyan);
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink2);
+    border-top: 1px solid var(--border);
+    padding: 40px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer-text {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--cyan); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    header { padding: 0 24px; }
+    nav a:not(.nav-cta) { display: none; }
+    .hamburger { display: flex; }
+
+    .mobile-nav {
+      position: fixed;
+      top: 68px;
+      left: 0; right: 0;
+      background: var(--ink2);
+      border-bottom: 1px solid var(--border);
+      padding: 16px;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 999;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      display: block;
+      padding: 12px 16px;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mobile-nav a:hover, .mobile-nav a.active { background: rgba(255,255,255,0.05); color: var(--white); }
+
+    .section-wrap { padding: 60px 24px; }
+    .hero-content { padding: 0 24px; bottom: 60px; }
+    .hero-title { font-size: 2.4rem; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 24px; gap: 16px; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 16px; }
+    .stat-item:nth-child(2n) { border-right: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .courses-grid { grid-template-columns: 1fr; }
+    .addins-grid { grid-template-columns: 1fr; }
+    .updates-grid { grid-template-columns: 1fr; }
+    .about-layout { grid-template-columns: 1fr; gap: 40px; }
+    .about-visual { display: none; }
+    .contact-layout { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .detail-wrap { padding: 80px 24px; }
+    footer { flex-direction: column; gap: 20px; padding: 32px 24px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.6s ease forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up-1 { animation-delay: 0.1s; }
+  .fade-up-2 { animation-delay: 0.2s; }
+  .fade-up-3 { animation-delay: 0.3s; }
+  .fade-up-4 { animation-delay: 0.4s; }
+</style>
 </head>
-<body class="bg-[#d4f0fc] text-[#01303f]">
+<body>
 
-    <!-- Header -->
-    <header class="bg-white shadow sticky top-0 z-30">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <img src="./HexaLogo.png" alt="Hexa Innovation Logo" class="logo-img">
-                <span class="text-2xl font-bold text-[#02a9f7]">Hexa Innovation</span>
-            </div>
-            <div class="hamburger md:hidden" id="hamburger">
-                <span></span><span></span><span></span>
-            </div>
-            <div class="nav-links hidden md:flex flex-row items-center justify-end space-x-8" id="navLinks">
-                <span class="nav-item active" data-section="home">Home</span>
-                <span class="nav-item" data-section="services">Services</span>
-                <span class="nav-item" data-section="courses">Courses</span>
-                <span class="nav-item" data-section="addins">Addins</span>
-                <span class="nav-item" data-section="updates">Updates</span>
-                <span class="nav-item" data-section="about">About</span>
-                <span class="nav-item" data-section="contact">Contact</span>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Home Section -->
-    <div id="home" class="section active">
-        <!-- Video Hero Section -->
-        <section class="hero-bg">
-            <video id="heroVideo" autoplay muted loop playsinline preload="auto">
-                <source src="./HexaVideo.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </section>
-
-        <!-- Hero Content Section -->
-        <section class="hero-content text-white py-20 bg-[#01303f]">
-            <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fadeIn">Transforming Construction with Innovation</h1>
-                <p class="text-lg md:text-xl mb-6 animate-fadeIn delay-200">Hexa Innovation delivers cutting-edge technology solutions for the construction and architecture industries.</p>
-                <button class="nav-item inline-block bg-[#02a9f7] text-white px-6 py-3 rounded-lg hover:bg-[#89d6fb] transition-colors animate-fadeIn delay-400" data-section="contact">Get in Touch</button>
-            </div>
-        </section>
+<!-- Header -->
+<header>
+  <a class="logo" href="#" onclick="showPage('home')">
+    <div class="logo-hex">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="rgba(0,194,224,0.15)" stroke="#00c2e0" stroke-width="1.5"/>
+        <polygon points="20,8 30,14 30,26 20,32 10,26 10,14" fill="rgba(0,194,224,0.08)" stroke="#00c2e0" stroke-width="1" opacity="0.6"/>
+        <circle cx="20" cy="20" r="3" fill="#00c2e0"/>
+      </svg>
     </div>
+    <span class="logo-name">HEXA <span>INNOVATION</span></span>
+  </a>
 
-    <!-- Services Section -->
-    <div id="services" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Our Services</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="servicesGrid">
-                    <div class="bg-white p-6 rounded-lg shadow highlight" data-service="1">
-                        <img src="./img1.png" alt="Software Development" class="service-img w-full mb-4">
-                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Software Development</h3>
-                        <p class="text-[#01303f]">Custom software solutions tailored to streamline construction and architecture workflows.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow" data-service="2">
-                        <img src="./img2.png" alt="Digital Twin & BIM Automation" class="service-img w-full mb-4">
-                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Digital Twin & BIM Automation</h3>
-                        <p class="text-[#01303f]">Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow" data-service="3">
-                        <img src="./img3.png" alt="VR & AR Solutions" class="service-img w-full mb-4">
-                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">VR & AR Solutions</h3>
-                        <p class="text-[#01303f]">Immersive Virtual Reality and Augmented Reality for enhanced project visualization and client engagement.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow" data-service="4">
-                        <img src="./img4.png" alt="AEC & VDC Automation" class="service-img w-full mb-4">
-                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AEC & VDC Automation</h3>
-                        <p class="text-[#01303f]">Automation solutions for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow" data-service="5">
-                        <img src="./img5.png" alt="4D Construction Scheduling" class="service-img w-full mb-4">
-                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">4D Construction Scheduling</h3>
-                        <p class="text-[#01303f]">Integrate time management with project planning to meet deadlines without compromising quality.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow" data-service="6">
-                        <img src="./img6.png" alt="AI & Machine Learning" class="service-img w-full mb-4">
-                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">AI & Machine Learning</h3>
-                        <p class="text-[#01303f]">Leveraging AI and ML to optimize resource management and drive productivity.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <nav id="desktopNav">
+    <a onclick="showPage('home')" class="active" data-p="home">Home</a>
+    <a onclick="showPage('services')" data-p="services">Services</a>
+    <a onclick="showPage('courses')" data-p="courses">Courses</a>
+    <a onclick="showPage('addins')" data-p="addins">Addins</a>
+    <a onclick="showPage('updates')" data-p="updates">Updates</a>
+    <a onclick="showPage('about')" data-p="about">About</a>
+    <a onclick="showPage('contact')" data-p="contact" class="nav-cta">Contact</a>
+  </nav>
+
+  <div class="hamburger" id="hamburger" onclick="toggleMobile()">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a onclick="showPage('home');toggleMobile()" data-p="home">Home</a>
+  <a onclick="showPage('services');toggleMobile()" data-p="services">Services</a>
+  <a onclick="showPage('courses');toggleMobile()" data-p="courses">Courses</a>
+  <a onclick="showPage('addins');toggleMobile()" data-p="addins">Addins</a>
+  <a onclick="showPage('updates');toggleMobile()" data-p="updates">Updates</a>
+  <a onclick="showPage('about');toggleMobile()" data-p="about">About</a>
+  <a onclick="showPage('contact');toggleMobile()" data-p="contact">Contact</a>
+</div>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="home" class="page active">
+  <div class="hero-video-wrap">
+    <video autoplay muted loop playsinline>
+      <source src="./HexaVideo.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-tag fade-up fade-up-1">Construction Technology</div>
+      <h1 class="hero-title fade-up fade-up-2">Building the<br><em>Future</em> of<br>Construction</h1>
+      <p class="hero-sub fade-up fade-up-3">Cutting-edge BIM, VR/AR, AI and automation solutions transforming how the world designs and builds.</p>
+      <div class="hero-btns fade-up fade-up-4">
+        <button class="btn-primary" onclick="showPage('services')">Explore Services →</button>
+        <button class="btn-secondary" onclick="showPage('contact')">Get in Touch</button>
+      </div>
     </div>
-
-    <!-- Courses Section -->
-    <div id="courses" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Professional Courses</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Course 1: Dynamo Visual Programming -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#02a9f7] to-[#89d6fb] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">Dynamo Visual Programming</h3>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
-                                <span class="text-[#02577a] font-semibold">12 weeks</span>
-                            </div>
-                            <p class="text-[#01303f] mb-4">Master visual programming with Dynamo for powerful BIM automation and parametric design workflows.</p>
-                            <button onclick="showCourseDetail('dynamo')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-
-                    <!-- Course 2: Revit API & C# Development -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#02577a] to-[#02a9f7] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">Revit API & C# Development</h3>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
-                                <span class="text-[#02577a] font-semibold">14 weeks</span>
-                            </div>
-                            <p class="text-[#01303f] mb-4">Develop custom Revit applications using C# programming and the powerful Revit API framework.</p>
-                            <button onclick="showCourseDetail('revit-api')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-
-                    <!-- Course 3: 4D Construction Planning -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#89d6fb] to-[#02a9f7] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">4D Construction Planning</h3>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
-                                <span class="text-[#02577a] font-semibold">10 weeks</span>
-                            </div>
-                            <p class="text-[#01303f] mb-4">Learn to integrate time management with 3D models for comprehensive construction scheduling and planning.</p>
-                            <button onclick="showCourseDetail('4d-construction')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-
-                    <!-- Course 4: VR/AR with Unity -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#01303f] to-[#02577a] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">VR/AR with Unity</h3>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
-                                <span class="text-[#02577a] font-semibold">16 weeks</span>
-                            </div>
-                            <p class="text-[#01303f] mb-4">Create immersive VR and AR experiences for architecture visualization using Unity development platform.</p>
-                            <button onclick="showCourseDetail('vr-ar-unity')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-
-                    <!-- Course 5: Unreal Engine Blueprints -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#02a9f7] to-[#01303f] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">Unreal Engine Blueprints</h3>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="price-badge text-white px-3 py-1 rounded-full text-sm font-semibold">$100</span>
-                                <span class="text-[#02577a] font-semibold">12 weeks</span>
-                            </div>
-                            <p class="text-[#01303f] mb-4">Master visual scripting in Unreal Engine to create stunning architectural visualizations and interactive experiences.</p>
-                            <button onclick="showCourseDetail('unreal-blueprints')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
     </div>
+  </div>
 
-    <!-- Addins Section -->
-    <div id="addins" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Professional Addins</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Addin 1: Pipe Sizer -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#02a9f7] to-[#89d6fb] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">Pipe Sizer</h3>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-[#01303f] mb-4 font-semibold">NFPA & ASHRAE Compliant</p>
-                            <p class="text-[#01303f] mb-4">Automated pipe sizing calculations following NFPA and ASHRAE standards for accurate MEP design and code compliance.</p>
-                            <button onclick="showAddinDetail('pipe-sizer')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-
-                    <!-- Addin 2: MEP Count Master -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#02577a] to-[#02a9f7] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">MEP Count Master</h3>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-[#01303f] mb-4 font-semibold">BOQ Generation Tool</p>
-                            <p class="text-[#01303f] mb-4">Automated Bill of Quantities generation for MEP elements with precise counting and material takeoffs.</p>
-                            <button onclick="showAddinDetail('mep-count-master')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-
-                    <!-- Addin 3: Clash Manager -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#89d6fb] to-[#02a9f7] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">Clash Manager</h3>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-[#01303f] mb-4 font-semibold">Advanced Clash Detection</p>
-                            <p class="text-[#01303f] mb-4">Intelligent clash detection and resolution tools to identify and resolve conflicts in MEP systems efficiently.</p>
-                            <button onclick="showAddinDetail('clash-manager')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-
-                    <!-- Addin 4: Smart Hanger -->
-                    <div class="bg-white rounded-lg shadow-lg course-card overflow-hidden">
-                        <div class="h-48 bg-gradient-to-r from-[#01303f] to-[#02577a] flex items-center justify-center">
-                            <h3 class="text-2xl font-bold text-white text-center">Smart Hanger</h3>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-[#01303f] mb-4 font-semibold">MEP Support Systems</p>
-                            <p class="text-[#01303f] mb-4">Automated placement and sizing of MEP element supports and false ceiling support systems with engineering calculations.</p>
-                            <button onclick="showAddinDetail('smart-hanger')" class="w-full bg-[#02a9f7] text-white py-2 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors">See More</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">6<span>+</span></div>
+      <div class="stat-label">Core Services</div>
     </div>
-
-    <!-- Updates Section -->
-    <div id="updates" class="section">
-        <section class="bg-[#89d6fb] py-16">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Latest Updates</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Harnessing Energy Modeling with Digital Twins</h3>
-                        <p class="text-[#01303f]">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
-                        <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Understanding Digital Twin Technology</h3>
-                        <p class="text-[#01303f]">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
-                        <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Read more on LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="stat-item">
+      <div class="stat-num">5<span>+</span></div>
+      <div class="stat-label">Professional Courses</div>
     </div>
-
-    <!-- About Section -->
-    <div id="about" class="section">
-        <section class="bg-[#d4f0fc] py-16">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">About Hexa Innovation</h2>
-                <p class="text-lg text-center mb-6 text-[#01303f]">Founded in 2024, Hexa Innovation is at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions. With a team of 11-50 dedicated professionals, we specialize in software development, AEC automation, VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
-                <p class="text-lg text-center text-[#01303f]">Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering. Join us in redefining the future of construction through innovation and technology.</p>
-            </div>
-        </section>
+    <div class="stat-item">
+      <div class="stat-num">4<span>+</span></div>
+      <div class="stat-label">Revit Addins</div>
     </div>
-
-    <!-- Contact Section -->
-    <div id="contact" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 text-[#01303f]">Contact Us</h2>
-                <div class="max-w-lg mx-auto">
-                    <p class="text-lg text-center mb-6 text-[#01303f]">Ready to transform your construction projects? Reach out to us!</p>
-                    <div class="space-y-4">
-                        <p class="text-center text-[#01303f]"><strong>Website:</strong> <a href="http://hexainnovation.com" class="text-[#02a9f7] hover:underline">hexainnovation.com</a></p>
-                        <p class="text-center text-[#01303f]"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/company/hexainnovation/" class="text-[#02a9f7] hover:underline">Hexa Innovation</a></p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="stat-item">
+      <div class="stat-num">2024</div>
+      <div class="stat-label">Founded</div>
     </div>
+  </div>
+</div>
 
-    <!-- Course Detail Pages -->
-    
-    <!-- Dynamo Course Detail -->
-    <div id="course-dynamo" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Courses</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Dynamo Visual Programming</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
-                            <p class="text-[#01303f] mb-6">Master the power of visual programming with Dynamo, Autodesk's computational design tool. This comprehensive course will teach you to create powerful scripts and automations that transform your BIM workflows and parametric design capabilities.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>Understand Dynamo's visual programming interface and node-based workflow</li>
-                                <li>Create parametric models and automated design solutions</li>
-                                <li>Integrate Dynamo with Revit for BIM automation</li>
-                                <li>Develop custom nodes and packages for reusable solutions</li>
-                                <li>Implement data-driven design processes</li>
-                            </ul>
-                        </div>
+<!-- ══════════════ SERVICES ══════════════ -->
+<div id="services" class="page">
+  <div class="section-wrap">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">End-to-end technology solutions for the AEC industry — from automation to immersive visualization.</p>
 
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
-                            <div class="space-y-4">
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-3: Dynamo Fundamentals</h4>
-                                    <p class="text-[#01303f]">Interface navigation, nodes, wires, and basic geometry creation</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 4-6: Data Management</h4>
-                                    <p class="text-[#01303f]">Lists, data structures, and mathematical operations</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 7-9: Revit Integration</h4>
-                                    <p class="text-[#01303f]">Element creation, parameter manipulation, and model automation</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 10-12: Advanced Applications</h4>
-                                    <p class="text-[#01303f]">Custom nodes, package development, and complex workflows</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Duration:</span>
-                                    <span class="font-semibold text-[#02577a]">12 weeks</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Price:</span>
-                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Format:</span>
-                                    <span class="font-semibold text-[#02577a]">Online</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Level:</span>
-                                    <span class="font-semibold text-[#02577a]">Beginner to Advanced</span>
-                                </div>
-                            </div>
-
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• Basic Revit knowledge</li>
-                                <li>• Understanding of BIM concepts</li>
-                                <li>• Computer literacy</li>
-                            </ul>
-
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">⚙️</div>
+        <div class="service-num">01</div>
+        <div class="service-title">Software Development</div>
+        <p class="service-desc">Custom software solutions tailored to streamline construction and architecture workflows.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏗️</div>
+        <div class="service-num">02</div>
+        <div class="service-title">Digital Twin & BIM Automation</div>
+        <p class="service-desc">Advanced Digital Twin and BIM automation to enhance project visualization and efficiency.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🥽</div>
+        <div class="service-num">03</div>
+        <div class="service-title">VR & AR Solutions</div>
+        <p class="service-desc">Immersive Virtual and Augmented Reality for enhanced project visualization and client engagement.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔄</div>
+        <div class="service-num">04</div>
+        <div class="service-title">AEC & VDC Automation</div>
+        <p class="service-desc">Automation for Architecture, Engineering, Construction, and Virtual Design & Construction.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📅</div>
+        <div class="service-num">05</div>
+        <div class="service-title">4D Construction Scheduling</div>
+        <p class="service-desc">Integrate time management with project planning to meet deadlines without compromising quality.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <div class="service-num">06</div>
+        <div class="service-title">AI & Machine Learning</div>
+        <p class="service-desc">Leveraging AI and ML to optimize resource management and drive productivity across projects.</p>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Revit API Course Detail -->
-    <div id="course-revit-api" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Courses</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Revit API & C# Development</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
-                            <p class="text-[#01303f] mb-6">Dive deep into Revit API development using C#. Learn to create powerful custom applications, automate repetitive tasks, and extend Revit's functionality to meet specific project requirements.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>Master C# programming fundamentals for Revit development</li>
-                                <li>Understand Revit API architecture and object model</li>
-                                <li>Create custom commands and external applications</li>
-                                <li>Implement user interfaces using WPF and Windows Forms</li>
-                                <li>Deploy and distribute Revit addins professionally</li>
-                            </ul>
-                        </div>
+<!-- ══════════════ COURSES ══════════════ -->
+<div id="courses" class="page">
+  <div class="section-wrap">
+    <div class="section-label">Education</div>
+    <h2 class="section-title">Professional Courses</h2>
+    <p class="section-sub">Master the tools shaping modern construction technology — taught by industry practitioners.</p>
 
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
-                            <div class="space-y-4">
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-4: C# Fundamentals</h4>
-                                    <p class="text-[#01303f]">C# syntax, object-oriented programming, and .NET framework basics</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 5-8: Revit API Basics</h4>
-                                    <p class="text-[#01303f]">API structure, element manipulation, and basic automation</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 9-11: Advanced Development</h4>
-                                    <p class="text-[#01303f]">Custom UI development, external applications, and complex workflows</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 12-14: Professional Deployment</h4>
-                                    <p class="text-[#01303f]">Package creation, installer development, and distribution strategies</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="courses-grid">
+      <div class="course-card" onclick="showDetail('course-dynamo')">
+        <div class="course-banner">
+          <div class="course-banner-bg" style="background: linear-gradient(135deg, #0a2a3a, #01303f);"></div>
+          <div class="course-banner-label">Dynamo Visual<br>Programming</div>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span class="course-price">$100</span>
+            <span class="course-duration">12 weeks</span>
+          </div>
+          <p class="course-desc">Master visual programming with Dynamo for powerful BIM automation and parametric design workflows.</p>
+          <button class="btn-card">View Course Details →</button>
+        </div>
+      </div>
 
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Duration:</span>
-                                    <span class="font-semibold text-[#02577a]">14 weeks</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Price:</span>
-                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Format:</span>
-                                    <span class="font-semibold text-[#02577a]">Online</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Level:</span>
-                                    <span class="font-semibold text-[#02577a]">Intermediate</span>
-                                </div>
-                            </div>
+      <div class="course-card" onclick="showDetail('course-revit-api')">
+        <div class="course-banner">
+          <div class="course-banner-bg" style="background: linear-gradient(135deg, #0f1f2e, #02577a);"></div>
+          <div class="course-banner-label">Revit API &<br>C# Development</div>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span class="course-price">$100</span>
+            <span class="course-duration">14 weeks</span>
+          </div>
+          <p class="course-desc">Develop custom Revit applications using C# programming and the powerful Revit API framework.</p>
+          <button class="btn-card">View Course Details →</button>
+        </div>
+      </div>
 
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• Proficient in Revit</li>
-                                <li>• Basic programming concepts</li>
-                                <li>• Windows development environment</li>
-                            </ul>
+      <div class="course-card" onclick="showDetail('course-4d')">
+        <div class="course-banner">
+          <div class="course-banner-bg" style="background: linear-gradient(135deg, #0d2030, #023848);"></div>
+          <div class="course-banner-label">4D Construction<br>Planning</div>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span class="course-price">$100</span>
+            <span class="course-duration">10 weeks</span>
+          </div>
+          <p class="course-desc">Learn to integrate time management with 3D models for comprehensive construction scheduling.</p>
+          <button class="btn-card">View Course Details →</button>
+        </div>
+      </div>
 
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="course-card" onclick="showDetail('course-vrar')">
+        <div class="course-banner">
+          <div class="course-banner-bg" style="background: linear-gradient(135deg, #080e15, #0f2030);"></div>
+          <div class="course-banner-label">VR/AR with Unity</div>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span class="course-price">$100</span>
+            <span class="course-duration">16 weeks</span>
+          </div>
+          <p class="course-desc">Create immersive VR and AR experiences for architecture visualization using Unity platform.</p>
+          <button class="btn-card">View Course Details →</button>
+        </div>
+      </div>
+
+      <div class="course-card" onclick="showDetail('course-unreal')">
+        <div class="course-banner">
+          <div class="course-banner-bg" style="background: linear-gradient(135deg, #0a1520, #01303f);"></div>
+          <div class="course-banner-label">Unreal Engine<br>Blueprints</div>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span class="course-price">$100</span>
+            <span class="course-duration">12 weeks</span>
+          </div>
+          <p class="course-desc">Master visual scripting in Unreal Engine for stunning architectural visualizations and interactive experiences.</p>
+          <button class="btn-card">View Course Details →</button>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- 4D Construction Course Detail -->
-    <div id="course-4d-construction" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Courses</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">4D Construction Planning</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
-                            <p class="text-[#01303f] mb-6">Learn to integrate time management with 3D models to create comprehensive 4D construction planning solutions. This course covers advanced scheduling techniques and visualization methods for project success.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>Understand 4D BIM concepts and methodology</li>
-                                <li>Create time-linked 3D models for construction sequencing</li>
-                                <li>Develop construction schedules integrated with BIM models</li>
-                                <li>Implement clash detection and resolution in time sequences</li>
-                                <li>Generate construction animations and progress reports</li>
-                            </ul>
-                        </div>
+<!-- ══════════════ ADDINS ══════════════ -->
+<div id="addins" class="page">
+  <div class="section-wrap">
+    <div class="section-label">Tools</div>
+    <h2 class="section-title">Professional Addins</h2>
+    <p class="section-sub">Purpose-built Revit addins that supercharge your MEP workflows and design processes.</p>
 
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
-                            <div class="space-y-4">
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-3: 4D BIM Fundamentals</h4>
-                                    <p class="text-[#01303f]">Introduction to 4D concepts, software tools, and project setup</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 4-6: Schedule Integration</h4>
-                                    <p class="text-[#01303f]">Linking construction schedules with BIM elements and sequencing</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 7-8: Animation & Visualization</h4>
-                                    <p class="text-[#01303f]">Creating construction animations and progress visualization</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 9-10: Advanced Applications</h4>
-                                    <p class="text-[#01303f]">Resource optimization, cost integration, and project delivery</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="addins-grid">
+      <div class="addin-card" onclick="showDetail('addin-pipe')">
+        <div class="addin-top">
+          <div class="addin-top-gradient" style="background: linear-gradient(120deg, #012a38, #014d6a);"></div>
+          <span class="addin-name">Pipe Sizer</span>
+        </div>
+        <div class="addin-body">
+          <span class="addin-tag">NFPA & ASHRAE</span>
+          <p class="addin-desc">Automated pipe sizing calculations following NFPA and ASHRAE standards for accurate MEP design and code compliance.</p>
+          <button class="btn-card">See More →</button>
+        </div>
+      </div>
 
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Duration:</span>
-                                    <span class="font-semibold text-[#02577a]">10 weeks</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Price:</span>
-                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Format:</span>
-                                    <span class="font-semibold text-[#02577a]">Online</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Level:</span>
-                                    <span class="font-semibold text-[#02577a]">Intermediate</span>
-                                </div>
-                            </div>
+      <div class="addin-card" onclick="showDetail('addin-mep')">
+        <div class="addin-top">
+          <div class="addin-top-gradient" style="background: linear-gradient(120deg, #011d28, #023448);"></div>
+          <span class="addin-name">MEP Count Master</span>
+        </div>
+        <div class="addin-body">
+          <span class="addin-tag">BOQ Generation</span>
+          <p class="addin-desc">Automated Bill of Quantities generation for MEP elements with precise counting and material takeoffs.</p>
+          <button class="btn-card">See More →</button>
+        </div>
+      </div>
 
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• Advanced BIM knowledge</li>
-                                <li>• Project management basics</li>
-                                <li>• Construction sequencing understanding</li>
-                            </ul>
+      <div class="addin-card" onclick="showDetail('addin-clash')">
+        <div class="addin-top">
+          <div class="addin-top-gradient" style="background: linear-gradient(120deg, #01202e, #013040);"></div>
+          <span class="addin-name">Clash Manager</span>
+        </div>
+        <div class="addin-body">
+          <span class="addin-tag">Clash Detection</span>
+          <p class="addin-desc">Intelligent clash detection and resolution tools to identify and resolve conflicts in MEP systems efficiently.</p>
+          <button class="btn-card">See More →</button>
+        </div>
+      </div>
 
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="addin-card" onclick="showDetail('addin-hanger')">
+        <div class="addin-top">
+          <div class="addin-top-gradient" style="background: linear-gradient(120deg, #010f18, #01293a);"></div>
+          <span class="addin-name">Smart Hanger</span>
+        </div>
+        <div class="addin-body">
+          <span class="addin-tag">MEP Support Systems</span>
+          <p class="addin-desc">Automated placement and sizing of MEP element supports and false ceiling support systems with engineering calculations.</p>
+          <button class="btn-card">See More →</button>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- VR/AR Unity Course Detail -->
-    <div id="course-vr-ar-unity" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Courses</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">VR/AR with Unity</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
-                            <p class="text-[#01303f] mb-6">Create immersive Virtual Reality and Augmented Reality experiences for architectural visualization using Unity. This comprehensive course covers everything from basic Unity development to advanced VR/AR implementation.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>Master Unity development environment and workflows</li>
-                                <li>Implement VR experiences for architectural walkthroughs</li>
-                                <li>Develop AR applications for on-site visualization</li>
-                                <li>Optimize performance for immersive experiences</li>
-                                <li>Deploy applications to various VR/AR platforms</li>
-                            </ul>
-                        </div>
+<!-- ══════════════ UPDATES ══════════════ -->
+<div id="updates" class="page">
+  <div class="section-wrap">
+    <div class="section-label">Insights</div>
+    <h2 class="section-title">Latest Updates</h2>
+    <p class="section-sub">Thoughts and insights from our team on the future of construction technology.</p>
 
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
-                            <div class="space-y-4">
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-4: Unity Fundamentals</h4>
-                                    <p class="text-[#01303f]">Unity interface, game objects, components, and basic scripting</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 5-8: 3D Environment Creation</h4>
-                                    <p class="text-[#01303f]">Scene development, lighting, materials, and architectural import workflows</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 9-12: VR Development</h4>
-                                    <p class="text-[#01303f]">VR SDK integration, interaction systems, and immersive experiences</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 13-16: AR Implementation</h4>
-                                    <p class="text-[#01303f]">AR foundation, marker tracking, and mobile deployment</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="updates-grid">
+      <div class="update-card">
+        <div class="update-date">Digital Twins · 2024</div>
+        <h3 class="update-title">Harnessing Energy Modeling with Digital Twins</h3>
+        <p class="update-text">Integrating energy modeling with digital twin technology transforms how we optimize energy consumption in buildings. Benefits include real-time monitoring, predictive analytics, scenario simulation, and lifecycle management for smarter, sustainable buildings.</p>
+        <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="update-link">Read on LinkedIn →</a>
+      </div>
 
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Duration:</span>
-                                    <span class="font-semibold text-[#02577a]">16 weeks</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Price:</span>
-                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Format:</span>
-                                    <span class="font-semibold text-[#02577a]">Online</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Level:</span>
-                                    <span class="font-semibold text-[#02577a]">Beginner to Advanced</span>
-                                </div>
-                            </div>
-
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• Basic 3D modeling knowledge</li>
-                                <li>• Computer graphics understanding</li>
-                                <li>• Gaming or interactive media interest</li>
-                            </ul>
-
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="update-card">
+        <div class="update-date">Technology · 2024</div>
+        <h3 class="update-title">Understanding Digital Twin Technology</h3>
+        <p class="update-text">Digital twins are virtual replicas of physical assets, enabling real-time performance monitoring, predictive maintenance, and enhanced decision-making. This technology is revolutionizing AEC industries and beyond.</p>
+        <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="update-link">Read on LinkedIn →</a>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Unreal Engine Course Detail -->
-    <div id="course-unreal-blueprints" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('courses')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Courses</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Unreal Engine Blueprints</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Course Overview</h2>
-                            <p class="text-[#01303f] mb-6">Master visual scripting in Unreal Engine to create stunning architectural visualizations and interactive experiences. Learn Blueprint programming for real-time rendering and immersive presentation solutions.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Learning Objectives</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>Master Unreal Engine interface and Blueprint visual scripting</li>
-                                <li>Create photorealistic architectural renderings</li>
-                                <li>Develop interactive walkthroughs and presentations</li>
-                                <li>Implement real-time lighting and material systems</li>
-                                <li>Build interactive VR-ready architectural experiences</li>
-                            </ul>
-                        </div>
+<!-- ══════════════ ABOUT ══════════════ -->
+<div id="about" class="page">
+  <div class="section-wrap">
+    <div class="about-layout">
+      <div class="about-text-content">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">Building Tomorrow's Construction Industry</h2>
 
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Module Breakdown</h2>
-                            <div class="space-y-4">
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 1-3: Unreal Engine Basics</h4>
-                                    <p class="text-[#01303f]">Engine interface, project setup, and basic scene creation</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 4-6: Blueprint Programming</h4>
-                                    <p class="text-[#01303f]">Visual scripting fundamentals and logic implementation</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 7-9: Architectural Visualization</h4>
-                                    <p class="text-[#01303f]">Lighting systems, material creation, and photorealistic rendering</p>
-                                </div>
-                                <div class="border-l-4 border-[#02a9f7] pl-4">
-                                    <h4 class="font-semibold text-[#01303f]">Weeks 10-12: Interactive Experiences</h4>
-                                    <p class="text-[#01303f]">User interaction, animation systems, and deployment strategies</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <p>Founded in 2024, Hexa Innovation stands at the forefront of transforming the construction and architecture industries through cutting-edge technology solutions.</p>
+        <p>With a team of 11–50 dedicated professionals, we specialize in software development, AEC & VDC automation, BIM automation, VR, AR, 4D construction scheduling, AI, Machine Learning, and Digital Twin technologies.</p>
+        <p>Our commitment to excellence and continuous improvement positions us as a trusted partner for organizations seeking to navigate the complexities of modern construction and engineering.</p>
 
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Course Details</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Duration:</span>
-                                    <span class="font-semibold text-[#02577a]">12 weeks</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Price:</span>
-                                    <span class="font-bold text-[#02a9f7] text-xl">$100</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Format:</span>
-                                    <span class="font-semibold text-[#02577a]">Online</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Level:</span>
-                                    <span class="font-semibold text-[#02577a]">Beginner to Intermediate</span>
-                                </div>
-                            </div>
+        <div class="about-tags">
+          <span class="about-tag">Software Development</span>
+          <span class="about-tag">BIM Automation</span>
+          <span class="about-tag">VR & AR</span>
+          <span class="about-tag">Digital Twins</span>
+          <span class="about-tag">AI & ML</span>
+          <span class="about-tag">4D Scheduling</span>
+          <span class="about-tag">AEC Automation</span>
+          <span class="about-tag">VDC Solutions</span>
+        </div>
+      </div>
 
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Prerequisites</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• 3D modeling experience</li>
-                                <li>• Basic game engine concepts</li>
-                                <li>• High-performance computer setup</li>
-                            </ul>
-
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Enroll Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="about-visual">
+        <div class="about-hex-grid" id="hexGrid"></div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Addin Detail Pages -->
-    
-    <!-- Pipe Sizer Addin Detail -->
-    <div id="addin-pipe-sizer" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('addins')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Addins</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Pipe Sizer (NFPA - ASHRAE)</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Overview</h2>
-                            <p class="text-[#01303f] mb-6">Professional pipe sizing tool that automatically calculates optimal pipe diameters based on NFPA and ASHRAE standards. Ensures code compliance and optimal system performance for fire protection and HVAC systems.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Key Features</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>NFPA 13 compliant fire protection system sizing</li>
-                                <li>ASHRAE standard HVAC piping calculations</li>
-                                <li>Automatic flow rate and pressure loss calculations</li>
-                                <li>Material property database integration</li>
-                                <li>Code compliance verification and reporting</li>
-                                <li>Integration with Revit MEP workflows</li>
-                            </ul>
-                        </div>
+<!-- ══════════════ CONTACT ══════════════ -->
+<div id="contact" class="page">
+  <div class="section-wrap">
+    <div class="section-label">Get in Touch</div>
+    <h2 class="section-title">Contact Us</h2>
+    <p class="section-sub">Ready to transform your construction projects? Let's talk.</p>
 
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Technical Capabilities</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">Fire Protection</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Sprinkler system calculations</li>
-                                        <li>• Standpipe system design</li>
-                                        <li>• Water supply analysis</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">HVAC Systems</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Hydronic piping calculations</li>
-                                        <li>• Chilled water systems</li>
-                                        <li>• Hot water distribution</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="contact-layout">
+      <div class="contact-info">
+        <p style="font-size:1rem; color:var(--muted); line-height:1.8;">We'd love to hear about your project and explore how Hexa Innovation can help bring it to life with the latest technology.</p>
 
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Addin Information</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Type:</span>
-                                    <span class="font-semibold text-[#02577a]">Revit Addin</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Category:</span>
-                                    <span class="font-semibold text-[#02577a]">MEP Design</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Standards:</span>
-                                    <span class="font-semibold text-[#02577a]">NFPA & ASHRAE</span>
-                                </div>
-                            </div>
-
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Requirements</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• Autodesk Revit 2020+</li>
-                                <li>• MEP modeling experience</li>
-                                <li>• Code compliance knowledge</li>
-                            </ul>
-
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Request Demo</button>
-                        </div>
-                    </div>
-                </div>
+        <div class="contact-link-block">
+          <a href="http://hexainnovation.com" target="_blank" class="contact-link-item">
+            <div class="contact-link-icon">🌐</div>
+            <div>
+              <div class="contact-link-label">Website</div>
+              <div class="contact-link-value">hexainnovation.com</div>
             </div>
-        </section>
-    </div>
-
-    <!-- MEP Count Master Addin Detail -->
-    <div id="addin-mep-count-master" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('addins')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Addins</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">MEP Count Master "BOQ"</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Overview</h2>
-                            <p class="text-[#01303f] mb-6">Comprehensive Bill of Quantities generation tool specifically designed for MEP systems. Automatically counts and quantifies all MEP elements with precise material takeoffs and cost estimation capabilities.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Key Features</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>Automated MEP element counting and classification</li>
-                                <li>Material quantity calculations with waste factors</li>
-                                <li>Labor hour estimation based on industry standards</li>
-                                <li>Customizable reporting templates and formats</li>
-                                <li>Integration with cost databases and pricing</li>
-                                <li>Multi-discipline coordination and consolidation</li>
-                            </ul>
-                        </div>
-
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Supported Elements</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">Electrical</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Panels & Switchgear</li>
-                                        <li>• Conduits & Cable Trays</li>
-                                        <li>• Fixtures & Devices</li>
-                                        <li>• Cables & Wiring</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">Plumbing</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Pipes & Fittings</li>
-                                        <li>• Fixtures & Equipment</li>
-                                        <li>• Valves & Controls</li>
-                                        <li>• Supports & Hangers</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">HVAC</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Ducts & Fittings</li>
-                                        <li>• Equipment & Units</li>
-                                        <li>• Dampers & Controls</li>
-                                        <li>• Insulation & Accessories</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Addin Information</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Type:</span>
-                                    <span class="font-semibold text-[#02577a]">Revit Addin</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Category:</span>
-                                    <span class="font-semibold text-[#02577a]">Quantity Takeoff</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Export:</span>
-                                    <span class="font-semibold text-[#02577a]">Excel, CSV, PDF</span>
-                                </div>
-                            </div>
-
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Requirements</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• Autodesk Revit 2020+</li>
-                                <li>• MEP modeling workflows</li>
-                                <li>• Cost estimation knowledge</li>
-                            </ul>
-
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Request Demo</button>
-                        </div>
-                    </div>
-                </div>
+          </a>
+          <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank" class="contact-link-item">
+            <div class="contact-link-icon">💼</div>
+            <div>
+              <div class="contact-link-label">LinkedIn</div>
+              <div class="contact-link-value">Hexa Innovation</div>
             </div>
-        </section>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form-panel">
+        <div class="form-title">Send a Message</div>
+        <div class="form-row">
+          <label class="form-label">Your Name</label>
+          <input type="text" class="form-input" placeholder="John Doe">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="john@company.com">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Subject</label>
+          <input type="text" class="form-input" placeholder="Project enquiry">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Tell us about your project..."></textarea>
+        </div>
+        <button class="btn-primary" style="width:100%; justify-content:center;">Send Message →</button>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Clash Manager Addin Detail -->
-    <div id="addin-clash-manager" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('addins')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Addins</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Clash Manager</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Overview</h2>
-                            <p class="text-[#01303f] mb-6">Advanced clash detection and resolution tool that identifies conflicts between MEP systems and provides intelligent solutions. Streamlines coordination workflows and reduces costly on-site conflicts.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Key Features</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>Intelligent clash detection with customizable rules</li>
-                                <li>Automated conflict resolution suggestions</li>
-                                <li>Multi-discipline coordination workflows</li>
-                                <li>Real-time clash monitoring during design</li>
-                                <li>Detailed clash reports with 3D visualization</li>
-                                <li>Integration with project coordination platforms</li>
-                            </ul>
-                        </div>
+<!-- ══════════════ DETAIL: COURSES ══════════════ -->
 
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Clash Detection Capabilities</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">Hard Clashes</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Physical interference detection</li>
-                                        <li>• Overlap analysis</li>
-                                        <li>• Collision identification</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">Soft Clashes</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Clearance zone violations</li>
-                                        <li>• Access space requirements</li>
-                                        <li>• Maintenance clearances</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Addin Information</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Type:</span>
-                                    <span class="font-semibold text-[#02577a]">Revit Addin</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Category:</span>
-                                    <span class="font-semibold text-[#02577a]">Coordination</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Analysis:</span>
-                                    <span class="font-semibold text-[#02577a]">Real-time</span>
-                                </div>
-                            </div>
-
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Requirements</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• Autodesk Revit 2021+</li>
-                                <li>• Multi-discipline BIM models</li>
-                                <li>• Coordination experience</li>
-                            </ul>
-
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Request Demo</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- Dynamo -->
+<div id="course-dynamo" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">Dynamo Visual Programming</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Course Overview</div>
+          <p>Master the power of visual programming with Dynamo, Autodesk's computational design tool. Create powerful scripts and automations that transform your BIM workflows and parametric design capabilities.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Learning Objectives</div>
+          <ul class="detail-list">
+            <li>Understand Dynamo's visual programming interface and node-based workflow</li>
+            <li>Create parametric models and automated design solutions</li>
+            <li>Integrate Dynamo with Revit for BIM automation</li>
+            <li>Develop custom nodes and packages for reusable solutions</li>
+            <li>Implement data-driven design processes</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Module Breakdown</div>
+          <div class="module-list">
+            <div class="module-item"><h4>Weeks 1–3: Dynamo Fundamentals</h4><p>Interface navigation, nodes, wires, and basic geometry creation</p></div>
+            <div class="module-item"><h4>Weeks 4–6: Data Management</h4><p>Lists, data structures, and mathematical operations</p></div>
+            <div class="module-item"><h4>Weeks 7–9: Revit Integration</h4><p>Element creation, parameter manipulation, and model automation</p></div>
+            <div class="module-item"><h4>Weeks 10–12: Advanced Applications</h4><p>Custom nodes, package development, and complex workflows</p></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Course Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">12 weeks</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Beginner–Advanced</span></div>
+          <ul class="prereq-list">
+            <li>Basic Revit knowledge</li>
+            <li>Understanding of BIM concepts</li>
+            <li>Computer literacy</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Smart Hanger Addin Detail -->
-    <div id="addin-smart-hanger" class="section">
-        <section class="py-16">
-            <div class="container mx-auto px-6">
-                <button onclick="showSection('addins')" class="back-btn mb-8 bg-[#02a9f7] text-white px-4 py-2 rounded-lg hover:bg-[#89d6fb] transition-all flex items-center space-x-2">
-                    <span>←</span> <span>Back to Addins</span>
-                </button>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <h1 class="text-4xl font-bold mb-6 text-[#01303f]">Smart Hanger</h1>
-                        <div class="bg-white rounded-lg p-8 shadow-lg mb-8">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Overview</h2>
-                            <p class="text-[#01303f] mb-6">Intelligent support system generator for MEP elements and false ceiling supports. Automatically calculates loads, selects appropriate support types, and places hangers according to engineering standards and building codes.</p>
-                            
-                            <h3 class="text-xl font-semibold mb-3 text-[#02577a]">Key Features</h3>
-                            <ul class="list-disc pl-6 text-[#01303f] mb-6 space-y-2">
-                                <li>Automatic support placement based on load calculations</li>
-                                <li>Engineering-grade support sizing and selection</li>
-                                <li>Code-compliant spacing and attachment methods</li>
-                                <li>False ceiling support system generation</li>
-                                <li>Load path analysis and structural coordination</li>
-                                <li>Material specifications and installation details</li>
-                            </ul>
-                        </div>
-
-                        <div class="bg-white rounded-lg p-8 shadow-lg">
-                            <h2 class="text-2xl font-semibold mb-4 text-[#02577a]">Support Systems</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">MEP Supports</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Pipe hangers and supports</li>
-                                        <li>• Duct support systems</li>
-                                        <li>• Cable tray supports</li>
-                                        <li>• Equipment mounting</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-[#01303f] mb-2">Ceiling Systems</h4>
-                                    <ul class="text-[#01303f] space-y-1 text-sm">
-                                        <li>• Grid system supports</li>
-                                        <li>• Main runner hangers</li>
-                                        <li>• Cross tee connections</li>
-                                        <li>• Perimeter attachments</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="bg-white rounded-lg p-6 shadow-lg sticky top-24">
-                            <h3 class="text-xl font-semibold mb-4 text-[#02577a]">Addin Information</h3>
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Type:</span>
-                                    <span class="font-semibold text-[#02577a]">Revit Addin</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Category:</span>
-                                    <span class="font-semibold text-[#02577a]">Support Systems</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-[#01303f]">Analysis:</span>
-                                    <span class="font-semibold text-[#02577a]">Load Calculations</span>
-                                </div>
-                            </div>
-
-                            <h4 class="text-lg font-semibold mb-3 text-[#02577a]">Requirements</h4>
-                            <ul class="text-[#01303f] mb-6 space-y-1">
-                                <li>• Autodesk Revit 2021+</li>
-                                <li>• MEP modeling experience</li>
-                                <li>• Structural coordination knowledge</li>
-                            </ul>
-
-                            <button class="w-full bg-[#02a9f7] text-white py-3 px-4 rounded-lg hover:bg-[#89d6fb] transition-colors font-semibold">Request Demo</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- Revit API -->
+<div id="course-revit-api" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">Revit API & C# Development</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Course Overview</div>
+          <p>Dive deep into Revit API development using C#. Create powerful custom applications, automate repetitive tasks, and extend Revit's functionality to meet specific project requirements.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Learning Objectives</div>
+          <ul class="detail-list">
+            <li>Master C# programming fundamentals for Revit development</li>
+            <li>Understand Revit API architecture and object model</li>
+            <li>Create custom commands and external applications</li>
+            <li>Implement user interfaces using WPF and Windows Forms</li>
+            <li>Deploy and distribute Revit addins professionally</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Module Breakdown</div>
+          <div class="module-list">
+            <div class="module-item"><h4>Weeks 1–4: C# Fundamentals</h4><p>C# syntax, object-oriented programming, and .NET framework basics</p></div>
+            <div class="module-item"><h4>Weeks 5–8: Revit API Basics</h4><p>API structure, element manipulation, and basic automation</p></div>
+            <div class="module-item"><h4>Weeks 9–11: Advanced Development</h4><p>Custom UI development, external applications, and complex workflows</p></div>
+            <div class="module-item"><h4>Weeks 12–14: Professional Deployment</h4><p>Package creation, installer development, and distribution strategies</p></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Course Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">14 weeks</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Intermediate</span></div>
+          <ul class="prereq-list">
+            <li>Proficient in Revit</li>
+            <li>Basic programming concepts</li>
+            <li>Windows development environment</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- Footer -->
-    <footer class="bg-[#01303f] text-white py-6 text-center">
-        <p>&copy; 2025 Hexa Innovation. All rights reserved.</p>
-    </footer>
+<!-- 4D -->
+<div id="course-4d" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">4D Construction Planning</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Course Overview</div>
+          <p>Learn to integrate time management with 3D models to create comprehensive 4D construction planning solutions. Covers advanced scheduling techniques and visualization methods for project success.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Learning Objectives</div>
+          <ul class="detail-list">
+            <li>Understand 4D BIM concepts and methodology</li>
+            <li>Create time-linked 3D models for construction sequencing</li>
+            <li>Develop construction schedules integrated with BIM models</li>
+            <li>Implement clash detection and resolution in time sequences</li>
+            <li>Generate construction animations and progress reports</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Module Breakdown</div>
+          <div class="module-list">
+            <div class="module-item"><h4>Weeks 1–3: 4D BIM Fundamentals</h4><p>Introduction to 4D concepts, software tools, and project setup</p></div>
+            <div class="module-item"><h4>Weeks 4–6: Schedule Integration</h4><p>Linking construction schedules with BIM elements and sequencing</p></div>
+            <div class="module-item"><h4>Weeks 7–8: Animation & Visualization</h4><p>Creating construction animations and progress visualization</p></div>
+            <div class="module-item"><h4>Weeks 9–10: Advanced Applications</h4><p>Resource optimization, cost integration, and project delivery</p></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Course Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">10 weeks</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Intermediate</span></div>
+          <ul class="prereq-list">
+            <li>Advanced BIM knowledge</li>
+            <li>Project management basics</li>
+            <li>Construction sequencing understanding</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <!-- JavaScript -->
-    <script>
-        // Navigation functionality
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Update navigation active state
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
-            
-            // Close mobile menu if open
-            const hamburger = document.getElementById('hamburger');
-            const navLinks = document.getElementById('navLinks');
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.style.overflow = '';
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+<!-- VR/AR -->
+<div id="course-vrar" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">VR/AR with Unity</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Course Overview</div>
+          <p>Create immersive VR and AR experiences for architectural visualization using Unity. Covers everything from basic Unity development to advanced VR/AR implementation for the AEC industry.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Learning Objectives</div>
+          <ul class="detail-list">
+            <li>Master Unity development environment and workflows</li>
+            <li>Implement VR experiences for architectural walkthroughs</li>
+            <li>Develop AR applications for on-site visualization</li>
+            <li>Optimize performance for immersive experiences</li>
+            <li>Deploy applications to various VR/AR platforms</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Module Breakdown</div>
+          <div class="module-list">
+            <div class="module-item"><h4>Weeks 1–4: Unity Fundamentals</h4><p>Unity interface, game objects, components, and basic scripting</p></div>
+            <div class="module-item"><h4>Weeks 5–8: 3D Environment Creation</h4><p>Scene development, lighting, materials, and architectural import workflows</p></div>
+            <div class="module-item"><h4>Weeks 9–12: VR Development</h4><p>VR SDK integration, interaction systems, and immersive experiences</p></div>
+            <div class="module-item"><h4>Weeks 13–16: AR Implementation</h4><p>AR foundation, marker tracking, and mobile deployment</p></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Course Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">16 weeks</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Beginner–Advanced</span></div>
+          <ul class="prereq-list">
+            <li>Basic 3D modeling knowledge</li>
+            <li>Computer graphics understanding</li>
+            <li>Interest in interactive media</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        function showCourseDetail(courseId) {
-            showSection(`course-${courseId}`);
-        }
+<!-- Unreal -->
+<div id="course-unreal" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('courses')">← Back to Courses</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">Unreal Engine Blueprints</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Course Overview</div>
+          <p>Master visual scripting in Unreal Engine to create stunning architectural visualizations and interactive experiences. Learn Blueprint programming for real-time rendering and immersive presentations.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Learning Objectives</div>
+          <ul class="detail-list">
+            <li>Master Unreal Engine interface and Blueprint visual scripting</li>
+            <li>Create photorealistic architectural renderings</li>
+            <li>Develop interactive walkthroughs and presentations</li>
+            <li>Implement real-time lighting and material systems</li>
+            <li>Build interactive VR-ready architectural experiences</li>
+          </ul>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Module Breakdown</div>
+          <div class="module-list">
+            <div class="module-item"><h4>Weeks 1–3: Unreal Engine Basics</h4><p>Engine interface, project setup, and basic scene creation</p></div>
+            <div class="module-item"><h4>Weeks 4–6: Blueprint Programming</h4><p>Visual scripting fundamentals and logic implementation</p></div>
+            <div class="module-item"><h4>Weeks 7–9: Architectural Visualization</h4><p>Lighting systems, material creation, and photorealistic rendering</p></div>
+            <div class="module-item"><h4>Weeks 10–12: Interactive Experiences</h4><p>User interaction, animation systems, and deployment strategies</p></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Course Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Duration</span><span class="sidebar-row-value">12 weeks</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Price</span><span class="sidebar-row-value highlight">$100</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Format</span><span class="sidebar-row-value">Online</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Level</span><span class="sidebar-row-value">Beginner–Intermediate</span></div>
+          <ul class="prereq-list">
+            <li>3D modeling experience</li>
+            <li>Basic game engine concepts</li>
+            <li>High-performance computer</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Enroll Now →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        function showAddinDetail(addinId) {
-            showSection(`addin-${addinId}`);
-        }
+<!-- ══════════════ DETAIL: ADDINS ══════════════ -->
 
-        // Navigation click handlers
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const sectionId = e.target.getAttribute('data-section');
-                if (sectionId) {
-                    showSection(sectionId);
-                }
-            });
-        });
+<!-- Pipe Sizer -->
+<div id="addin-pipe" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('addins')">← Back to Addins</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">Pipe Sizer (NFPA–ASHRAE)</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Overview</div>
+          <p>Professional pipe sizing tool that automatically calculates optimal pipe diameters based on NFPA and ASHRAE standards. Ensures code compliance and optimal system performance for fire protection and HVAC systems.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Key Features</div>
+          <ul class="detail-list">
+            <li>NFPA 13 compliant fire protection system sizing</li>
+            <li>ASHRAE standard HVAC piping calculations</li>
+            <li>Automatic flow rate and pressure loss calculations</li>
+            <li>Material property database integration</li>
+            <li>Code compliance verification and reporting</li>
+            <li>Full integration with Revit MEP workflows</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Addin Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Type</span><span class="sidebar-row-value">Revit Addin</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Category</span><span class="sidebar-row-value">MEP Design</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Standards</span><span class="sidebar-row-value">NFPA & ASHRAE</span></div>
+          <ul class="prereq-list">
+            <li>Autodesk Revit 2020+</li>
+            <li>MEP modeling experience</li>
+            <li>Code compliance knowledge</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Request Demo →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        // Auto-play video fallback
-        document.addEventListener("DOMContentLoaded", () => {
-            const video = document.getElementById("heroVideo");
-            if (video) {
-                video.play().catch(() => { 
-                    video.muted = true; 
-                    video.play(); 
-                });
-            }
-        });
+<!-- MEP Count Master -->
+<div id="addin-mep" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('addins')">← Back to Addins</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">MEP Count Master "BOQ"</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Overview</div>
+          <p>Comprehensive Bill of Quantities generation tool for MEP systems. Automatically counts and quantifies all MEP elements with precise material takeoffs and cost estimation capabilities.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Key Features</div>
+          <ul class="detail-list">
+            <li>Automated MEP element counting and classification</li>
+            <li>Material quantity calculations with waste factors</li>
+            <li>Labor hour estimation based on industry standards</li>
+            <li>Customizable reporting templates and formats</li>
+            <li>Integration with cost databases and pricing</li>
+            <li>Multi-discipline coordination and consolidation</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Addin Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Type</span><span class="sidebar-row-value">Revit Addin</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Category</span><span class="sidebar-row-value">Quantity Takeoff</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Export</span><span class="sidebar-row-value">Excel, CSV, PDF</span></div>
+          <ul class="prereq-list">
+            <li>Autodesk Revit 2020+</li>
+            <li>MEP modeling workflows</li>
+            <li>Cost estimation knowledge</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Request Demo →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        // Service highlight rotation (only when services section is active)
-        const services = document.querySelectorAll('#servicesGrid > div');
-        let currentService = 1;
-        const totalServices = 6;
+<!-- Clash Manager -->
+<div id="addin-clash" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('addins')">← Back to Addins</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">Clash Manager</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Overview</div>
+          <p>Advanced clash detection and resolution tool that identifies conflicts between MEP systems and provides intelligent solutions. Streamlines coordination workflows and reduces costly on-site conflicts.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Key Features</div>
+          <ul class="detail-list">
+            <li>Intelligent clash detection with customizable rules</li>
+            <li>Automated conflict resolution suggestions</li>
+            <li>Multi-discipline coordination workflows</li>
+            <li>Real-time clash monitoring during design</li>
+            <li>Detailed clash reports with 3D visualization</li>
+            <li>Integration with project coordination platforms</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Addin Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Type</span><span class="sidebar-row-value">Revit Addin</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Category</span><span class="sidebar-row-value">Coordination</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Analysis</span><span class="sidebar-row-value">Real-time</span></div>
+          <ul class="prereq-list">
+            <li>Autodesk Revit 2021+</li>
+            <li>Multi-discipline BIM models</li>
+            <li>Coordination experience</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Request Demo →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        function rotateServices() {
-            const servicesSection = document.getElementById('services');
-            if (!servicesSection.classList.contains('active')) return;
-            
-            services.forEach(service => {
-                service.classList.remove('highlight');
-                service.classList.add('fade-out');
-            });
-            const current = document.querySelector(`[data-service="${currentService}"]`);
-            if (current) {
-                current.classList.remove('fade-out');
-                current.classList.add('fade-in', 'highlight');
-            }
-            currentService = (currentService % totalServices) + 1;
-        }
+<!-- Smart Hanger -->
+<div id="addin-hanger" class="page">
+  <div class="detail-wrap">
+    <a class="back-btn" onclick="showPage('addins')">← Back to Addins</a>
+    <div class="detail-grid">
+      <div>
+        <h1 class="detail-title">Smart Hanger</h1>
+        <div class="detail-block">
+          <div class="detail-block-title">Overview</div>
+          <p>Intelligent support system generator for MEP elements and false ceiling supports. Automatically calculates loads, selects appropriate support types, and places hangers according to engineering standards and building codes.</p>
+        </div>
+        <div class="detail-block">
+          <div class="detail-block-title">Key Features</div>
+          <ul class="detail-list">
+            <li>Automatic support placement based on load calculations</li>
+            <li>Engineering-grade support sizing and selection</li>
+            <li>Code-compliant spacing and attachment methods</li>
+            <li>False ceiling support system generation</li>
+            <li>Load path analysis and structural coordination</li>
+            <li>Material specifications and installation details</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Addin Details</div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Type</span><span class="sidebar-row-value">Revit Addin</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Category</span><span class="sidebar-row-value">Support Systems</span></div>
+          <div class="sidebar-row"><span class="sidebar-row-label">Analysis</span><span class="sidebar-row-value">Load Calculations</span></div>
+          <ul class="prereq-list">
+            <li>Autodesk Revit 2021+</li>
+            <li>MEP modeling experience</li>
+            <li>Structural coordination knowledge</li>
+          </ul>
+          <button class="btn-primary" style="width:100%; justify-content:center;">Request Demo →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        // Start rotation and set interval
-        rotateServices();
-        setInterval(rotateServices, 3000);
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-left">
+    <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+      <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" stroke="#00c2e0" stroke-width="1.5" fill="rgba(0,194,224,0.1)"/>
+    </svg>
+    <span class="footer-text">© 2025 Hexa Innovation. All rights reserved.</span>
+  </div>
+  <div class="footer-links">
+    <a onclick="showPage('services')">Services</a>
+    <a onclick="showPage('courses')">Courses</a>
+    <a onclick="showPage('addins')">Addins</a>
+    <a href="https://www.linkedin.com/company/hexainnovation/" target="_blank">LinkedIn</a>
+    <a onclick="showPage('contact')">Contact</a>
+  </div>
+</footer>
 
-        // Mobile menu functionality
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
 
-        function toggleMenu(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            const isActive = hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active', isActive);
-            document.body.style.overflow = isActive ? 'hidden' : '';
-        }
+    // Update nav
+    document.querySelectorAll('[data-p]').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('data-p') === id);
+    });
 
-        hamburger.addEventListener('click', toggleMenu);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-        // Close menu when clicking nav items
-        document.querySelectorAll('.nav-links .nav-item').forEach(link => {
-            link.addEventListener('click', (event) => {
-                event.stopPropagation();
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-        });
+  function showDetail(id) {
+    showPage(id);
+  }
 
-        // Close menu when clicking outside
-        document.addEventListener('click', (event) => {
-            if (!hamburger.contains(event.target) && !navLinks.contains(event.target) && navLinks.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
+  function toggleMobile() {
+    const mn = document.getElementById('mobileNav');
+    const hb = document.getElementById('hamburger');
+    const open = mn.classList.toggle('open');
+    hb.querySelectorAll('span')[0].style.transform = open ? 'rotate(45deg) translate(5px,5px)' : '';
+    hb.querySelectorAll('span')[1].style.opacity = open ? '0' : '1';
+    hb.querySelectorAll('span')[2].style.transform = open ? 'rotate(-45deg) translate(5px,-5px)' : '';
+  }
 
-        // Close menu on window resize
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-    </script>
+  // Hex grid animation
+  const hexGrid = document.getElementById('hexGrid');
+  if (hexGrid) {
+    for (let i = 0; i < 25; i++) {
+      const h = document.createElement('div');
+      h.className = 'about-hex';
+      h.style.setProperty('--dur', (3 + Math.random() * 4) + 's');
+      h.style.setProperty('--delay', (Math.random() * 4) + 's');
+      hexGrid.appendChild(h);
+    }
+  }
+
+  // Video autoplay
+  const vid = document.querySelector('video');
+  if (vid) vid.play().catch(() => { vid.muted = true; vid.play(); });
+</script>
 </body>
 </html>
