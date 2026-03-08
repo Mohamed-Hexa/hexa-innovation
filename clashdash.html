@@ -238,9 +238,53 @@ tbody td:last-child{padding-right:28px;}
 .page-btn:disabled{opacity:.35;cursor:not-allowed;}
 
 /* Element ID tags */
-.elem-tag{display:inline-block;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:6px;vertical-align:middle;}
+.elem-tag{display:inline-block;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:6px;vertical-align:middle;}
 .elem-tag-1{background:var(--cyan-l);color:var(--cyan);border:1px solid var(--cyan-m);}
 .elem-tag-2{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+
+/* Thumbnail */
+.clash-thumb{width:56px;height:44px;object-fit:cover;border-radius:6px;border:1.5px solid var(--border);display:block;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+.clash-thumb:hover{transform:scale(1.08);box-shadow:0 4px 14px rgba(0,153,198,.3);}
+.thumb-missing{width:56px;height:44px;border-radius:6px;border:1.5px dashed var(--border);background:var(--off);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--muted);}
+.thumb-cell{cursor:pointer;}
+.thumb-cell:hover .clash-id-tag{color:var(--cyan);}
+.clash-id-tag{font-family:monospace;font-size:.78rem;font-weight:700;color:var(--navy);margin-top:4px;display:block;text-align:center;}
+
+/* Row clickable */
+tbody tr.clickable-row{cursor:pointer;}
+tbody tr.clickable-row:hover{background:var(--cyan-l) !important;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(11,31,58,.72);backdrop-filter:blur(6px);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--white);border-radius:20px;box-shadow:0 24px 80px rgba(11,31,58,.3);max-width:820px;width:100%;max-height:90vh;overflow-y:auto;animation:modalIn .25s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(12px);}to{opacity:1;transform:none;}}
+.modal-header{background:var(--navy);padding:22px 28px;border-radius:20px 20px 0 0;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:10;}
+.modal-header-left{display:flex;align-items:center;gap:14px;}
+.modal-clash-id{font-family:monospace;font-size:1rem;font-weight:700;color:var(--cyan);background:rgba(0,153,198,.15);border:1px solid rgba(0,153,198,.3);padding:5px 14px;border-radius:8px;}
+.modal-test-name{font-size:.82rem;color:rgba(255,255,255,.6);font-weight:600;}
+.modal-close{width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.7);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.modal-close:hover{background:rgba(255,255,255,.1);color:#fff;}
+.modal-img-wrap{background:#0d1b2e;padding:24px;display:flex;align-items:center;justify-content:center;min-height:300px;}
+.modal-img{max-width:100%;max-height:420px;border-radius:10px;object-fit:contain;display:block;}
+.modal-img-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:rgba(255,255,255,.3);font-size:.9rem;font-weight:600;}
+.modal-img-placeholder span{font-size:3rem;}
+.modal-body{padding:28px;}
+.modal-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+.modal-info-item{background:var(--off);border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
+.modal-info-label{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.modal-info-value{font-size:.95rem;font-weight:700;color:var(--navy);}
+.modal-section-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.modal-section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.modal-elements{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;}
+.modal-elem-card{border-radius:12px;padding:16px 18px;border:1.5px solid;}
+.modal-elem-card.e1{background:var(--cyan-l);border-color:var(--cyan-m);}
+.modal-elem-card.e2{background:#f0fdf4;border-color:#bbf7d0;}
+.modal-elem-num{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.modal-elem-card.e1 .modal-elem-num{color:var(--cyan);}
+.modal-elem-card.e2 .modal-elem-num{color:#16a34a;}
+.modal-elem-val{font-size:.88rem;font-weight:700;color:var(--navy);word-break:break-all;}
+.modal-nav{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:20px;border-top:1px solid var(--border);}
 
 /* Footer */
 footer{background:var(--navy);padding:32px 56px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
@@ -432,14 +476,15 @@ footer{background:var(--navy);padding:32px 56px;display:flex;align-items:center;
         <table>
           <thead>
             <tr>
+              <th style="min-width:80px;">Image</th>
               <th style="min-width:90px;">Clash ID</th>
               <th style="min-width:110px;">Test Name</th>
               <th style="min-width:90px;">Status</th>
               <th style="min-width:80px;">Severity</th>
               <th style="min-width:100px;">Distance (m)</th>
-              <th style="min-width:200px;">Element 1 ID</th>
-              <th style="min-width:200px;">Element 2 ID</th>
-              <th style="min-width:180px;">Position (x, y, z)</th>
+              <th style="min-width:200px;">Element 1</th>
+              <th style="min-width:200px;">Element 2</th>
+              <th style="min-width:160px;">Position (x, y, z)</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -662,7 +707,11 @@ function renderTable() {
   const start = (currentPage - 1) * PAGE_SIZE;
   const slice = filteredClashes.slice(start, start + PAGE_SIZE);
 
-  tbody.innerHTML = slice.map(c => {
+  // Build index map for modal navigation
+  window._modalClashes = filteredClashes;
+  window._modalOffset = start;
+
+  tbody.innerHTML = slice.map((c, i) => {
     const sev = getSev(c.distance);
     const sevClass = sev === 'High' ? 'sev-high' : sev === 'Medium' ? 'sev-med' : 'sev-low';
     const statusKey = c.status.toLowerCase();
@@ -670,8 +719,17 @@ function renderTable() {
     const badgeCls = badgeMap[statusKey] || 'badge-new';
     const distAbs = Math.abs(c.distance);
     const distColor = distAbs > 0.5 ? 'var(--red)' : distAbs > 0.2 ? 'var(--amber)' : 'var(--green)';
-    return `<tr>
-      <td><span style="font-family:monospace;font-size:.8rem;font-weight:700;color:var(--navy);background:var(--off);border:1px solid var(--border);padding:3px 8px;border-radius:5px;">${escHtml(c.id)}</span></td>
+    const globalIdx = start + i;
+    const imgSrc = c.id ? `./${c.id}.jpg` : '';
+    const thumbHtml = imgSrc
+      ? `<img class="clash-thumb" src="${imgSrc}" alt="${escHtml(c.id)}" onerror="this.parentNode.innerHTML='<div class=\\'thumb-missing\\'>🖼️</div>'">`
+      : `<div class="thumb-missing">🖼️</div>`;
+    return `<tr class="clickable-row" onclick="openModal(${globalIdx})">
+      <td class="thumb-cell" style="padding:8px 18px 8px 28px;">
+        ${thumbHtml}
+        <span class="clash-id-tag">${escHtml(c.id)}</span>
+      </td>
+      <td><span style="font-family:monospace;font-size:.78rem;font-weight:700;color:var(--navy);background:var(--off);border:1px solid var(--border);padding:3px 8px;border-radius:5px;">${escHtml(c.id)}</span></td>
       <td><span style="font-size:.82rem;font-weight:600;color:var(--navy);">${escHtml(c.testName)}</span></td>
       <td><span class="badge ${badgeCls}">${capitalize(c.status)}</span></td>
       <td class="${sevClass}">${sev}</td>
@@ -801,6 +859,75 @@ function resetDashboard() {
   resetUploadUI();
 }
 
+/* ── MODAL ── */
+let currentModalIdx = 0;
+
+function openModal(idx) {
+  currentModalIdx = idx;
+  renderModal();
+  document.getElementById('clashModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('clashModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target === document.getElementById('clashModal')) closeModal();
+}
+
+function navigateModal(dir) {
+  const total = (window._modalClashes || filteredClashes).length;
+  currentModalIdx = Math.max(0, Math.min(total - 1, currentModalIdx + dir));
+  renderModal();
+}
+
+function renderModal() {
+  const clashes = window._modalClashes || filteredClashes;
+  const c = clashes[currentModalIdx];
+  if (!c) return;
+
+  const sev = getSev(c.distance);
+  const distAbs = Math.abs(c.distance);
+  const distColor = distAbs > 0.5 ? '#dc2626' : distAbs > 0.2 ? '#d97706' : '#16a34a';
+  const badgeMap = { new:'badge-new', active:'badge-active', reviewed:'badge-reviewed', approved:'badge-approved', resolved:'badge-resolved' };
+  const badgeCls = badgeMap[c.status.toLowerCase()] || 'badge-new';
+
+  document.getElementById('modalClashId').textContent = c.id;
+  document.getElementById('modalTestName').textContent = c.testName;
+  document.getElementById('modalStatus').innerHTML = `<span class="badge ${badgeCls}">${capitalize(c.status)}</span>`;
+  document.getElementById('modalSeverity').innerHTML = `<span style="color:${distColor};font-weight:700;">${sev}</span>`;
+  document.getElementById('modalDistance').innerHTML = `<span style="color:${distColor};font-weight:700;font-family:monospace;">${c.distance.toFixed(3)} m</span>`;
+  document.getElementById('modalPosition').textContent = c.position;
+  document.getElementById('modalElem1').textContent = c.elem1 || 'N/A';
+  document.getElementById('modalElem2').textContent = c.elem2 || 'N/A';
+
+  // Image
+  const imgWrap = document.getElementById('modalImgWrap');
+  if (c.id) {
+    imgWrap.innerHTML = `<img class="modal-img" src="./${escHtml(c.id)}.jpg" alt="${escHtml(c.id)}"
+      onerror="this.parentNode.innerHTML='<div class=\'modal-img-placeholder\'><span>🖼️</span>Image not found: ${escHtml(c.id)}.jpg</div>'">`;
+  } else {
+    imgWrap.innerHTML = `<div class="modal-img-placeholder"><span>🖼️</span>No image available</div>`;
+  }
+
+  // Nav
+  const total = clashes.length;
+  document.getElementById('modalCounter').textContent = `${currentModalIdx + 1} / ${total}`;
+  document.getElementById('modalPrev').disabled = currentModalIdx === 0;
+  document.getElementById('modalNext').disabled = currentModalIdx === total - 1;
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('clashModal').classList.contains('open')) return;
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigateModal(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigateModal(-1);
+});
+
 /* ── HELPERS ── */
 function extractElemInfo(obj) {
   if (!obj) return 'N/A';
@@ -847,5 +974,57 @@ function getSev(d) {
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : ''; }
 function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 </script>
+<!-- ── MODAL ── -->
+<div class="modal-overlay" id="clashModal" onclick="closeModalOnOverlay(event)">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-clash-id" id="modalClashId">—</span>
+        <span class="modal-test-name" id="modalTestName">—</span>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-img-wrap" id="modalImgWrap">
+      <div class="modal-img-placeholder"><span>🖼️</span>No image available</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-info-grid">
+        <div class="modal-info-item">
+          <div class="modal-info-label">Status</div>
+          <div class="modal-info-value" id="modalStatus">—</div>
+        </div>
+        <div class="modal-info-item">
+          <div class="modal-info-label">Severity</div>
+          <div class="modal-info-value" id="modalSeverity">—</div>
+        </div>
+        <div class="modal-info-item">
+          <div class="modal-info-label">Distance</div>
+          <div class="modal-info-value" id="modalDistance">—</div>
+        </div>
+        <div class="modal-info-item" style="grid-column:1/-1;">
+          <div class="modal-info-label">Clash Point (x, y, z)</div>
+          <div class="modal-info-value" style="font-family:monospace;font-size:.88rem;" id="modalPosition">—</div>
+        </div>
+      </div>
+      <div class="modal-section-title">Clashing Elements</div>
+      <div class="modal-elements">
+        <div class="modal-elem-card e1">
+          <div class="modal-elem-num">Element 1</div>
+          <div class="modal-elem-val" id="modalElem1">—</div>
+        </div>
+        <div class="modal-elem-card e2">
+          <div class="modal-elem-num">Element 2</div>
+          <div class="modal-elem-val" id="modalElem2">—</div>
+        </div>
+      </div>
+      <div class="modal-nav">
+        <button class="btn-outline" id="modalPrev" onclick="navigateModal(-1)">← Previous</button>
+        <span style="font-size:.8rem;color:var(--muted);align-self:center;" id="modalCounter"></span>
+        <button class="btn-outline" id="modalNext" onclick="navigateModal(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
