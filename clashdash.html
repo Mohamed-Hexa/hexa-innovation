@@ -269,97 +269,114 @@ tbody tr.clickable-row{cursor:pointer;}
 tbody tr.clickable-row:hover{background:var(--cyan-l) !important;}
 
 /* ── IMAGE PATH RESOLUTION ── */
+// Strategy: when user picks the XML via showOpenFilePicker (File System Access API),
+// we get the parent directory handle and scan it for images automatically.
+// Fallback: plain <input type=file> — we only have the filename, so images
+// must be served from the same folder as the HTML (or a subfolder picked separately).
+
+async function chooseXmlFile() {
+  if (window.showDirectoryPicker) {
+    // Step 1: user picks the FOLDER containing the XML (and images)
+    // This gives us full access to all siblings including images
+    try {
+      const dirHandle = await window.showDirectoryPicker({ mode: 'read' });
+
+      // Step 2: find the XML file inside that folder
+      let xmlFile = null;
+      const xmlFiles = [];
+      for await (const [name, handle] of dirHandle.entries()) {
+        if (handle.kind === 'file' && name.toLowerCase().endsWith('.xml')) {
+          xmlFiles.push({ name, handle });
+        }
+      }
+
+      if (xmlFiles.length === 0) {
+        alert('No XML file found in the selected folder.');
+        return;
+      }
+
+      // If multiple XMLs, pick the first one (or could show a picker)
+      const chosen = xmlFiles.length === 1 ? xmlFiles[0] : await pickXmlFromList(xmlFiles);
+      if (!chosen) return;
+      xmlFile = await chosen.handle.getFile();
+
+      // Step 3: load all images from the same folder
+      const imgCount = await loadImagesFromDir(dirHandle);
+
+      // Step 4: parse the XML
+      handleFile(xmlFile);
+
+      // Show folder name in status
+      document.getElementById('loadingMsg').querySelector
+      updateDashImgBar(`"${dirHandle.name}" — ${imgCount} image${imgCount !== 1 ? 's' : ''} loaded`);
+
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        // Fallback to plain file input
+        document.getElementById('fileInput').click();
+      }
+    }
+  } else {
+    // No File System Access API — plain file input, images must be co-located with HTML
+    document.getElementById('fileInput').click();
+  }
+}
+
+function pickXmlFromList(xmlFiles) {
+  return new Promise(resolve => {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(11,31,58,.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    const box = document.createElement('div');
+    box.style.cssText = 'background:#fff;border-radius:16px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);';
+    box.innerHTML = `<div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#0b1f3a;margin-bottom:16px;">Multiple XML files found</div>
+      <div style="font-size:.85rem;color:#607080;margin-bottom:18px;">Select which XML to load:</div>
+      ${xmlFiles.map((f,i) => `<button onclick="this.closest('.xml-picker').dataset.idx='${i}'" 
+        style="display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1.5px solid #e2e8f0;border-radius:9px;background:#f7f9fc;cursor:pointer;font-family:'Manrope',sans-serif;font-size:.88rem;font-weight:600;color:#0b1f3a;"
+        onmouseover="this.style.borderColor='#0099c6'" onmouseout="this.style.borderColor='#e2e8f0'">
+        📄 ${f.name}</button>`).join('')}
+      <button onclick="this.closest('.xml-picker-wrap').remove();window._xmlPickerResolve(null);" 
+        style="margin-top:6px;padding:8px 18px;border:1.5px solid #e2e8f0;border-radius:8px;background:transparent;cursor:pointer;font-size:.82rem;color:#607080;">Cancel</button>`;
+    box.className = 'xml-picker';
+    overlay.className = 'xml-picker-wrap';
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    window._xmlPickerResolve = resolve;
+    box.addEventListener('click', e => {
+      const idx = box.dataset.idx;
+      if (idx !== undefined) { overlay.remove(); resolve(xmlFiles[parseInt(idx)]); }
+    });
+  });
+}
+
+async function loadImagesFromDir(dirHandle) {
+  Object.values(imgFolderMap).forEach(u => URL.revokeObjectURL(u));
+  imgFolderMap = {};
+  let count = 0;
+  try {
+    for await (const [name, handle] of dirHandle.entries()) {
+      if (handle.kind === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(name)) {
+        const f = await handle.getFile();
+        imgFolderMap[name.toLowerCase()] = URL.createObjectURL(f);
+        // also store original case
+        imgFolderMap[name] = imgFolderMap[name.toLowerCase()];
+        count++;
+      }
+    }
+  } catch(_) {}
+  imgPathMode = 'folder';
+  updateDashImgBar(dirHandle.name + ' (' + count + ' image' + (count !== 1 ? 's' : '') + ' found)');
+  return count;
+}
 
 function getImgSrc(clashId) {
   if (!clashId) return null;
   const filename = clashId + '.jpg';
-  if (imgPathMode === 'folder' && imgFolderMap[filename]) {
-    return imgFolderMap[filename];
+  // Folder mode: use blob URL resolved from XML's own directory
+  if (imgPathMode === 'folder') {
+    return imgFolderMap[filename] || imgFolderMap[filename.toLowerCase()] || null;
   }
-  // prefix mode: imgPathPrefix can be '' (same folder) or 'images/' etc.
-  return imgPathPrefix + filename;
-}
-
-function updateImgPathFromInput() {
-  let val = document.getElementById('imgPathInput').value.trim();
-  // Normalize: ensure trailing slash if non-empty
-  if (val && !val.endsWith('/') && !val.endsWith('\\')) val += '/';
-  imgPathPrefix = val;
-  imgPathMode = 'prefix';
-  imgFolderMap = {};
-  const status = document.getElementById('imgFolderStatus');
-  if (val) {
-    status.className = 'img-folder-status ok';
-    status.textContent = '✅ Using path prefix: ' + val;
-    updateDashImgBar('prefix: ' + val);
-  } else {
-    status.className = 'img-folder-status warn';
-    status.textContent = 'ℹ️ Using same folder as HTML file (default)';
-    updateDashImgBar(null);
-  }
-  if (filteredClashes.length) renderTable();
-}
-
-async function pickImageFolder() {
-  // Use File System Access API if available
-  if (window.showDirectoryPicker) {
-    try {
-      const dirHandle = await window.showDirectoryPicker({ mode: 'read' });
-      // Revoke old blobs
-      Object.values(imgFolderMap).forEach(u => URL.revokeObjectURL(u));
-      imgFolderMap = {};
-      let count = 0;
-      for await (const [name, handle] of dirHandle.entries()) {
-        if (handle.kind === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(name)) {
-          const file = await handle.getFile();
-          imgFolderMap[name] = URL.createObjectURL(file);
-          count++;
-        }
-      }
-      imgPathMode = 'folder';
-      imgPathPrefix = '';
-      document.getElementById('imgPathInput').value = dirHandle.name + '/';
-      const status = document.getElementById('imgFolderStatus');
-      status.className = 'img-folder-status ok';
-      status.textContent = `✅ Folder "${dirHandle.name}" selected — ${count} image${count !== 1 ? 's' : ''} loaded`;
-      updateDashImgBar(dirHandle.name + '/ (' + count + ' images)');
-      if (filteredClashes.length) renderTable();
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        alert('Could not open folder: ' + err.message);
-      }
-    }
-  } else {
-    // Fallback: use <input type=file webkitdirectory>
-    const inp = document.createElement('input');
-    inp.type = 'file'; inp.multiple = true;
-    inp.accept = 'image/*';
-    inp.setAttribute('webkitdirectory', '');
-    inp.onchange = () => {
-      Object.values(imgFolderMap).forEach(u => URL.revokeObjectURL(u));
-      imgFolderMap = {};
-      let folderName = '';
-      for (const file of inp.files) {
-        const name = file.name;
-        if (/\.(jpg|jpeg|png|gif|webp)$/i.test(name)) {
-          imgFolderMap[name] = URL.createObjectURL(file);
-        }
-        if (!folderName && file.webkitRelativePath) {
-          folderName = file.webkitRelativePath.split('/')[0];
-        }
-      }
-      const count = Object.keys(imgFolderMap).length;
-      imgPathMode = 'folder';
-      imgPathPrefix = '';
-      document.getElementById('imgPathInput').value = (folderName || 'selected') + '/';
-      const status = document.getElementById('imgFolderStatus');
-      status.className = 'img-folder-status ok';
-      status.textContent = `✅ ${count} image${count !== 1 ? 's' : ''} loaded from folder`;
-      updateDashImgBar((folderName || 'folder') + '/ (' + count + ' images)');
-      if (filteredClashes.length) renderTable();
-    };
-    inp.click();
-  }
+  // Fallback: relative path (images must be next to the HTML file)
+  return './' + filename;
 }
 
 function updateDashImgBar(text) {
@@ -465,25 +482,13 @@ footer{background:var(--navy);padding:32px 56px;display:flex;align-items:center;
       <div class="drop-zone" id="dropZone">
         <span class="drop-icon" id="dropIcon">📂</span>
         <div class="drop-title" id="dropTitle">Drag &amp; drop your XML file here</div>
-        <div class="drop-hint" id="dropHint">or click below to browse your files</div>
+        <div class="drop-hint" id="dropHint">Select the <strong>folder</strong> containing your XML &amp; images — or drag the XML file above</div>
         <input type="file" id="fileInput" accept=".xml">
-        <button class="btn-primary" type="button" onclick="document.getElementById('fileInput').click()">
-          Choose XML File →
+        <button class="btn-primary" type="button" id="chooseFileBtn" onclick="chooseXmlFile()">
+          Choose Folder / XML →
         </button>
         <div class="loading-msg" id="loadingMsg">
           <div class="spinner"></div> Processing clash report…
-        </div>
-      </div>
-
-      <!-- Image folder picker -->
-      <div class="img-folder-section">
-        <div class="img-folder-title">🖼️ Clash Images Location <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);font-size:.75rem;">(optional)</span></div>
-        <div class="img-folder-row">
-          <input class="img-folder-input" id="imgPathInput" type="text" placeholder="e.g. images/ or leave blank if images are in same folder as XML" oninput="updateImgPathFromInput()">
-          <button class="btn-sm" id="folderPickBtn" onclick="pickImageFolder()" title="Browse for images folder">📁 Browse Folder</button>
-        </div>
-        <div class="img-folder-status warn" id="imgFolderStatus">
-          ℹ️ By default images are looked up in the same folder as your HTML file
         </div>
       </div>
 
@@ -506,7 +511,6 @@ footer{background:var(--navy);padding:32px 56px;display:flex;align-items:center;
         <div class="dash-sub" id="dashSub">Navisworks XML — loaded successfully</div>
       </div>
       <div class="dash-actions">
-        <button class="btn-sm" onclick="pickImageFolder()" title="Change images folder">🖼️ Change Image Folder</button>
         <button class="btn-outline" onclick="resetDashboard()">↑ New Upload</button>
       </div>
     </div>
@@ -1005,9 +1009,7 @@ function resetDashboard() {
   imgFolderMap = {};
   imgPathMode = 'prefix';
   imgPathPrefix = '';
-  document.getElementById('imgPathInput').value = '';
-  document.getElementById('imgFolderStatus').className = 'img-folder-status warn';
-  document.getElementById('imgFolderStatus').textContent = 'ℹ️ By default images are looked up in the same folder as your HTML file';
+  updateDashImgBar(null);
   resetUploadUI();
 }
 
