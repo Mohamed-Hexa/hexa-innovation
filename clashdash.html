@@ -103,6 +103,20 @@ header{
 @keyframes spin{to{transform:rotate(360deg);}}
 
 .format-strip{margin-top:28px;padding-top:24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;}
+.img-folder-section{margin-top:20px;padding:18px 20px;background:var(--off);border:1.5px dashed var(--border);border-radius:12px;text-align:left;}
+.img-folder-title{font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.img-folder-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.img-folder-input{flex:1;min-width:0;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Manrope',sans-serif;font-size:.82rem;color:var(--text);background:var(--white);outline:none;transition:border-color .2s;}
+.img-folder-input:focus{border-color:var(--cyan);}
+.img-folder-status{font-size:.75rem;font-weight:600;margin-top:8px;display:flex;align-items:center;gap:6px;}
+.img-folder-status.ok{color:#16a34a;}
+.img-folder-status.warn{color:var(--amber);}
+.btn-sm{display:inline-flex;align-items:center;gap:6px;background:var(--white);color:var(--navy);font-family:'Manrope',sans-serif;font-weight:700;font-size:.78rem;padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0;}
+.btn-sm:hover{border-color:var(--cyan);color:var(--cyan);}
+.dash-img-bar{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(11,31,58,.04);}
+.dash-img-bar-label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
+.dash-img-bar-path{font-size:.82rem;font-weight:600;color:var(--navy);font-family:monospace;background:var(--off);padding:5px 12px;border-radius:6px;border:1px solid var(--border);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.dash-img-bar-path.none{color:var(--muted);font-style:italic;}
 .format-label{font-size:.73rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
 .format-badge{background:var(--cyan-l);color:var(--cyan);border:1px solid var(--cyan-m);font-size:.75rem;font-weight:700;padding:5px 12px;border-radius:20px;letter-spacing:.04em;}
 
@@ -254,6 +268,112 @@ tbody td:last-child{padding-right:28px;}
 tbody tr.clickable-row{cursor:pointer;}
 tbody tr.clickable-row:hover{background:var(--cyan-l) !important;}
 
+/* ── IMAGE PATH RESOLUTION ── */
+
+function getImgSrc(clashId) {
+  if (!clashId) return null;
+  const filename = clashId + '.jpg';
+  if (imgPathMode === 'folder' && imgFolderMap[filename]) {
+    return imgFolderMap[filename];
+  }
+  // prefix mode: imgPathPrefix can be '' (same folder) or 'images/' etc.
+  return imgPathPrefix + filename;
+}
+
+function updateImgPathFromInput() {
+  let val = document.getElementById('imgPathInput').value.trim();
+  // Normalize: ensure trailing slash if non-empty
+  if (val && !val.endsWith('/') && !val.endsWith('\\')) val += '/';
+  imgPathPrefix = val;
+  imgPathMode = 'prefix';
+  imgFolderMap = {};
+  const status = document.getElementById('imgFolderStatus');
+  if (val) {
+    status.className = 'img-folder-status ok';
+    status.textContent = '✅ Using path prefix: ' + val;
+    updateDashImgBar('prefix: ' + val);
+  } else {
+    status.className = 'img-folder-status warn';
+    status.textContent = 'ℹ️ Using same folder as HTML file (default)';
+    updateDashImgBar(null);
+  }
+  if (filteredClashes.length) renderTable();
+}
+
+async function pickImageFolder() {
+  // Use File System Access API if available
+  if (window.showDirectoryPicker) {
+    try {
+      const dirHandle = await window.showDirectoryPicker({ mode: 'read' });
+      // Revoke old blobs
+      Object.values(imgFolderMap).forEach(u => URL.revokeObjectURL(u));
+      imgFolderMap = {};
+      let count = 0;
+      for await (const [name, handle] of dirHandle.entries()) {
+        if (handle.kind === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(name)) {
+          const file = await handle.getFile();
+          imgFolderMap[name] = URL.createObjectURL(file);
+          count++;
+        }
+      }
+      imgPathMode = 'folder';
+      imgPathPrefix = '';
+      document.getElementById('imgPathInput').value = dirHandle.name + '/';
+      const status = document.getElementById('imgFolderStatus');
+      status.className = 'img-folder-status ok';
+      status.textContent = `✅ Folder "${dirHandle.name}" selected — ${count} image${count !== 1 ? 's' : ''} loaded`;
+      updateDashImgBar(dirHandle.name + '/ (' + count + ' images)');
+      if (filteredClashes.length) renderTable();
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        alert('Could not open folder: ' + err.message);
+      }
+    }
+  } else {
+    // Fallback: use <input type=file webkitdirectory>
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.multiple = true;
+    inp.accept = 'image/*';
+    inp.setAttribute('webkitdirectory', '');
+    inp.onchange = () => {
+      Object.values(imgFolderMap).forEach(u => URL.revokeObjectURL(u));
+      imgFolderMap = {};
+      let folderName = '';
+      for (const file of inp.files) {
+        const name = file.name;
+        if (/\.(jpg|jpeg|png|gif|webp)$/i.test(name)) {
+          imgFolderMap[name] = URL.createObjectURL(file);
+        }
+        if (!folderName && file.webkitRelativePath) {
+          folderName = file.webkitRelativePath.split('/')[0];
+        }
+      }
+      const count = Object.keys(imgFolderMap).length;
+      imgPathMode = 'folder';
+      imgPathPrefix = '';
+      document.getElementById('imgPathInput').value = (folderName || 'selected') + '/';
+      const status = document.getElementById('imgFolderStatus');
+      status.className = 'img-folder-status ok';
+      status.textContent = `✅ ${count} image${count !== 1 ? 's' : ''} loaded from folder`;
+      updateDashImgBar((folderName || 'folder') + '/ (' + count + ' images)');
+      if (filteredClashes.length) renderTable();
+    };
+    inp.click();
+  }
+}
+
+function updateDashImgBar(text) {
+  const el = document.getElementById('dashImgBarPath');
+  if (!el) return;
+  if (text) {
+    el.textContent = text;
+    el.classList.remove('none');
+  } else {
+    el.textContent = 'Same folder as HTML (default)';
+    el.classList.add('none');
+  }
+}
+
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(11,31,58,.72);backdrop-filter:blur(6px);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px;}
 .modal-overlay.open{display:flex;}
@@ -348,10 +468,22 @@ footer{background:var(--navy);padding:32px 56px;display:flex;align-items:center;
         <div class="drop-hint" id="dropHint">or click below to browse your files</div>
         <input type="file" id="fileInput" accept=".xml">
         <button class="btn-primary" type="button" onclick="document.getElementById('fileInput').click()">
-          Choose File →
+          Choose XML File →
         </button>
         <div class="loading-msg" id="loadingMsg">
           <div class="spinner"></div> Processing clash report…
+        </div>
+      </div>
+
+      <!-- Image folder picker -->
+      <div class="img-folder-section">
+        <div class="img-folder-title">🖼️ Clash Images Location <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);font-size:.75rem;">(optional)</span></div>
+        <div class="img-folder-row">
+          <input class="img-folder-input" id="imgPathInput" type="text" placeholder="e.g. images/ or leave blank if images are in same folder as XML" oninput="updateImgPathFromInput()">
+          <button class="btn-sm" id="folderPickBtn" onclick="pickImageFolder()" title="Browse for images folder">📁 Browse Folder</button>
+        </div>
+        <div class="img-folder-status warn" id="imgFolderStatus">
+          ℹ️ By default images are looked up in the same folder as your HTML file
         </div>
       </div>
 
@@ -374,8 +506,15 @@ footer{background:var(--navy);padding:32px 56px;display:flex;align-items:center;
         <div class="dash-sub" id="dashSub">Navisworks XML — loaded successfully</div>
       </div>
       <div class="dash-actions">
+        <button class="btn-sm" onclick="pickImageFolder()" title="Change images folder">🖼️ Change Image Folder</button>
         <button class="btn-outline" onclick="resetDashboard()">↑ New Upload</button>
       </div>
+    </div>
+
+    <!-- Image path bar -->
+    <div class="dash-img-bar" id="dashImgBar">
+      <span class="dash-img-bar-label">🖼️ Images path</span>
+      <span class="dash-img-bar-path none" id="dashImgBarPath">Same folder as HTML (default)</span>
     </div>
 
     <!-- Filters -->
@@ -520,6 +659,11 @@ let filteredClashes = [];
 let currentPage = 1;
 const PAGE_SIZE = 25;
 let isProcessing = false;
+
+// Image path resolution
+let imgPathMode = 'prefix';   // 'prefix' | 'folder'
+let imgPathPrefix = '';        // manual prefix e.g. "images/"
+let imgFolderMap = {};         // filename -> blob URL (when folder picked)
 
 /* ── DRAG & DROP ── */
 const dropZone = document.getElementById('dropZone');
@@ -720,7 +864,7 @@ function renderTable() {
     const distAbs = Math.abs(c.distance);
     const distColor = distAbs > 0.5 ? 'var(--red)' : distAbs > 0.2 ? 'var(--amber)' : 'var(--green)';
     const globalIdx = start + i;
-    const imgSrc = c.id ? `./${c.id}.jpg` : '';
+    const imgSrc = c.id ? getImgSrc(c.id) : null;
     const thumbHtml = imgSrc
       ? `<img class="clash-thumb" src="${imgSrc}" alt="${escHtml(c.id)}" onerror="this.parentNode.innerHTML='<div class=\\'thumb-missing\\'>🖼️</div>'">`
       : `<div class="thumb-missing">🖼️</div>`;
@@ -856,6 +1000,14 @@ function resetDashboard() {
   Object.values(charts).forEach(c=>{if(c)c.destroy();});
   charts = { byTest:null, severity:null, status:null };
   currentPage = 1;
+  // Revoke any blob URLs
+  Object.values(imgFolderMap).forEach(url => URL.revokeObjectURL(url));
+  imgFolderMap = {};
+  imgPathMode = 'prefix';
+  imgPathPrefix = '';
+  document.getElementById('imgPathInput').value = '';
+  document.getElementById('imgFolderStatus').className = 'img-folder-status warn';
+  document.getElementById('imgFolderStatus').textContent = 'ℹ️ By default images are looked up in the same folder as your HTML file';
   resetUploadUI();
 }
 
@@ -907,7 +1059,8 @@ function renderModal() {
   // Image
   const imgWrap = document.getElementById('modalImgWrap');
   if (c.id) {
-    imgWrap.innerHTML = `<img class="modal-img" src="./${escHtml(c.id)}.jpg" alt="${escHtml(c.id)}"
+    const src = getImgSrc(c.id);
+    imgWrap.innerHTML = `<img class="modal-img" src="${src}" alt="${escHtml(c.id)}"
       onerror="this.parentNode.innerHTML='<div class=\'modal-img-placeholder\'><span>🖼️</span>Image not found: ${escHtml(c.id)}.jpg</div>'">`;
   } else {
     imgWrap.innerHTML = `<div class="modal-img-placeholder"><span>🖼️</span>No image available</div>`;
